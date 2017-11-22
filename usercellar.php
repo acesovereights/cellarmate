@@ -77,6 +77,7 @@
 									</div>
 									<div class="col-lg-3 col-sm-3 pad-right">
 										<?php echo $beerDate ?>
+										<a href="#editBeer" class="btn btn-default">Edit</a>
 									</div>
 								</div>
 								<?php
@@ -88,14 +89,15 @@
 			</div>
 		</div>
 	</div>
-	<div class="scrollContainer" id="addBeer">
+<!--	Begin Add a beer panel-->
+	<div class="scrollContainer addBeerPanel" id="addBeer">
 		<div class="container">
 			<aside id="left" class="pull-left">
 				<div class="col-lg-12 col-sm-12">
 					<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10">
 						<h2>Barcode</h2>
 						<form action="" method="post">
-							<input type="text" placeholder="Scan or type the barcode" name="barcode" autofocus>
+							<input type="text" placeholder="Scan or type the barcode" name="barcode" >
 						</form>						
 					</div>
 				</div>
@@ -106,6 +108,39 @@
 						<input type="text" placeholder="Beer Name" name="beer-name">
 						<br>
 						<input type="text" placeholder="Brewery Name" name="brewery-name">
+						<br>
+						<input type="submit" name="submitManualEntry" class="btn btn-default">
+					</form>
+				</div>
+			</aside>
+			<aside class="pull-right" id="right">
+				<div class="col-lg-12 col-sm-12">
+					<h3>Beer Name</h3>
+				</div>
+			</aside>
+		</div>
+		
+	</div>
+	<div class="scrollContainer editBeerPanel" id="editBeer">
+		<div class="container">
+			<aside id="left" class="pull-left">
+				<div class="col-lg-12 col-sm-12">
+					<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10">
+						<h2>Barcode</h2>
+						<form action="" method="post">
+							<input type="text" placeholder="Scan or type the barcode" name="barcode" >
+						</form>						
+					</div>
+				</div>
+				<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10 ">
+					<h3>Sorry! Data for that <br>barcode was not found.</h3>
+					<p>Lets try searching by Beer Name and Brewery Name</p>
+					<form action="" method="post">
+						<input type="text" placeholder="Beer Name" name="beer-name">
+						<br>
+						<input type="text" placeholder="Brewery Name" name="brewery-name">
+						<br>
+						<input type="submit" name="submitManualEntry" class="btn btn-default">
 					</form>
 				</div>
 			</aside>

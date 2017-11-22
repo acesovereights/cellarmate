@@ -201,4 +201,10 @@
 .pad-right{
 	padding-right: 5%;
 }
+.editBeerPanel{
+	background-color: #541407;
+}
+.addBeerPanel{
+	margin-top: 7%;
+}
 
