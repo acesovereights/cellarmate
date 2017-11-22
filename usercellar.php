@@ -137,7 +137,7 @@
 						</form>						
 					</div>
 				</div>
-				<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10 ">
+				<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10">
 					<h3>Reason for removal<br>from cellar</h3>
 					
 					<form action="" method="post">

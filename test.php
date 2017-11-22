@@ -127,7 +127,7 @@
       <div class="modal-body">
         <input class="loginTextbox" type="text" name="username" placeholder="Username">
         <br>
-        <input class="loginTextbox"type="text" name="password" placeholder="Password">
+        <input class="loginTextbox"type="password" name="password" placeholder="Password">
         <br><br>
         <button type="submit" class="btn btn-success" name="loginBtn">Login</button>
       </div>
