@@ -1,0 +1,204 @@
+@charset "utf-8";
+/* CSS Document */
+	@font-face {
+    font-family: taller;
+    src: url(../fonts/taller.ttf);
+}
+@font-face {
+    font-family: tallest;
+    src: url(../fonts/tallest.ttf);
+}
+@font-face {
+    font-family: opti;
+    src: url(../fonts/OptimusPrinceps.ttf);
+}
+@font-face {
+    font-family: urban;
+    src: url(../fonts/UrbanEleganceRegular.ttf);
+}
+@font-face {
+    font-family: ediface;
+    src: url(../fonts/EdificeClassic_TB.otf);
+}
+	
+	.divBox{
+		background-color: #A65317; /*rgba(128,97,54,.8);*/
+		border-radius: 10px;
+		color: #F0B037;
+		/*color: #F0B037;
+		/*drop shadow the text a bit to see of that helps soften it*/
+		text-shadow: 2px 2px black;
+		
+	}
+	.pushRight{
+		
+		/*margin-top: 5%;*/
+		margin-left: 5%;
+		
+		
+	}
+	h1{
+		font-size: 3vw;
+	}
+	h2{
+		font-size: 2vw;
+	}
+	h3{
+		font-size: 1.85vw;
+	}
+	
+	
+	#inputs{
+		width:60%;
+	}
+	input[type="text"]{
+		background-color:cornsilk;
+		
+	}
+	input{
+		margin-top: 5%;
+	}
+	.loginBtn{
+		background-color: #3daa3d;
+		margin-bottom: 2%;
+	}
+	#loginBoxHeader{
+		margin-bottom: 3%;
+		font-family: "taller";
+		/*font-family: "tallest";*/
+		font-size: 10em;
+	}
+	.scrollContainer{
+		/*background-image: url('../images/rusty-whiskey-barrel_rev.jpg');*/
+		/*background-color: #FCE49C;*/
+		
+		height: 95vh;
+		
+		/*height: 88vh;*/
+	}
+	.indexFirstPanel{
+		background-color: #EDA626;
+	}
+.cellarFirstPanel{
+	background-color: #C97621;
+}
+	#headerBar{
+		background-color: rgba(128,97,54,.8);
+	}
+	.noBullets{
+		list-style: none;
+	}
+	.fixHeight{
+		height: 20%;
+	}
+	.rowDrop{
+		margin-top: 5%;
+	}
+	#newBox{
+		padding-top: 1%;
+	}
+	.noHref{
+		text-decoration: none;
+		font-weight: bold;
+		color: inherit;
+	}
+	 a:hover{
+		color: cornsilk;
+		text-decoration: none;
+	}
+	.bottom-row{
+		margin-top: 12%;
+		margin-bottom: 8.8%;
+	}
+	.right{
+		margin-left: 3%;
+	}
+	.block {
+		/*border: 1px solid red;*/
+		background-image: url('../images/cm_bottlecap_rotated.png');
+		/* image courtesy of https://pixabay.com/p-877599/?no_redirect*/
+		background-repeat: no-repeat;
+		background-size: contain;
+		text-align: center;
+		vertical-align: middle;
+		background-size: 350px;
+		
+	}
+	.circle {
+		/*background: red;
+		border: solid thin red;*/
+		text-shadow: 2px 2px #6E4101;
+		/*border-radius: 500px;*/
+		color: white;
+		height: 500px;
+		font-weight: bold;
+		width: 500px;
+		display: table;
+		margin: -30% 0% 0% -20%;
+		/*transform: rotateX(35deg);*/
+		transform: rotateZ(-25deg);
+	}
+	.circle p {
+		vertical-align: middle;
+		display: table-cell;
+	}
+.bottle{
+	margin-top: 3%;
+	width: 25%;
+}
+.buttonDrop{
+	margin-top: 2%;
+}
+#tagline{
+	font-family: 'ediface';
+	font-size: 1.5em;
+}
+.modal-css
+{
+	background-color: #69220F;
+	color: #DFD3AB;
+}
+.loginTextbox{
+	font-size: 1.5em;
+}
+.aboutUs{
+	font-family: 'ediface';
+	margin-top: 8%;
+	height: 75vh;
+}
+.aboutUs p{
+	font-size: 1.15em;
+}
+.bold{
+	font-weight: bold;
+}
+.beerPanel{
+	margin-top: -5%;
+	background-image: url(../images/beerpanel.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 70vh;
+}
+.beerpanelnoheader{
+	
+	background-image: url(../images/beerpanelnoheader.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	height: 70vh;
+}
+.downLeft{
+	margin-left: 10%;
+	margin-top: 28%;
+	font-size: 1.65em;
+	padding-right: 11%;
+	color: #EDA626;
+	text-shadow: 2px 2px black;
+	font-family: 'ediface';
+}
+.pad-left{
+	padding-left: 10%;
+}
+.pad-right{
+	padding-right: 5%;
+}
+
