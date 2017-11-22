@@ -9,6 +9,7 @@
 	$beerQty = "1";
 	$beerVintage = "2015";
 	$beerDate = "05-11-2016";
+	$beerBrewery = "Best Ever Brewing";
 
 	
 ?>
@@ -123,28 +124,30 @@
 	</div>
 	<div class="scrollContainer editBeerPanel" id="editBeer">
 		<div class="container">
-			<aside id="left" class="pull-left">
+			<aside id="leftEdit" class="pull-left dropText">
 				<div class="col-lg-12 col-sm-12">
 					<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10">
-						<h2>Barcode</h2>
+						<h3><?php echo $beerName; ?></h3>
+						<h4><?php echo $beerBrewery; ?></h4>
 						<form action="" method="post">
-							<input type="text" placeholder="Scan or type the barcode" name="barcode" >
+							<input class="btn btn-success" type="submit"  name="editBeer" value="Edit Beer">
+							<br>
+							<input class="btn btn-danger pull-right" type="submit"  name="deleteBeer" value="Delete Beer">
+							
 						</form>						
 					</div>
 				</div>
 				<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10 ">
-					<h3>Sorry! Data for that <br>barcode was not found.</h3>
-					<p>Lets try searching by Beer Name and Brewery Name</p>
+					<h3>Reason for removal<br>from cellar</h3>
+					
 					<form action="" method="post">
-						<input type="text" placeholder="Beer Name" name="beer-name">
-						<br>
-						<input type="text" placeholder="Brewery Name" name="brewery-name">
-						<br>
-						<input type="submit" name="submitManualEntry" class="btn btn-default">
+						<input type="radio" name="deletion" value="drank"><label> Drank it!</label><br>
+						<input type="radio" name="deletion" value="incorrect"><label> Wrong beer listed</label><br>
+						<input type="radio" name="deletion" value="other"><label> Other</label>
 					</form>
 				</div>
 			</aside>
-			<aside class="pull-right" id="right">
+			<aside class="pull-right dropText" id="rightEdit">
 				<div class="col-lg-12 col-sm-12">
 					<h3>Beer Name</h3>
 				</div>

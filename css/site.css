@@ -118,7 +118,6 @@
 		background-image: url('../images/cm_bottlecap_rotated.png');
 		/* image courtesy of https://pixabay.com/p-877599/?no_redirect*/
 		background-repeat: no-repeat;
-		background-size: contain;
 		text-align: center;
 		vertical-align: middle;
 		background-size: 350px;
@@ -203,8 +202,13 @@
 }
 .editBeerPanel{
 	background-color: #541407;
+	color: #EDA626;
+	
 }
 .addBeerPanel{
+	margin-top: 7%;
+}
+.dropText{
 	margin-top: 7%;
 }
 
