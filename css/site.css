@@ -72,7 +72,7 @@
 		/*background-image: url('../images/rusty-whiskey-barrel_rev.jpg');*/
 		/*background-color: #FCE49C;*/
 		
-		height: 95vh;
+		height: 925px;
 		
 		/*height: 88vh;*/
 	}
@@ -174,8 +174,8 @@
 }
 .beerPanel{
 	margin-top: -5%;
-	background-image: url(../images/beerpanel.png);
-	background-size: cover;
+	background-image: url(../images/beerpaneldropshadow.png);
+	/*background-size: cover;*/
 	background-repeat: no-repeat;
 	height: 70vh;
 }
@@ -211,5 +211,34 @@
 }
 .dropText{
 	margin-top: 7%;
+}
+.halfDrop{
+	margin-top: 2%;
+}
+.paleYellow{
+	background-color: #FFCF7A;
+	
+}
+.maxWidth{
+	max-width: 100%;
+}
+img{
+	max-width: 100%;
+    height: auto;
+}
+.imgOverText{
+	position: relative;
+    text-align: center;
+}
+.textInside{
+	position: absolute;
+    top: 30%;
+    left: 5%;
+	color: #EDA626;
+	text-shadow: 2px 2px black;
+	font-family: 'ediface';
+	font-size: 1.25vw;
+	padding-right: 11%;
+	width: 100%;
 }
 

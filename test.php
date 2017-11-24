@@ -25,33 +25,36 @@
 	<div class="container col-lg-12 col-sm-12 scrollContainer indexFirstPanel">
 		<div class="row">
 			<div class="col-lg-4 col-sm-4 fixHeight bottle">
-				<img src="images/cellarmate.png" alt="" width="100%">
+				<img src="images/bottle.png" alt="">
 			</div>
-			<div class="offset-lg-4 offset-sm-4 col-lg-4 col-sm-4 ">
-				<h3 id="loginBoxHeader">[ cellarmate ]</h1>
+			<div class="offset-lg-4 offset-sm-4 col-lg-4 col-sm-4 halfDrop">
+				<img src="images/cellarmatelogo275.png" alt="cellarmate logo">
+<!--				<h3 id="loginBoxHeader">[ cellarmate ]</h1>-->
 				<p id="tagline">Better beer tracking<br>through barcodes</p>
 				
 			</div>	<!-- end of loginBox Div -->
 			<div class="offset-8-lg offset-8-sm col-lg-3 col-sm-3 row buttonDrop">
-				<div class="col-lg-4"><a href="" data-toggle="modal" data-target="#loginModal"><img src="images/loginword.png" alt="login" width="75%"></a></div>
-				<div class="col-lg-4"><a class="pull-right" href=""><img src="images/registerword.png" alt="login" width="100%"></a></div>
+				
+				<div class="col-lg-4"><a href=""><img src="images/registerword.png" alt="login" ></a></div>
+				<div class="col-lg-4"><a href="" class="pull-right" data-toggle="modal" data-target="#loginModal"><img src="images/loginword.png" alt="login" ></a></div>
 				
 				<!--
 				<input type="submit" class="btn loginBtn" name="login" value="Login">
 				<input type="submit" class="btn loginBtn pull-right" name="register" value="Register">-->
 			</div>
 			
-			<div class="col-lg-offset-3 col-ms-offset-4 col-lg-5 col-sm-5 beerPanel">
-				<!--<img src="images/beerpanel.png" alt="beerPanel" width="100%"> -->
+			<div class="col-lg-offset-3 col-ms-offset-4 col-lg-5 col-sm-5 imgOverText">
+				<img src="images/beerpanel.png" alt="beerPanel">
 				
-				<ul class="noBullets downLeft">
+				<div class="textInside">
 					<?php 
 					for($i=0; $i<10; $i++)
 					{?>
-					<li>Lorem Ipsum <span class="pull-right">01-01-2017 12:00:35</span></li>
+					<div class="row">
+						<span class="col-lg-6 col-sm-6">Lorem Ipsum</span> <span class="col-sm-6 col-lg-6 pull-right">01-01-2017 12:00:35</span>
+					</div>
 					<?php }  ?>
-
-				</ul>
+				</div>
 				
 			</div>
 			<!--<div class="col-lg-offset-3 col-sm-offset-3 col-lg-4 col-sm-4 rowDrop block">
@@ -83,8 +86,8 @@
 		-->
 		
 	</div>
-	<div class="container scrollContainer">
-		<div class="col-lg-12 col-sm-12"></div>
+	<div class="container scrollContainer paleYellow">
+		<div class="col-lg-12 col-sm-12 ">
 			<div class="aboutUs col-lg-11 col-sm-11" id="about">
 				<h1> cellarmate.com</h1>
 				<h3>Better beer tracking through barcodes</h3>
