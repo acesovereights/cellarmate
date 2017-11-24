@@ -58,7 +58,7 @@
 				
 			</div>
 		</div>
-<!--		just a test comment, delete later-->
+
 	</div>
 	<div class="container scrollContainer paleYellow">
 		<div class="col-lg-12 col-sm-12 ">
