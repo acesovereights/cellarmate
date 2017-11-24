@@ -44,7 +44,7 @@
 			</div>
 			
 			<div class="col-lg-offset-3 col-ms-offset-4 col-lg-5 col-sm-5 imgOverText">
-				<img src="images/beerpanel.png" alt="beerPanel">
+				<img src="images/beerpaneldropshadow.png" alt="beerPanel">
 				
 				<div class="textInside">
 					<?php 
@@ -57,33 +57,7 @@
 				</div>
 				
 			</div>
-			<!--<div class="col-lg-offset-3 col-sm-offset-3 col-lg-4 col-sm-4 rowDrop block">
-				<div class="circle">
-					<p><span class="h3">New to <span class="h2">cellarmate</span>?</span><br>
-					Check out the <a class="noHref" href=''>FAQ</a>, <a class="noHref" href='#about'>About Us</a>,<br> or <a class="noHref" href=''>create an account</a>!</p>
-				</div>
-			</div>-->
 		</div>
-		<!--
-		<div class="row bottom-row">
-			
-			<!--<div class="col-lg-2 col-sm-2 divBox pushRight" id="newBox">
-				<h3>New to Cellarmate?</h3>
-				<p>Check out the <a class="noHref" href=''>FAQ</a>, <a class="noHref" href=''>About Us</a>,<br> or <a class="noHref" href=''>create an account</a>!</p>
-			</div>
-			<div class="col-lg-2 col-sm-3 col-lg-offset-5 col-sm-offset-3 divBox">
-				<h3>Top Cellars by beer count</h3>
-				<ul class="noBullets">
-					<li>Lorem Ipsum <span class="offset-lg-4">345</span></li>
-					<li>Lorem Ipsum <span class="offset-lg-4">333</span></li>
-					<li>Lorem Ipsum <span class="offset-lg-4">222</span></li>
-					<li>Lorem Ipsum <span class="offset-lg-4">111</span></li>
-					<li>Lorem Ipsum <span class="offset-lg-4">100</span></li>
-				</ul>
-			</div>
-			
-		</div>
-		-->
 		
 	</div>
 	<div class="container scrollContainer paleYellow">
