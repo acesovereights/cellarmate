@@ -62,8 +62,6 @@ if(isset($_POST['submitRegistration']))
 			{
 				//the move_upload_file() func moves the file to the new location
 				move_uploaded_file($_FILES["file"]["tmp_name"],"../userImages/".$_FILES["file"]["name"]);
-//do I need an echo? where am I echoing to?
-				echo "Data Entered Successsfully Saved";
 			}
 		}
 	}
@@ -89,28 +87,29 @@ if(isset($_POST['submitRegistration']))
 		//all of the data needed to complete a user in the USER table is complete
 		$query = $db->prepare("INSERT INTO USER (USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_LOCATION, USER_CELLAR_NAME, USER_PROFILE_PICTURE, USER_CELLAR_VISIBLE) VALUES (?,?,?,?,?,?,?,?,?);");
 		$query->execute([$username, $password, $email, $firstName, $lastName, $location, $cellarName, $filename, $public]);
-
-
-		//query the database to get the userID for the user we just entered
-		$query = $db->query("SELECT USER_ID FROM USER WHERE USERNAME = '$username';");
+		
+		//query the database to get the user ID of the just entered user so we can create a cellar for them
+		$query = $db->prepare("SELECT USER_ID FROM USER WHERE USER_USERNAME = ?;");
+		$db->execute([$username]);
+		
 		$query->setFetchMode(PDO::FETCH_ASSOC);
-
-		$result = $query->fetch();
-
-		$userID = $result['USER_ID'];
-
-
-		//insert the user into the USER_ROLE table, the default role is USER
-		$query = $db->prepare("INSERT INTO USER_ROLES USER_ROLE_ID VALUES ?;");
-		$query->execute([$userID]);
+	
+		$userID = $query->fetch();
+		
+		//create the cellar for the user
+		$query = $db->prepare("INSERT INTO USER_CELLAR (CELLAR_USER_ID, CELLAR_UNIQUE_BEER_ID) VALUES (?,?);");
+		$query->execute([$userID, 0]);
+//left off here, finish this part
+		
 	}
 	catch(PDOException $exception)
 	{
-		echo $exception->getMessage();
+		echo "User Insert ".$exception->getMessage();
 	}
 	
-	echo "everything went ok?";
 	
+	//send the user to their cellar.
+	//header("location: usercellar.php");
 	
 }
 else

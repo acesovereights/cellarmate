@@ -251,4 +251,13 @@ img{
 	font-size: .9vw;
 	
 }
-
+.imgSize{
+	max-height: 100%;
+	width: auto;
+}
+#recentBoxAdjust{
+	margin-top: -5%;
+}
+#registerBody{
+	background-color: #BA671C;
+}

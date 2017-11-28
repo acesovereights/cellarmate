@@ -17,7 +17,7 @@
 <title>Register</title>
 </head>
 
-<body>
+<body id="registerBody">
 	<div class="container">
 		<div class="col-lg-12 col-sm-12">
 			<div class="col-lg-6 col-sm-6">
@@ -36,7 +36,7 @@
 						<label>No </label><input id="publicNo" type="radio" name="public" value="no" checked>
 					</span>
 <!--					check that the username does not exist before registration-->
-					<input class="form-control" id="username" type="text" name="username" placeholder="Desired User Name" onfocusout="checkUser()" required> <div class="userResult" id="userCheck"></div>
+					<input class="form-control" id="username" type="text" name="username" placeholder="Desired User Name" onfocusout="checkUser()" onKeyDown="$('#userCheck').val("")"> <div class="userResult" id="userCheck"></div>
 					<input class="form-control" id="password" type="password" name="password" placeholder="Password" required> 
 					<input class="form-control" id="passwordVer" type="password" name="passwordVer" placeholder="Retype Password" onfocusout="checkPass()" required>
 					<div class="red" id="noPWMatch"></div>

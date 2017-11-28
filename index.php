@@ -35,15 +35,15 @@
 			</div>	<!-- end of loginBox Div -->
 			<div class="offset-8-lg offset-8-sm col-lg-3 col-sm-3 row buttonDrop">
 				
-				<div class="col-lg-4"><a href=""><img src="images/registerword.png" alt="login" ></a></div>
-				<div class="col-lg-4"><a href="" class="pull-right" data-toggle="modal" data-target="#loginModal"><img src="images/loginword.png" alt="login" ></a></div>
+				<div class="col-lg-4 imgSize pull-left" ><a href=""><img src="images/registerword.png" alt="Register"></a></div>
+				<div class="col-lg-4 imgSize pull-right" ><a href=""  data-toggle="modal" data-target="#loginModal"><img src="images/loginword.png" alt="Login"></a></div>
 				
 				<!--
 				<input type="submit" class="btn loginBtn" name="login" value="Login">
 				<input type="submit" class="btn loginBtn pull-right" name="register" value="Register">-->
 			</div>
 			
-			<div class="col-lg-offset-3 col-ms-offset-4 col-lg-5 col-sm-5 imgOverText">
+			<div class="col-lg-offset-3 col-ms-offset-4 col-lg-5 col-sm-5 imgOverText" id="recentBoxAdjust">
 				<img src="images/beerpaneldropshadow.png" alt="beerPanel">
 				
 				<div class="textInside">
@@ -142,6 +142,7 @@
 					{
 						
 						$("#results").html(html);
+						window.location = 'usercellar.php';
 						
 					}
 				});

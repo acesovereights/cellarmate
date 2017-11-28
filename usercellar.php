@@ -1,10 +1,31 @@
 <?php
+	
+	include('scripts/connect.php');
+	$userID = $_SESSION['ID'];
+	
+	//get the unique beer id's from the users cellar
+	$query = $db->prepare("SELECT CELLAR_UNIQUE_BEER_ID FROM CELLAR WHERE CELLAR_USER_ID =?;");
+	$query->execute([$userID]);
+	$query->setFetchMode(PDO::FETCH_ASSOC);
+	
+	$numBottles = $query->fetch();
+
+	//select distinct beers (beers that have the same barcode, name, and vintage)
+	$query = $db->prepare("SELECT DISTINCT USER_BARCODE, USER_BEER_NAME, USER_VINTAGE FROM USER_BEER WHERE USER_BEER_USER_ID = ?;");
+	$query->execute([$userID]);
+
+	$query->setFetchMode(PDO::FETCH_ASSOC);
+	
+	$uniqueBeerResult = $query->fetch();
+
+//left off here, need to deal with empty cellars. 
+	
 
 	//temp setup of variables
-	$cellarName = "User's Cellar";
-	$numBottles = "189";
-	$uniqueBeers = "138";
-	$consumedBeers = "34";
+	$cellarName = $_SESSION['cellarName'];
+	$numBottles = $numBottles->rowCount();
+	$uniqueBeers = $uniqueBeerResult->rowCount();
+	$consumedBeers = $_SESSION['consumedBeers'];
 	$beerName = "Test Beer Yummy";
 	$beerQty = "1";
 	$beerVintage = "2015";

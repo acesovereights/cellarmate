@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 //if the username and password were sent via ajax from index.php
 if(isset($_POST['user']) && isset($_POST['pass']))
 {
@@ -10,7 +10,8 @@ if(isset($_POST['user']) && isset($_POST['pass']))
 	$password = hash('sha512', $_POST['pass']);
 	
 	
-	$query = $db->query("SELECT USER_FIRST_NAME, USER_LAST_NAME FROM USER WHERE USER_USERNAME='".$username."' AND USER_PASSWORD='".$password."';");
+	$query = $db->prepare("SELECT USER_ID, USER_FIRST_NAME, USER_LAST_NAME, USER_CONSUMED_BEERS, USER_CELLAR_NAME FROM USER WHERE USER_USERNAME=? AND USER_PASSWORD=?;");
+	$query->execute([$username, $password]);
 	$query->setFetchMode(PDO::FETCH_ASSOC);
 	
 	$result = $query->fetch();
@@ -26,9 +27,14 @@ if(isset($_POST['user']) && isset($_POST['pass']))
 		
 		//set users full name into session
 		$_SESSION['user'] = $name;
+		$_SESSION['ID'] = $result['USER_ID'];
+		$_SESSION['consumedBeers'] = $result['USER_CONSUMED_BEERS'];
+		$_SESSION['cellarName'] = $result['USER_CELLAR_NAME'];
 		
-		//return to index.php
-		header("location: index.php");
+		echo "Thank you for logging in ".$name;
+		
+		//set the userID in the session
+		
 	}
 	else
 	{
