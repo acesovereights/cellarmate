@@ -181,10 +181,10 @@
 }
 .beerpanelnoheader{
 	
-	background-image: url(../images/beerpanelnoheader.png);
+	background-image: url(../images/cellarpanel.png);
 	background-size: 100%;
 	background-repeat: no-repeat;
-	height: 70vh;
+	height: 75vh;
 }
 .downLeft{
 	margin-left: 10%;
@@ -241,6 +241,24 @@ img{
 	padding-right: 11%;
 	width: 100%;
 }
+.textInsideLeftCellar{
+	position: absolute;
+    top: 8%;
+    left: 5%;
+	color: #EDA626;
+	text-shadow: 2px 2px black;
+	font-family: 'ediface';
+	font-size: 1.05vw;
+	padding-right: 20%;
+	width: 100%;
+}
+.textInsideRightCellar{
+	position: absolute;
+    top: -2%;
+    left: 0%;
+	padding-right: 8%;
+	width: 100%;
+}
 .red{
 	color: red;
 }
@@ -261,3 +279,30 @@ img{
 #registerBody{
 	background-color: #BA671C;
 }
+.cellarLeftPanel{
+	background-image: url(../images/cellarleftpanel.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	height: 70vh;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+#newBeerBtn{
+	margin-top: 20%;
+}
+#cellarHeader{
+	color: #EDA626;
+	text-shadow: 2px 2px black;
+	font-family: 'ediface';
+}
+.sorting{
+	margin-top: 5%;
+	color: #EDA626;
+	text-shadow: 2px 2px black;
+	font-family: 'ediface';
+	font-size: .75vw;
+}
+.rowSpacer{
+	margin-bottom: 2%;
+}
+

@@ -1,8 +1,8 @@
 <?php
-	
+	session_start();
 	include('scripts/connect.php');
-	$userID = $_SESSION['ID'];
-	
+	//$userID = $_SESSION['ID'];
+	/*
 	//get the unique beer id's from the users cellar
 	$query = $db->prepare("SELECT CELLAR_UNIQUE_BEER_ID FROM CELLAR WHERE CELLAR_USER_ID =?;");
 	$query->execute([$userID]);
@@ -26,6 +26,12 @@
 	$numBottles = $numBottles->rowCount();
 	$uniqueBeers = $uniqueBeerResult->rowCount();
 	$consumedBeers = $_SESSION['consumedBeers'];
+	
+	*/
+	$cellarName = "Test Cellar";
+	$numBottles = "124";
+	$uniqueBeers = "45";
+	$consumedBeers = "33";
 	$beerName = "Test Beer Yummy";
 	$beerQty = "1";
 	$beerVintage = "2015";
@@ -56,18 +62,24 @@
 		<div class="container">
 
 			 <div class="col-lg-12 col-sm-12 row rowDrop">
-				<div class="col-lg-2 col-sm-2 panel">
-					<h2> <?php echo $cellarName; ?></h2>
-					<h4>Number of bottles in cellar</h4>
-					<p class="pull-right"><?php echo $numBottles; ?></p><br>
-					<h4>Unique Beers</h4>
-					<p class="pull-right"><?php echo $uniqueBeers; ?></p><br>
-					<h4>Consumed Beers</h4>
-					<p class="pull-right"><?php echo $consumedBeers; ?></p><br>
-					<a href="#addBeer" class="btn btn-success">Add a new beer</a>
+			 <h2 id="cellarHeader"> <?php echo $cellarName; ?></h2>
+				<div class="col-lg-3 col-sm-3 imgOverText">
+					<img src="images/cellarleftpanel.png" alt="Left Panel">
+					<div class="textInsideLeftCellar">
+						
+						<h4>Number of Beers</h4>
+						<p class="pull-right"><?php echo $numBottles; ?></p><br>
+						<h4>Unique Beers</h4>
+						<p class="pull-right"><?php echo $uniqueBeers; ?></p><br>
+						<h4>Consumed Beers</h4>
+						<p class="pull-right"><?php echo $consumedBeers; ?></p>
+						<br>
+						<a href="#addBeer" class="btn btn-success" id="newBeerBtn">Add a new beer</a>
+					</div>
 				</div>
-				<div class="col-lg-8 col-sm-8 pull-right beerpanelnoheader">
-					<div class="sorting">
+				<div class="col-lg-8 col-sm-8 pull-right imgOverText">
+					<img src="images/cellarpanel.png" alt="User Cellar Panel">
+					<div class="sorting textInsideRightCellar">
 						<form action="" method="" class="row">
 							<div class="col-lg-3 col-sm-3">
 								<input type="submit" name="sortByName" class="btn btn-default" value="Sort by Name">
@@ -86,21 +98,25 @@
 								for($i=0;$i<10;$i++)
 								{
 									?>
-	<!--					this pad-left pad-right kind of works, not how I want tit to though. I think I need a wider image overall. and place it in a div outside the line 46 one.-->
-								<div class="row">
-									<div class="col-lg-3 col-sm-3 pad-left">
+	<!--					this pad-left pad-right kind of works, not how I want it to though. I think I need a wider image overall. and place it in a div outside the line 46 one.-->
+								<div class="row rowSpacer">
+									<div class="col-lg-4 col-sm-4 pad-left">
 										<?php echo $beerName ?>
 									</div>
 									<div class="col-lg-3 col-sm-3">
+										<?php echo $beerBrewery ?>
+									</div>
+									<div class="col-lg-1 col-sm-1">
 										<?php echo $beerQty ?>
 									</div>
-									<div class="col-lg-3 col-sm-3">
+									<div class="col-lg-1 col-sm-1">
 										<?php echo $beerVintage ?>
 									</div>
-									<div class="col-lg-3 col-sm-3 pad-right">
+									<div class="col-lg-2 col-sm-2 pad-right">
 										<?php echo $beerDate ?>
-										<a href="#editBeer" class="btn btn-default">Edit</a>
+										
 									</div>
+									<a href="#editBeer" class="btn btn-default">Edit</a>
 								</div>
 								<?php
 								}?>

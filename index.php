@@ -35,7 +35,7 @@
 			</div>	<!-- end of loginBox Div -->
 			<div class="offset-8-lg offset-8-sm col-lg-3 col-sm-3 row buttonDrop">
 				
-				<div class="col-lg-4 imgSize pull-left" ><a href=""><img src="images/registerword.png" alt="Register"></a></div>
+				<div class="col-lg-4 imgSize pull-left" ><a href="register.php"><img src="images/registerword.png" alt="Register"></a></div>
 				<div class="col-lg-4 imgSize pull-right" ><a href=""  data-toggle="modal" data-target="#loginModal"><img src="images/loginword.png" alt="Login"></a></div>
 				
 				<!--
@@ -142,7 +142,11 @@
 					{
 						
 						$("#results").html(html);
-						window.location = 'usercellar.php';
+						if(html.includes("Thank"))
+							{
+								window.location = 'usercellar.php';
+							}
+						
 						
 					}
 				});

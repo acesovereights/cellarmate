@@ -81,32 +81,34 @@ if(isset($_POST['submitRegistration']))
 	{
 		$public=0;
 	}
-	
+	/*
 	try
 	{
+		
 		//all of the data needed to complete a user in the USER table is complete
 		$query = $db->prepare("INSERT INTO USER (USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_LOCATION, USER_CELLAR_NAME, USER_PROFILE_PICTURE, USER_CELLAR_VISIBLE) VALUES (?,?,?,?,?,?,?,?,?);");
 		$query->execute([$username, $password, $email, $firstName, $lastName, $location, $cellarName, $filename, $public]);
 		
 		//query the database to get the user ID of the just entered user so we can create a cellar for them
 		$query = $db->prepare("SELECT USER_ID FROM USER WHERE USER_USERNAME = ?;");
-		$db->execute([$username]);
+		$query->execute([$username]);
 		
 		$query->setFetchMode(PDO::FETCH_ASSOC);
 	
 		$userID = $query->fetch();
 		
 		//create the cellar for the user
-		$query = $db->prepare("INSERT INTO USER_CELLAR (CELLAR_USER_ID, CELLAR_UNIQUE_BEER_ID) VALUES (?,?);");
+		$query = $db->prepare("INSERT INTO CELLAR (CELLAR_USER_ID, CELLAR_UNIQUE_BEER_ID) VALUES (?,?);");
 		$query->execute([$userID, 0]);
 //left off here, finish this part
+
 		
 	}
 	catch(PDOException $exception)
 	{
 		echo "User Insert ".$exception->getMessage();
 	}
-	
+	*/
 	
 	//send the user to their cellar.
 	//header("location: usercellar.php");
