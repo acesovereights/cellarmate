@@ -241,4 +241,14 @@ img{
 	padding-right: 11%;
 	width: 100%;
 }
+.red{
+	color: red;
+}
+.green{
+	color:green;
+}
+.userResult{
+	font-size: .9vw;
+	
+}
 
