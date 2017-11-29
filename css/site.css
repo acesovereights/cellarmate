@@ -72,7 +72,7 @@
 		/*background-image: url('../images/rusty-whiskey-barrel_rev.jpg');*/
 		/*background-color: #FCE49C;*/
 		
-		height: 925px;
+		height: 95vh;
 		
 		/*height: 88vh;*/
 	}
@@ -208,6 +208,7 @@
 }
 .addBeerPanel{
 	margin-top: 7%;
+	background-color: #F9D67E;
 }
 .dropText{
 	margin-top: 7%;
@@ -308,4 +309,6 @@ img{
 .cellarPadRight{
 	padding-right: 3%;
 }
-
+.sortHolder{
+	margin-bottom: 7%;
+}

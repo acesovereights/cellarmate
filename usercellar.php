@@ -57,7 +57,7 @@
 <link rel="stylesheet" href="css/site.css" type="text/css">
 </head>
 
-<body>
+<body style="background-color: #F9D67E;">
 	<div class="scrollContainer cellarFirstPanel">
 		<div class="container">
 
@@ -81,23 +81,24 @@
 					<img src="images/cellarpanel.png" alt="User Cellar Panel">
 					<div class="sorting textInsideRightCellar">
 						<form action="" method="" class="row">
+						<div class="sortHolder">
 							<div class="col-lg-3 col-sm-3">
 <!--								<input type="image" src="images/sortarrow.png" name="sortByName" value="Sort by Name">-->
-								<img src="images/sortarrow.png" alt="Sort By Name" onClick="sort('name')">
+								<img src="images/sortarrow.png" alt="Sort By Name" onClick="sort('name')" style="padding-left: 35%;">
 							</div>
 							<div class="col-lg-3 col-sm-3">
 <!--								<input type="submit" name="sortByQty" class="btn btn-default" value="Sort by Quantity">-->
-								<img src="images/sortarrow.png" alt="Sort By Quantity" onClick="sort('brewery')">
+								<img src="images/sortarrow.png" alt="Sort By Quantity" onClick="sort('brewery')" style="padding-left: 55%;">
 							</div>
 							<div class="col-lg-2 col-sm-2">
 <!--								<input type="submit" name="sortByVintage" class="btn btn-default" value="Sort by Vintage">-->
-								<img src="images/sortarrow.png" alt="Sort By Vintage" onClick="sort('qty')">
+								<img src="images/sortarrow.png" alt="Sort By Vintage" onClick="sort('qty')" style="padding-left: 35%;">
 							</div>
 							<div class="col-lg-3 col-sm-3">
 <!--								<input type="submit" name="sortByDate" class="btn btn-default" value="Sort by Date">-->
-								<img src="images/sortarrow.png" alt="Sort By Date" onClick="sort('year')">
+								<img src="images/sortarrow.png" alt="Sort By Date" onClick="sort('year')" style="margin-left: -65%;">
 							</div>
-							
+						</div>
 							
 								<?php
 								for($i=0;$i<10;$i++)
@@ -165,6 +166,14 @@
 			<aside class="pull-right" id="right">
 				<div class="col-lg-12 col-sm-12">
 					<h3>Beer Name</h3>
+					<input type="text" class="form-control" placeholder="Beer Name">
+					<input type="text" class="form-control" placeholder="Brewery Name">
+					<input type="text" class="form-control" placeholder="Vintage">
+					<input type="text" class="form-control" placeholder="Beer Style">
+					<input type="text" class="form-control" placeholder="Container Size">
+					<input type="text" class="form-control" placeholder="IBU">
+					<input type="text" class="form-control" placeholder="ABV">
+					<input type="textarea" class="form-control" placeholder="Description">
 				</div>
 			</aside>
 		</div>
@@ -189,15 +198,26 @@
 					<h3>Reason for removal<br>from cellar</h3>
 					
 					<form action="" method="post">
-						<input type="radio" name="deletion" value="drank"><label> Drank it!</label><br>
-						<input type="radio" name="deletion" value="incorrect"><label> Wrong beer listed</label><br>
-						<input type="radio" name="deletion" value="other"><label> Other</label>
+						<input type="radio" name="deletion" value="drank"><label>&nbsp;Drank it!</label><br>
+						<input type="radio" name="deletion" value="incorrect"><label>&nbsp;Wrong beer listed</label><br>
+						<input type="radio" name="deletion" value="other"><label>&nbsp;Other</label>
 					</form>
 				</div>
 			</aside>
 			<aside class="pull-right dropText" id="rightEdit">
 				<div class="col-lg-12 col-sm-12">
 					<h3>Beer Name</h3>
+					<input type="text" class="form-control" placeholder="Beer Name">
+					<input type="text" class="form-control" placeholder="Brewery Name">
+					<input type="text" class="form-control" placeholder="Vintage">
+					<input type="text" class="form-control" placeholder="Beer Style">
+					<input type="text" class="form-control" placeholder="Container Size">
+					<input type="text" class="form-control" placeholder="IBU">
+					<input type="text" class="form-control" placeholder="ABV">
+					<input type="textarea" class="form-control" placeholder="Description">
+					
+					
+					<input type="submit" class="btn btn-success" value="Submit Edits">
 				</div>
 			</aside>
 		</div>
