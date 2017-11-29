@@ -82,18 +82,23 @@
 					<div class="sorting textInsideRightCellar">
 						<form action="" method="" class="row">
 							<div class="col-lg-3 col-sm-3">
-								<input type="submit" name="sortByName" class="btn btn-default" value="Sort by Name">
+<!--								<input type="image" src="images/sortarrow.png" name="sortByName" value="Sort by Name">-->
+								<img src="images/sortarrow.png" alt="Sort By Name" onClick="sort('name')">
 							</div>
 							<div class="col-lg-3 col-sm-3">
-								<input type="submit" name="sortByQty" class="btn btn-default" value="Sort by Quantity">
+<!--								<input type="submit" name="sortByQty" class="btn btn-default" value="Sort by Quantity">-->
+								<img src="images/sortarrow.png" alt="Sort By Quantity" onClick="sort('brewery')">
+							</div>
+							<div class="col-lg-2 col-sm-2">
+<!--								<input type="submit" name="sortByVintage" class="btn btn-default" value="Sort by Vintage">-->
+								<img src="images/sortarrow.png" alt="Sort By Vintage" onClick="sort('qty')">
 							</div>
 							<div class="col-lg-3 col-sm-3">
-								<input type="submit" name="sortByVintage" class="btn btn-default" value="Sort by Vintage">
+<!--								<input type="submit" name="sortByDate" class="btn btn-default" value="Sort by Date">-->
+								<img src="images/sortarrow.png" alt="Sort By Date" onClick="sort('year')">
 							</div>
-							<div class="col-lg-3 col-sm-3">
-								<input type="submit" name="sortByDate" class="btn btn-default" value="Sort by Date">
-							</div>
-
+							
+							
 								<?php
 								for($i=0;$i<10;$i++)
 								{
@@ -112,12 +117,18 @@
 									<div class="col-lg-1 col-sm-1">
 										<?php echo $beerVintage ?>
 									</div>
-									<div class="col-lg-2 col-sm-2 pad-right">
+									<!--
+									<div class="col-lg-2 col-sm-2">
 										<?php echo $beerDate ?>
 										
 									</div>
-									<a href="#editBeer" class="btn btn-default">Edit</a>
+									-->
+									<div class="col-lg-2 col-sm-2">
+										<a href="#editBeer"><img src="images/editbutton.png" alt="Edit Button"></a>
+									</div>
+									
 								</div>
+<!--								put pagination here-->
 								<?php
 								}?>
 
@@ -192,5 +203,18 @@
 		</div>
 		
 	</div>
+	
+	<script>
+		
+		function sort(criteria)
+		{
+			//put the sorting stuff here. like ajax
+			alert(criteria);
+			
+		}
+	
+	
+	
+	</script>
 </body>
 </html>
