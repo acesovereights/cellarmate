@@ -63,7 +63,7 @@
 	<div class="container scrollContainer paleYellow">
 		<div class="col-lg-12 col-sm-12 ">
 			<div class="aboutUs col-lg-11 col-sm-11" id="about">
-				<h1> cellarmate.com</h1>
+				<h1>cellarmate.com</h1>
 				<h3>Better beer tracking through barcodes</h3>
 
 				<div class="col-lg-11 col-sm-11">

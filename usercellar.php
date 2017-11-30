@@ -55,6 +55,7 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="css/site.css" type="text/css">
 </head>
 
@@ -77,6 +78,7 @@
 						<br>
 						<a href="#addBeer" class="btn btn-success" id="newBeerBtn">Add a new beer</a>
 					</div>
+						<a href="" class="btn btn-success" id="searchBtn" data-toggle="modal" data-target="#searchModal">Search for another user</a>
 				</div>
 				<div class="col-lg-8 col-sm-8 pull-right imgOverText">
 					<img src="images/cellarpanel.png" alt="User Cellar Panel">
@@ -232,7 +234,41 @@
 		</div>
 		
 	</div>
-	
+	<!--	Search Modal-->
+	<div id="searchModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content modal-css">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Search Cellars</h4>
+		  </div>
+
+
+			  <div class="modal-body">
+
+				<input class="loginTextbox" id="username" type="text" name="username" placeholder="Username" required>
+				<br>
+				<input class="loginTextbox" id="password" type="password" name="password" placeholder="Beer Name" required>
+				<br><br>
+	<!--      Send the login data to the php module-->
+				<div class="row">
+					<button type="submit" class="btn btn-success" name="loginBtn" onClick="sendLogin()">Search</button>
+					<div id="results"></div>				
+				</div>
+
+			  </div>
+			  <div class="modal-footer">
+
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			  </div>
+		</div>
+
+	  </div>
+	<script>
+		$("[data-toggle='modal']").modal();
+	</script>
 	<script>
 		
 		function sort(criteria)
