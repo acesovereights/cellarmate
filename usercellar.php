@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	
 	include('scripts/connect.php');
 	//$userID = $_SESSION['ID'];
 	/*
@@ -146,10 +147,18 @@
 				<div class="col-lg-12 col-sm-12">
 					<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10">
 						<h2>Barcode</h2>
-						<form action="" method="post">
+						<form action="scripts/apicall.php" method="post">
 							<input type="text" placeholder="Scan or type the barcode" name="barcode" >
+							<input type="submit" name="submitBarcode" value="Get Data">
 						</form>						
 					</div>
+					<?php
+						//print_r($_POST);
+						if(isset($_SESSION['decoded']))
+						{
+							//print_r($_SESSION['decoded']);	
+						}
+					?>
 				</div>
 				<div class="offset-lg-1 offset-sm-1 col-lg-10 col-sm-10 ">
 					<h3>Sorry! Data for that <br>barcode was not found.</h3>
@@ -166,14 +175,14 @@
 			<aside class="pull-right" id="right">
 				<div class="col-lg-12 col-sm-12">
 					<h3>Beer Name</h3>
-					<input type="text" class="form-control" placeholder="Beer Name">
-					<input type="text" class="form-control" placeholder="Brewery Name">
-					<input type="text" class="form-control" placeholder="Vintage">
-					<input type="text" class="form-control" placeholder="Beer Style">
-					<input type="text" class="form-control" placeholder="Container Size">
-					<input type="text" class="form-control" placeholder="IBU">
-					<input type="text" class="form-control" placeholder="ABV">
-					<input type="textarea" class="form-control" placeholder="Description">
+					<input type="text" class="form-control" name="" placeholder="Beer Name">
+					<input type="text" class="form-control" name="" placeholder="Brewery Name">
+					<input type="text" class="form-control" name="" placeholder="Vintage">
+					<input type="text" class="form-control" name="" placeholder="Beer Style">
+					<input type="text" class="form-control" name="" placeholder="Container Size">
+					<input type="text" class="form-control" name="" placeholder="IBU">
+					<input type="text" class="form-control" name="" placeholder="ABV">
+					<textarea rows="5" columns="50" class="form-control" name="" placeholder="Description" style="margin-top: 4%;"></textarea>
 				</div>
 			</aside>
 		</div>
@@ -207,14 +216,14 @@
 			<aside class="pull-right dropText" id="rightEdit">
 				<div class="col-lg-12 col-sm-12">
 					<h3>Beer Name</h3>
-					<input type="text" class="form-control" placeholder="Beer Name">
-					<input type="text" class="form-control" placeholder="Brewery Name">
-					<input type="text" class="form-control" placeholder="Vintage">
-					<input type="text" class="form-control" placeholder="Beer Style">
-					<input type="text" class="form-control" placeholder="Container Size">
-					<input type="text" class="form-control" placeholder="IBU">
-					<input type="text" class="form-control" placeholder="ABV">
-					<input type="textarea" class="form-control" placeholder="Description">
+					<input type="text" class="form-control" name="" placeholder="Beer Name">
+					<input type="text" class="form-control" name="" placeholder="Brewery Name">
+					<input type="text" class="form-control" name="" placeholder="Vintage">
+					<input type="text" class="form-control" name="" placeholder="Beer Style">
+					<input type="text" class="form-control" name="" placeholder="Container Size">
+					<input type="text" class="form-control" name="" placeholder="IBU">
+					<input type="text" class="form-control" name="" placeholder="ABV">
+					<textarea rows="5" columns="50" class="form-control" name="" placeholder="Description" style="margin-top: 4%;"></textarea>
 					
 					
 					<input type="submit" class="btn btn-success" value="Submit Edits">

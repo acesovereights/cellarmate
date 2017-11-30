@@ -20,6 +20,9 @@
     font-family: ediface;
     src: url(../fonts/EdificeClassic_TB.otf);
 }
+.ediface{
+	font-family: 'ediface';
+}
 	
 	.divBox{
 		background-color: #A65317; /*rgba(128,97,54,.8);*/
@@ -204,11 +207,16 @@
 .editBeerPanel{
 	background-color: #541407;
 	color: #EDA626;
+	text-shadow: 2px 2px black;
+	font-family: 'ediface';
 	
 }
 .addBeerPanel{
 	margin-top: 7%;
 	background-color: #F9D67E;
+	font-family: 'ediface';
+	color: #6E4101;
+	text-shadow: 2px 2px #EDA626;
 }
 .dropText{
 	margin-top: 7%;
@@ -311,4 +319,8 @@ img{
 }
 .sortHolder{
 	margin-bottom: 7%;
+}
+.adminContainer{
+	font-family: ediface;
+	font-size: 1.25vw;
 }

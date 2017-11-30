@@ -19,7 +19,7 @@
 
 <body id="registerBody">
 	<div class="container">
-		<div class="col-lg-12 col-sm-12">
+		<div class="col-lg-12 col-sm-12 ediface">
 			<div class="col-lg-6 col-sm-6">
 				<h2>New User Registration</h2>
 				<form action="scripts/createuser.php" method="post" enctype="multipart/form-data">
