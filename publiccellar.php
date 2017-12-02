@@ -124,9 +124,11 @@
 										
 									</div>
 									-->
+									<!--
 									<div class="col-lg-2 col-sm-2">
 										<a href="#editBeer"><img src="images/editbutton.png" alt="Edit Button"></a>
 									</div>
+									-->
 									
 								</div>
 <!--								put pagination here-->
