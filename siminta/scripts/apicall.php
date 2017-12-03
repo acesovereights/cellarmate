@@ -2,7 +2,9 @@
 session_start();
 if(isset($_POST['barcode']))
 	{
-	
+	unset($_SESSION['fromSearch']);
+	unset($_SESSION['names']);
+	unset($_SESSION['IDs']);
 	$upc = $_POST['barcode'];
 
 			

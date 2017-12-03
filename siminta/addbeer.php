@@ -544,6 +544,7 @@ include('scripts/connect.php');
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
+<!--                                 	section to scan a barcode-->
                                   	<form action="scripts/apicall.php" method="post">
                                   		<?php
 												if(isset($_SESSION['insertedBeer']))
@@ -559,10 +560,14 @@ include('scripts/connect.php');
 									</form>
                              		
 										<?php
+											if(isset($_SESSION['barcode']))
+											{
+												$barcodeSession = $_SESSION['barcode'];	
+											}
 											if(isset($_SESSION['names']) && isset($_SESSION['IDs']))
 											{
 												//The barcode returned no results, and the user manually entered beer details
-												echo "<form action='' method='post'>";
+												echo "<form action='scripts/apiBeer.php' method='post'>";
 												//print_r($_SESSION['names']);
 												foreach($_SESSION['names'] as $index=>$beer)
 												{
@@ -570,8 +575,8 @@ include('scripts/connect.php');
 													echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$foundBeerId''> $beer</label><br>";
 												}
 												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other''> Not Listed</label><br>";
-												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='searchSubmit'>Add Beer</button></form>";
-												session_destroy();
+												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='searchSubmit'>Get Beer Data</button></form>";
+												
 												
 												
 												//so we are here. This properly displays the returned beers, right now it can handle the partial name of a beer, but not a partial name of a brewery
@@ -602,31 +607,59 @@ include('scripts/connect.php');
 												print_r($results[1]->{'data'});//->{'name'});
 												echo "<br>";
 												*/
-												if($foundResults >2)
+												if(!isset($_SESSION['fromSearch']))
 												{
-													$numResults = $results->totalResults;
+													if($foundResults >2)
+													{
+														$numResults = $results->totalResults;
+													}
+													else
+													{
+														$numResults = 0;
+													}
 												}
 												else
 												{
+													//set results to 0 so the if condition below fails the AND portion
 													$numResults = 0;
 												}
 												
 												
 												
 												
-												if($foundResults >2 && $numResults == 1)
+												if( ($foundResults >2 && $numResults == 1) || isset($_SESSION['fromSearch']))
 												{
-													//put double quotes around the beername so that apostrophes dont break in the input
-													$displayBeerName = '"'.$results->data[0]->name.'"';
-													$beerName = $results->data[0]->name;
-													$ibu = $results->data[0]->ibu;
-													$abv = $results->data[0]->abv;
-													$description = $results->data[0]->description;
-													$style = $results->data[0]->style->name;
-													$image = $results->data[0]->labels->medium;
-													$beerID = $results->data[0]->id;
-													$barcode = $_SESSION['barcode'];
-													$isCommercial = 1;
+													if(!$_SESSION['fromSearch'])	//from successful barcode retrieval
+													{
+														//put double quotes around the beername so that apostrophes dont break in the input
+														$displayBeerName = '"'.$results->data[0]->name.'"';
+														$beerName = $results->data[0]->name;
+														$ibu = $results->data[0]->ibu;
+														$abv = $results->data[0]->abv;
+														$description = $results->data[0]->description;
+														$style = $results->data[0]->style->name;
+														$image = $results->data[0]->labels->medium;
+														$beerID = $results->data[0]->id;
+														$barcode = $_SESSION['barcode'];
+														$isCommercial = 1;
+													}
+													else	//from manual beer search
+													{
+														//this is for the data sent back from the API when user searched by name
+														//put double quotes around the beername so that apostrophes dont break in the input
+														
+														print_r($_SESSION);
+														$displayBeerName = '"'.$results->data->name.'"';
+														$beerName = $results->data->name;
+														$ibu = $results->data->ibu;
+														$abv = $results->data->abv;
+														$description = $results->data->description;
+														$style = $results->data->style->name;
+														$image = $results->data->labels->medium;
+														$beerID = $results->data->id;
+														$barcode = $barcodeSession;
+														$isCommercial = 1;
+													}
 													
 													
 													
