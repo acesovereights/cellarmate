@@ -339,7 +339,7 @@ include('scripts/connect.php');
                         <!--end search section-->
                     </li>
                     <li class="selected">
-                        <a href="index.html"><i class="fa fa-list fa-fw"></i> Cellar View</a>
+                        <a href="cellar.php"><i class="fa fa-list fa-fw"></i> Cellar View</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-plus fa-fw"></i> Add a beer</a>
@@ -531,13 +531,11 @@ include('scripts/connect.php');
                                     <ul class="dropdown-menu pull-right" role="menu">
                                         <li><a href="#">Action</a>
                                         </li>
-                                        <li><a href="#">Another action</a>
+                                        <li><a href="#">Remove a Beer</a>
                                         </li>
-                                        <li><a href="#">Something else here</a>
+                                        <li><a href="#">Cellar View</a>
                                         </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
+                  
                                     </ul>
                                 </div>
                             </div>
@@ -547,16 +545,55 @@ include('scripts/connect.php');
                             <div class="row">
                                 <div class="col-lg-12">
                                   	<form action="scripts/apicall.php" method="post">
+                                  		<?php
+												if(isset($_SESSION['insertedBeer']))
+												{
+													$insertedBeerName = $_SESSION['insertedBeer'];
+													echo "<h3>$insertedBeerName was added to your cellar</h3><h4>Ready to add another</h4>";
+												}
+											
+										?>
 									  	<div class="input-group custom-search-form">
-											<input type="text" class="form-control" placeholder="Scan or type the barcode" name="barcode">
+											<input type="text" class="form-control" placeholder="Scan or type the barcode" name="barcode" autofocus>
 										</div>
 									</form>
                              		
 										<?php
+											if(isset($_SESSION['names']) && isset($_SESSION['IDs']))
+											{
+												//The barcode returned no results, and the user manually entered beer details
+												echo "<form action='' method='post'>";
+												//print_r($_SESSION['names']);
+												foreach($_SESSION['names'] as $index=>$beer)
+												{
+													$foundBeerId = $_SESSION['IDs'][$index];
+													echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$foundBeerId''> $beer</label><br>";
+												}
+												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other''> Not Listed</label><br>";
+												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='searchSubmit'>Add Beer</button></form>";
+												session_destroy();
+												
+												
+												//so we are here. This properly displays the returned beers, right now it can handle the partial name of a beer, but not a partial name of a brewery
+												//what i need it to do is to call the api and feed it the value of the selected radio box. 
+												//that should return it to the same area that a successful barcode scan does.
+												
+												
+												
+												
+												
+												
+												
+											}
 											if(isset($_SESSION['results']))
 											{
+												unset($_SESSION['insertedBeer']);
 												$results = $_SESSION['results'];
 												//print_r($results);
+												
+												//cast the results as an array so we can count the number of items
+												//2 items means no results found. more than 2 means results are found
+												$foundResults = count((array)$results);
 												//echo"<br><br>";
 												//print_r($results->data[0]);
 												//$numResults = $results[0];
@@ -565,20 +602,34 @@ include('scripts/connect.php');
 												print_r($results[1]->{'data'});//->{'name'});
 												echo "<br>";
 												*/
-												$numResults = $results->totalResults;
-												
-												$beerName = $results->data[0]->name;
-												$ibu = $results->data[0]->ibu;
-												$abv = $results->data[0]->abv;
-												$description = $results->data[0]->description;
-												$style = $results->data[0]->style->name;
-												$image = $results->data[0]->labels->medium;
-												$beerID = $results->data[0]->id;
-												$barcode = $_SESSION['barcode'];
-												$isCommercial = 1;
-												
-												if($numResults == 1)
+												if($foundResults >2)
 												{
+													$numResults = $results->totalResults;
+												}
+												else
+												{
+													$numResults = 0;
+												}
+												
+												
+												
+												
+												if($foundResults >2 && $numResults == 1)
+												{
+													//put double quotes around the beername so that apostrophes dont break in the input
+													$displayBeerName = '"'.$results->data[0]->name.'"';
+													$beerName = $results->data[0]->name;
+													$ibu = $results->data[0]->ibu;
+													$abv = $results->data[0]->abv;
+													$description = $results->data[0]->description;
+													$style = $results->data[0]->style->name;
+													$image = $results->data[0]->labels->medium;
+													$beerID = $results->data[0]->id;
+													$barcode = $_SESSION['barcode'];
+													$isCommercial = 1;
+													
+													
+													
 													echo  "<form action='insertBeer.php' method='post'><h2>$beerName</h2>";
 													echo "<div class='col-lg-5'>";
 
@@ -592,13 +643,14 @@ include('scripts/connect.php');
 													//that you need to search for and get the brewery name from there
 													include('scripts/apiBrewery.php');
 													$breweryName = $_SESSION['brewery']->data[0]->name;
+													$DisplayBreweryName = '"'.$_SESSION['brewery']->data[0]->name.'"';
 
-													echo "<label>Beer Name</label><input type='text' class='form-control' placeholder='$beerName'' name='beerName'>";
-													echo "<label>Brewery</label><input type='text' class='form-control' placeholder='$breweryName' name='breweryName'>";
+													echo "<label>Beer Name</label><input type='text' class='form-control' value=$displayBeerName name='beerName'>";
+													echo "<label>Brewery</label><input type='text' class='form-control' value=$DisplayBreweryName name='breweryName'>";
 													echo "<label>Container Size</label><input type='text' class='form-control' name='containerSize'>";
-													echo "<label>IBU</label><input type='text' class='form-control' placeholder='$ibu' name='ibu'>";
-													echo "<label>ABV</label><input type='text' class='form-control' placeholder='$abv' name='abv'>";
-													echo "<label>Beer Style</label><input type='text' class='form-control' placeholder='$style' name='style'>";
+													echo "<label>IBU</label><input type='text' class='form-control' value='$ibu' name='ibu'>";
+													echo "<label>ABV</label><input type='text' class='form-control' value='$abv' name='abv'>";
+													echo "<label>Beer Style</label><input type='text' class='form-control' value='$style' name='style'>";
 													echo "<img src='$image' alt='Beer Label Image' name='image' value='$image'>";
 
 
@@ -606,24 +658,25 @@ include('scripts/connect.php');
 															<div class='col-lg-5'>";
 
 
-													echo "<label>Vintage</label><input type='text' class='form-control' placeholder='2017'' name='beerVintage'>";
+													echo "<label>Vintage</label><input type='text' class='form-control' value='2017'' name='beerVintage'>";
 													echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace'>";
 													echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice'>";
 					//if I get time maybe add a date picker calendar....
 													echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
-													echo "<label>Quantity</label><input type='text' class='form-control' placeholder='1' name='beerQuantity'>";										
+													echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
 													echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>$description</textarea>";
 													echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
-													echo "<br><button class='btn btn-success' name='submitBeer'>Add to Cellar</button>
+													echo "<br><button class='btn btn-success' name='submitBeer' value='submit'>Add to Cellar</button>
 														</div></form>";
 													//manually set some post variables
-													$_POST['barcode'] = $barcode;
-													$_POST['commercial'] = $isCommercial;
-													$_POST['ID'] = $id;
+													$_SESSION['barcode'] = $barcode;
+													$_SESSION['commercial'] = $isCommercial;
+													$_SESSION['ID'] = $id;
+													$_SESSION['image'] = $image;
 													
 													
 												}
-												else		//there are multiple returned beers
+												elseif($numResults >1)		//there are multiple returned beers
 												{
 													$multipleBeers=[];
 													//the api returned more than 1 beer
@@ -657,6 +710,28 @@ include('scripts/connect.php');
 													}
 													echo "</div>";
 												}
+												else
+												{
+													// no results returned
+													//print_r($results);
+													echo "<h3>No beers found with that barcode</h3>";
+													echo "<h4>Try searching by Beer Name and Brewery</h4><br>";
+													session_destroy();
+													echo "<div class='col-lg-4'>";
+													echo "<form action='scripts/beersearch.php' method='post'>";
+													echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
+													echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
+													echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='Search'>Search</button>";
+													echo "</form>";
+													
+													
+													
+													
+													
+													
+													
+													echo "</div>";
+												}
 											}
 												
 										?>
@@ -664,7 +739,6 @@ include('scripts/connect.php');
                              			<br>
                               			
                                		</div>
-                                </div>
 
                             </div>
                             <!-- /.row -->
@@ -739,225 +813,11 @@ include('scripts/connect.php');
                             </span>
                         </div>
                     </div>
-     <!-- Don think i need this element
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body red">
-                            <i class="fa fa-thumbs-up fa-3x"></i>
-                            <h3>2,700 </h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">New User Registered
-                            </span>
-                        </div>
-                    </div>
-                    -->
-
-
-
-
-
-
-
-                </div>
+                 </div>
 
             </div>
-<!--
-            <div class="row">
-                <div class="col-lg-4">
-                    <!-- Notifications
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i>Notifications Panel
-                        </div>
 
-                        <div class="panel-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i>New Comment
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-twitter fa-fw"></i>3 New Followers
-                                    <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i>Message Sent
-                                    <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-tasks fa-fw"></i>New Task
-                                    <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-upload fa-fw"></i>Server Rebooted
-                                    <span class="pull-right text-muted small"><em>11:32 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-bolt fa-fw"></i>Server Crashed!
-                                    <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-warning fa-fw"></i>Server Not Responding
-                                    <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-shopping-cart fa-fw"></i>New Order Placed
-                                    <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
-                                </a>
-
-                            </div>
-                            <!-- /.list-group 
-                            <a href="#" class="btn btn-default btn-block">View All Alerts</a>
-                        </div>
-
-                    </div>
-                    <!--End Notifications
-                </div>
-                <div class="col-lg-4">
-                    <!-- Donut Example
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Donut Chart Example
-                        </div>
-                        <div class="panel-body">
-                            <div id="morris-donut-chart"></div>
-                            <a href="#" class="btn btn-default btn-block">View Details</a>
-                        </div>
-
-                    </div>
-                    <!--End Donut Example
-                </div>
-                <div class="col-lg-4">
-                    <!-- Chat Panel Example
-                    <div class="chat-panel panel panel-primary">
-                        <div class="panel-heading">
-                            <i class="fa fa-comments fa-fw"></i>
-                            Chat
-                            <div class="btn-group pull-right">
-                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-chevron-down"></i>
-                                </button>
-                                <ul class="dropdown-menu slidedown">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-refresh fa-fw"></i>Refresh
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-check-circle fa-fw"></i>Available
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-times fa-fw"></i>Busy
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-clock-o fa-fw"></i>Away
-                                        </a>
-                                    </li>
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-sign-out fa-fw"></i>Sign Out
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="panel-body">
-                            <ul class="chat">
-                                <li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <strong class="primary-font">Jack Sparrow</strong>
-                                            <small class="pull-right text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i>12 mins ago
-                                            </small>
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <small class=" text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i>13 mins ago</small>
-                                            <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <strong class="primary-font">Jack Sparrow</strong>
-                                            <small class="pull-right text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i>14 mins ago</small>
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <small class=" text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i>15 mins ago</small>
-                                            <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="panel-footer">
-                            <div class="input-group">
-                                <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-warning btn-sm" id="btn-chat">
-                                        Send
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!--End Chat Panel Example-->
-                </div>
-            </div>
-
+                
 
          
 
