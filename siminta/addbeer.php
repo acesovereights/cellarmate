@@ -551,7 +551,7 @@ include('scripts/connect.php');
 											<input type="text" class="form-control" placeholder="Scan or type the barcode" name="barcode">
 										</div>
 									</form>
-                             		<form action=""></form>
+                             		
 										<?php
 											if(isset($_SESSION['results']))
 											{
@@ -579,7 +579,7 @@ include('scripts/connect.php');
 												
 												if($numResults == 1)
 												{
-													echo  "<h2>$beerName</h2>";
+													echo  "<form action='insertBeer.php' method='post'><h2>$beerName</h2>";
 													echo "<div class='col-lg-5'>";
 
 													//unset the barcode so the api interface doesnt re run the call
@@ -599,10 +599,11 @@ include('scripts/connect.php');
 													echo "<label>IBU</label><input type='text' class='form-control' placeholder='$ibu' name='ibu'>";
 													echo "<label>ABV</label><input type='text' class='form-control' placeholder='$abv' name='abv'>";
 													echo "<label>Beer Style</label><input type='text' class='form-control' placeholder='$style' name='style'>";
-													echo "<img src='$image' alt='Beer Label Image'>";
+													echo "<img src='$image' alt='Beer Label Image' name='image' value='$image'>";
 
 
-													echo "</div><div class='col-lg-5'>";
+													echo "</div>
+															<div class='col-lg-5'>";
 
 
 													echo "<label>Vintage</label><input type='text' class='form-control' placeholder='2017'' name='beerVintage'>";
@@ -612,9 +613,17 @@ include('scripts/connect.php');
 													echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
 													echo "<label>Quantity</label><input type='text' class='form-control' placeholder='1' name='beerQuantity'>";										
 													echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>$description</textarea>";
-													echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='description'></textarea>";
+													echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
+													echo "<br><button class='btn btn-success' name='submitBeer'>Add to Cellar</button>
+														</div></form>";
+													//manually set some post variables
+													$_POST['barcode'] = $barcode;
+													$_POST['commercial'] = $isCommercial;
+													$_POST['ID'] = $id;
+													
+													
 												}
-												else
+												else		//there are multiple returned beers
 												{
 													$multipleBeers=[];
 													//the api returned more than 1 beer
@@ -653,7 +662,7 @@ include('scripts/connect.php');
 										?>
                             			
                              			<br>
-                              			<button class="btn btn-success" name="submitBeer">Add to Cellar</button>
+                              			
                                		</div>
                                 </div>
 
