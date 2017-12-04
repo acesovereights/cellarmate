@@ -42,237 +42,9 @@ include('scripts/connect.php');
     <!--  wrapper -->
     <div id="wrapper">
         <!-- navbar top -->
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar">
-            <!-- navbar-header -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.php">
-                    <img src="images/cellarmatelogo.png" alt="Cellarmate">
-                </a>
-            </div>
-            <!-- end navbar-header -->
-            <!-- navbar-top-links -->
-            <ul class="nav navbar-top-links navbar-right">
-                <!-- main dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span class="top-label label label-danger">3</span><i class="fa fa-envelope fa-3x"></i>
-                    </a>
-                    <!-- dropdown-messages -->
-                    <ul class="dropdown-menu dropdown-messages">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong><span class=" label label-danger">Andrew Smith</span></strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong><span class=" label label-info">Jonney Depp</span></strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong><span class=" label label-success">Jonney Depp</span></strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>Read All Messages</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- end dropdown-messages -->
-                </li>
-
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span class="top-label label label-success">4</span>  <i class="fa fa-tasks fa-3x"></i>
-                    </a>
-                    <!-- dropdown tasks -->
-                    <ul class="dropdown-menu dropdown-tasks">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 1</strong>
-                                        <span class="pull-right text-muted">40% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                            <span class="sr-only">40% Complete (success)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 2</strong>
-                                        <span class="pull-right text-muted">20% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only">20% Complete</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 3</strong>
-                                        <span class="pull-right text-muted">60% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                            <span class="sr-only">60% Complete (warning)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 4</strong>
-                                        <span class="pull-right text-muted">80% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                            <span class="sr-only">80% Complete (danger)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>See All Tasks</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- end dropdown-tasks -->
-                </li>
-
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span class="top-label label label-warning">5</span>  <i class="fa fa-bell fa-3x"></i>
-                    </a>
-                    <!-- dropdown alerts-->
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-comment fa-fw"></i>New Comment
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-twitter fa-fw"></i>3 New Followers
-                                    <span class="pull-right text-muted small">12 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-envelope fa-fw"></i>Message Sent
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-tasks fa-fw"></i>New Task
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-upload fa-fw"></i>Server Rebooted
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>See All Alerts</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- end dropdown-alerts -->
-                </li>
-
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-3x"></i>
-                    </a>
-                    <!-- dropdown user-->
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i>User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i>Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
-                        </li>
-                    </ul>
-                    <!-- end dropdown-user -->
-                </li>
-                <!-- end main dropdown -->
-            </ul>
-            <!-- end navbar-top-links -->
-
-        </nav>
+        <?php
+			include('scripts/topnav.php');
+		?>
         <!-- end navbar top -->
 
         <!-- navbar side -->
@@ -621,11 +393,11 @@ include('scripts/connect.php');
 												
 												
 											}
-											if(isset($_SESSION['results']))
+											if(isset($_SESSION['apiBeer']['results']))
 											{
 												
 												unset($_SESSION['insertedBeer']);
-												$results = $_SESSION['results'];
+												$results = $_SESSION['apiBeer']['results'];
 												//print_r($results);
 												
 												//cast the results as an array so we can count the number of items
@@ -639,7 +411,7 @@ include('scripts/connect.php');
 												print_r($results[1]->{'data'});//->{'name'});
 												echo "<br>";
 												*/
-												if(!isset($_SESSION['fromSearch']))
+												if(!isset($_SESSION['apiBeer']['fromSearch']))
 												{
 													if($foundResults >2)
 													{
@@ -659,20 +431,48 @@ include('scripts/connect.php');
 												
 												
 												
-												if( ($foundResults >2 && $numResults == 1) || isset($_SESSION['fromSearch']))
+												if( ($foundResults >2 && $numResults == 1) || isset($_SESSION['apiBeer']['fromSearch']))
 												{
-													if(!$_SESSION['fromSearch'])	//from successful barcode retrieval
+													if(!isset($_SESSION['apiBeer']['fromSearch']))	//from successful barcode retrieval
 													{
 														//put double quotes around the beername so that apostrophes dont break in the input
 														$displayBeerName = '"'.$results->data[0]->name.'"';
 														$beerName = $results->data[0]->name;
-														$ibu = $results->data[0]->ibu;
-														$abv = $results->data[0]->abv;
-														$description = $results->data[0]->description;
-														$style = $results->data[0]->style->name;
+														if(isset($results->data[0]->ibu))
+														{
+															$ibu = $results->data[0]->ibu;
+														}
+														else
+														{
+															$ibu =NULL;
+														}
+														if(isset($results->data[0]->abv))
+														{
+															$abv = $results->data[0]->abv;
+														}
+														else
+														{
+															$abv =NULL;
+														}
+														if(isset($results->data[0]->description))
+														{
+															$description = $results->data[0]->description;
+														}
+														else
+														{
+															$description =NULL;
+														}
+														if(isset($results->data[0]->style->name))
+														{
+															$style = $results->data[0]->style->name;
+														}
+														else
+														{
+															$style =NULL;
+														}
 														$image = $results->data[0]->labels->medium;
 														$beerID = $results->data[0]->id;
-														$barcode = $_SESSION['barcode'];
+														$barcode = $_GET['upc'];
 														$isCommercial = 1;
 													}
 													else	//from manual beer search
@@ -683,10 +483,38 @@ include('scripts/connect.php');
 														//print_r($_SESSION);
 														$displayBeerName = '"'.$results->data->name.'"';
 														$beerName = $results->data->name;
-														$ibu = $results->data->ibu;
-														$abv = $results->data->abv;
-														$description = $results->data->description;
-														$style = $results->data->style->name;
+														if(isset($results->data->ibu))
+														{
+															$ibu = $results->data->ibu;
+														}
+														else
+														{
+															$ibu =NULL;
+														}
+														if(isset($results->data->abv))
+														{
+															$abv = $results->data->abv;
+														}
+														else
+														{
+															$abv =NULL;
+														}
+														if(isset($results->data->description))
+														{
+															$description = $results->data->description;
+														}
+														else
+														{
+															$description =NULL;
+														}
+														if(isset($results->data->style->name))
+														{
+															$style = $results->data->style->name;
+														}
+														else
+														{
+															$style =NULL;
+														}
 														$image = $results->data->labels->medium;
 														$beerID = $results->data->id;
 														$barcode = $_GET['upc'];
@@ -776,9 +604,10 @@ include('scripts/connect.php');
 													}
 													echo "</div>";
 												}
-												elseif(!isset($_SESSION['Multi']) && !isset($_SESSION['MultiBeerNames']))
+												elseif(!isset($_SESSION['Multi']) && !isset($_SESSION['MultiBeerNames']) && isset($_SESSION['apiBeer']['results']))
 												{
 													// no results returned
+													print_r($_SESSION);
 													
 													echo "<h3>No beers found with that barcode</h3>";
 													echo "<h4>Try searching by Beer Name and Brewery</h4><br>";

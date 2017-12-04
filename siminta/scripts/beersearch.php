@@ -74,6 +74,9 @@ if(isset($_POST['multipleBreweries']))
 	$breweryID = $_POST['BreweryID'];
 	//set the case to upper to eliminate case sensitivity
 	$beerName = strtoupper($_SESSION['Multi']['beerName']);
+	//print_r($beerNameArray = explode(" ",$beerName));
+	
+	echo "<br>";
 	
 	$barcode = $_POST['multipleBreweries'];
 	//get the list of beers from the API by using the breweryID
@@ -89,11 +92,18 @@ if(isset($_POST['multipleBreweries']))
 		$breweryBeerName = strtoupper($beerItem->name);
 		
 		$breweryBeerDisplayName = strtoupper($beerItem->nameDisplay);
+		/*
+		foreach($beerNameArray as $i=>$beerSegment)
+		{
+			preg_match('/'.$beerSegment.'/', $breweryBeerName, $nameMatch[]);
+			
+		}
 		
+		*/
 		
-	
 		preg_match('/'.$beerName.'/', $breweryBeerName, $nameMatch);
 		preg_match('/'.$beerName.'/', $breweryBeerDisplayName, $nameDisplayMatch);
+		
 		
 		
 		

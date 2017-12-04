@@ -31,8 +31,8 @@ if(isset($_POST['searchSubmit']))
 		}
 
 
-		$_SESSION['results'] = $decoded;
-		$_SESSION['fromSearch'] = true;
+		$_SESSION['apiBeer']['results'] = $decoded;
+		$_SESSION['apiBeer']['fromSearch'] = true;
 		
 		unset($_SESSION['MultiBeerNames']);
 		header('location: ../addbeer.php?upc='.$_POST['searchSubmit']);
