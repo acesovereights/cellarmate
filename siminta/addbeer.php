@@ -540,7 +540,8 @@ include('scripts/connect.php');
 												{
 													$insertedBeerName = $_SESSION['insertedBeer'];
 													echo "<h3>$insertedBeerName was added to your cellar</h3><h4>Ready to add another</h4>";
-													session_destroy();
+													//session_destroy();
+													//instead of destroy, lets just unset the variables we need cleared, leaving the user data set.
 												}
 										
 											
@@ -552,13 +553,14 @@ include('scripts/connect.php');
                              		
 										<?php
 									
-									//if there are multipl breweries returned from the manual search
-											if(isset($_SESSION['multiBreweryIdArray']))
+									//if there are multiple breweries returned from the manual search
+											if(isset($_SESSION['Multi']))
 												{
 													//there were more than one brewery returned
-													$BreweryID = $_SESSION['multiBreweryIdArray'];
-													$BreweryName = $_SESSION['multiBreweryNameArray'];
-													$BreweryDesc = $_SESSION['multiBreweryDescArray'];
+													$BreweryID = $_SESSION['Multi']['multiBreweryIdArray'];
+													$BreweryName = $_SESSION['Multi']['multiBreweryNameArray'];
+													$BreweryDesc = $_SESSION['Multi']['multiBreweryDescArray'];
+													$barcode = $_SESSION['Multi']['barcode'];
 													
 													echo "<form action='scripts/beersearch.php' method='post'>";
 													foreach($BreweryID as $index=>$brewery)
@@ -570,13 +572,30 @@ include('scripts/connect.php');
 														
 														
 													}
-													print_r($_SESSION);
-													echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='".$_SESSION['beerSearchBarcode']."'>Select Brewery</button></form>";
+													//print_r($_SESSION);
+													
+													//sends to beersearch.php
+													echo "<button class='btn btn-success' type='submit' name='multipleBreweries' value='".$barcode."'>Select Brewery</button></form>";
 												}
 									
+											//where the beer results from the selection of the proper brewery are sent
+											if(isset($_SESSION['MultiBeerNames']))
+											{
+												echo "<form action='scripts/apiBeer.php' method='post'>";
+												$names = $_SESSION['MultiBeerNames']['names'];
+												foreach($names as $i=>$beerName)
+												{
+													$beerID = $_SESSION['MultiBeerNames']['ids'][$i];
+													echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$beerID'> $beerName</label><br>";
+												}
+												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other'> Not Listed</label><br>";
+												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button>";
+												echo "</form>";
+											}
 									
 									
-											if(isset($_SESSION['names']) && isset($_SESSION['IDs']) && !isset($_SESSION['multiBreweryIdArray']))
+									
+											if(isset($_SESSION['names']) && isset($_SESSION['IDs']) && !isset($_SESSION['Multi']['multiBreweryIdArray']))
 											{
 												//The barcode returned no results, and the user manually entered beer details
 												echo "<form action='scripts/apiBeer.php' method='post'>";
@@ -586,7 +605,7 @@ include('scripts/connect.php');
 													$foundBeerId = $_SESSION['IDs'][$index];
 													echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$foundBeerId''> $beer</label><br>";
 												}
-												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other''> Not Listed</label><br>";
+												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other'> Not Listed</label><br>";
 												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button></form>";
 												
 												
@@ -757,25 +776,19 @@ include('scripts/connect.php');
 													}
 													echo "</div>";
 												}
-												else
+												elseif(!isset($_SESSION['Multi']) && !isset($_SESSION['MultiBeerNames']))
 												{
 													// no results returned
-													//print_r($results);
+													
 													echo "<h3>No beers found with that barcode</h3>";
 													echo "<h4>Try searching by Beer Name and Brewery</h4><br>";
-													session_destroy();
+													//session_destroy();
 													echo "<div class='col-lg-4'>";
 													echo "<form action='scripts/beersearch.php' method='post'>";
 													echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
 													echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
 													echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='".$_GET['upc']."'>Search</button>";
 													echo "</form>";
-													
-													
-													
-													
-													
-													
 													
 													echo "</div>";
 												}
