@@ -335,7 +335,7 @@ unset($_SESSION['insertedBeer']);
                         <!--end search section-->
                     </li>
                     <li class="selected">
-                        <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Cellar View</a>
+                        <a href="cellar.php"><i class="fa fa-list fa-fw"></i> Cellar View</a>
                     </li>
                     <li>
                         <a href="addbeer.php"><i class="fa fa-plus fa-fw"></i> Add a beer</a>
@@ -580,7 +580,7 @@ unset($_SESSION['insertedBeer']);
 														$beerResult = $query->fetchAll();
 
 
-
+//THis needs to be refined. It does not find all the proper results. I think a LIKE is needed in the query
 														foreach($beerResult as $beer)
 														{
 															$beerName = $beer['USERS_BEER_NAME'];

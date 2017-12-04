@@ -4,44 +4,95 @@ if(isset($_POST['searchUnfoundBeer']))
 	include('connect.php');
 	session_start();
 	
-	$beerName = $_POST['searchBeerName'];
-	$breweryName = $_POST['searchBreweryName'];
+	if(isset($_POST['searchBeerName']))
+	{
+		//came from the manual input area
+		$beerName = $_POST['searchBeerName'];
+		$breweryName = $_POST['searchBreweryName'];
+	}
+	else
+	{
+		//came from the select multiple brewery are
+		$beerName = $_SESSION['beerName'];
+	}
+	
+	
+	
 	//echo $breweryName."<br>";
 	
 	//get the brewery info, specifically the brewery ID
 	
-	
-	$service_url = "https://api.brewerydb.com/v2/search?q=";
-	$service_url.=$breweryName;
-	$service_url.= "&type=brewery&key=59a62c5db7fbcbce7bd278756f886a11&format=json";
-		
-
-		//echo $service_url;
-	$curl = curl_init($service_url);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	$curl_response = curl_exec($curl);
-	if ($curl_response === false) 
+	if(!isset($_POST['BreweryID']))
 	{
-		$info = curl_getinfo($curl);
+		$service_url = "https://api.brewerydb.com/v2/search?q=";
+		$service_url.=$breweryName;
+		$service_url.= "&type=brewery&key=59a62c5db7fbcbce7bd278756f886a11&format=json";
+
+
+			//echo $service_url;
+		$curl = curl_init($service_url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		$curl_response = curl_exec($curl);
+		if ($curl_response === false) 
+		{
+			$info = curl_getinfo($curl);
+			curl_close($curl);
+			die('error occured during curl exec. Aditional info: ' . var_export($info));
+		}
 		curl_close($curl);
-		die('error occured during curl exec. Aditional info: ' . var_export($info));
-	}
-	curl_close($curl);
-	$decoded = json_decode($curl_response);
-	if (isset($decoded->response->status) && $decoded->response->status == 'ERROR') {
+		$decoded = json_decode($curl_response);
+		if (isset($decoded->response->status) && $decoded->response->status == 'ERROR') {
+
+			die('error occured: ' . $decoded->response->errormessage);
+
+		}
+		//print_r($decoded);
+		//find the number of results returned for that brewery
+		$numResults = $decoded->totalResults;
+
+		if($numResults>1)
+		{
+			//There are more then 1 brewery returned for that name, lets list them to the user and have them choose before proceeding
+			$multiBreweryIDArray = [];
+			$multiBreweryNameArray = [];
+			$multiBreweryDescArray = [];
+
+
+			foreach($decoded->data as $index=>$brewery)
+			{
+				$multiBreweryIDArray[] = $brewery->id;
+				$multiBreweryNameArray[] = $brewery->name;
+				$multiBreweryDescArray[] = $brewery->description;
+			}
+			$_SESSION['multiBreweryIdArray'] = $multiBreweryIDArray;
+			$_SESSION['multiBreweryNameArray'] = $multiBreweryNameArray;
+			$_SESSION['multiBreweryDescArray'] = $multiBreweryDescArray;
+			$_SESSION['beerName'] = $_POST['searchBeerName'];
+
+			header('location: ../addbeer.php?upc='.$_POST['searchUnfoundBeer']);
+		}
 	
-		die('error occured: ' . $decoded->response->errormessage);
-		
+	
 	}
 	
+//Left off here, the $decoded doesnt exist when I try to get to this page from the multiple brewery selection area. 
+	//maybe make the main working chunk of this section a function so it can be called as needed by either count((array)$decoded)>2 or isset($_POST['BreweryID']) ???????????
 	
 	//there is atleast 1 result returned
-	if(count((array)$decoded)>2)
+	if(count((array)$decoded)>2 || isset($_POST['BreweryID']))
 	{
 		if($decoded->totalResults >= 1)
 		{
 			//echo "in as awell";
-			$breweryID = $decoded->data[0]->id;
+			if(isset($_POST['BreweryID']))
+			{
+				$breweryID = $_POST['BreweryID'];
+			}
+			else
+			{
+				$breweryID = $decoded->data[0]->id;
+			}
+			
 			//echo $breweryID;
 			$service_url = "https://api.brewerydb.com/v2/brewery/";
 			$service_url.=$breweryID;
@@ -93,8 +144,9 @@ if(isset($_POST['searchUnfoundBeer']))
 			//print_r($resultsNameArray);
 			$_SESSION['names'] = $resultsNameArray;
 			$_SESSION['IDs'] = $resultsIdArray;
+			$_SESSION['beerSearchBarcode'] = $_POST['searchUnfoundBeer'];
 			
-			header('location: ../addbeer.php');
+			//header('location: ../addbeer.php?upc='.$_POST['searchUnfoundBeer']);
 		}
 		
 		else

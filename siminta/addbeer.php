@@ -338,21 +338,10 @@ include('scripts/connect.php');
 						</form>
                         <!--end search section-->
                     </li>
-                    <li class="selected">
-                        <a href="cellar.php"><i class="fa fa-list fa-fw"></i> Cellar View</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-plus fa-fw"></i> Add a beer</a>
-                    </li>
-                     <li>
-                        <a href="timeline.html"><i class="fa fa-flask fa-fw"></i>Timeline</a>
-                    </li>
-                    <li>
-                        <a href="tables.html"><i class="fa fa-table fa-fw"></i>Tables</a>
-                    </li>
-                    <li>
-                        <a href="forms.html"><i class="fa fa-edit fa-fw"></i>Forms</a>
-                    </li>
+                    	<?php
+							include('scripts/nav.html');
+						?>
+                   <!--
                     <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i>UI Elements<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -372,7 +361,7 @@ include('scripts/connect.php');
                                 <a href="grid.html">Grid</a>
                             </li>
                         </ul>
-                        <!-- second-level-items -->
+                        <!-- second-level-items 
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-fw"></i>Multi-Level Dropdown<span class="fa arrow"></span></a>
@@ -399,10 +388,10 @@ include('scripts/connect.php');
                                         <a href="#">Third Level Item</a>
                                     </li>
                                 </ul>
-                                <!-- third-level-items -->
+                                <!-- third-level-items 
                             </li>
                         </ul>
-                        <!-- second-level-items -->
+                        <!-- second-level-items 
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-files-o fa-fw"></i>Sample Pages<span class="fa arrow"></span></a>
@@ -414,8 +403,8 @@ include('scripts/connect.php');
                                 <a href="login.html">Login Page</a>
                             </li>
                         </ul>
-                        <!-- second-level-items -->
-                    </li>
+                        <!-- second-level-items 
+                    </li>-->
                 </ul>
                 <!-- end side-menu -->
             </div>
@@ -533,7 +522,7 @@ include('scripts/connect.php');
                                         </li>
                                         <li><a href="#">Remove a Beer</a>
                                         </li>
-                                        <li><a href="#">Cellar View</a>
+                                        <li><a href="cellar.php">Cellar View</a>
                                         </li>
                   
                                     </ul>
@@ -551,7 +540,9 @@ include('scripts/connect.php');
 												{
 													$insertedBeerName = $_SESSION['insertedBeer'];
 													echo "<h3>$insertedBeerName was added to your cellar</h3><h4>Ready to add another</h4>";
+													session_destroy();
 												}
+										
 											
 										?>
 									  	<div class="input-group custom-search-form">
@@ -560,11 +551,32 @@ include('scripts/connect.php');
 									</form>
                              		
 										<?php
-											if(isset($_SESSION['barcode']))
-											{
-												$barcodeSession = $_SESSION['barcode'];	
-											}
-											if(isset($_SESSION['names']) && isset($_SESSION['IDs']))
+									
+									//if there are multipl breweries returned from the manual search
+											if(isset($_SESSION['multiBreweryIdArray']))
+												{
+													//there were more than one brewery returned
+													$BreweryID = $_SESSION['multiBreweryIdArray'];
+													$BreweryName = $_SESSION['multiBreweryNameArray'];
+													$BreweryDesc = $_SESSION['multiBreweryDescArray'];
+													
+													echo "<form action='scripts/beersearch.php' method='post'>";
+													foreach($BreweryID as $index=>$brewery)
+													{
+														//pad with "'s in case there are apostrophes in the name
+														$quotedBreweryName = '"'.$BreweryName[$index].'"';
+														//echo "<input type='radio' class='radio-inline' name='breweryChoice' value='$brewery'><h4>$BreweryName[$index]</h4><p>$BreweryDesc[$index]</p>";
+														echo "<label class='radio-inline'><input type='radio' name='BreweryID' value='$brewery'> <strong>$BreweryName[$index]</strong></label><p>$BreweryDesc[$index]</p><br>";
+														
+														
+													}
+													print_r($_SESSION);
+													echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='".$_SESSION['beerSearchBarcode']."'>Select Brewery</button></form>";
+												}
+									
+									
+									
+											if(isset($_SESSION['names']) && isset($_SESSION['IDs']) && !isset($_SESSION['multiBreweryIdArray']))
 											{
 												//The barcode returned no results, and the user manually entered beer details
 												echo "<form action='scripts/apiBeer.php' method='post'>";
@@ -575,7 +587,7 @@ include('scripts/connect.php');
 													echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$foundBeerId''> $beer</label><br>";
 												}
 												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other''> Not Listed</label><br>";
-												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='searchSubmit'>Get Beer Data</button></form>";
+												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button></form>";
 												
 												
 												
@@ -584,7 +596,7 @@ include('scripts/connect.php');
 												//that should return it to the same area that a successful barcode scan does.
 												
 												
-												
+												//WHY CAN I NOT SAVE THE BARCODE!!!!!! I NEED THAT TO INSERT INTO THE DB!!!!
 												
 												
 												
@@ -592,6 +604,7 @@ include('scripts/connect.php');
 											}
 											if(isset($_SESSION['results']))
 											{
+												
 												unset($_SESSION['insertedBeer']);
 												$results = $_SESSION['results'];
 												//print_r($results);
@@ -648,7 +661,7 @@ include('scripts/connect.php');
 														//this is for the data sent back from the API when user searched by name
 														//put double quotes around the beername so that apostrophes dont break in the input
 														
-														print_r($_SESSION);
+														//print_r($_SESSION);
 														$displayBeerName = '"'.$results->data->name.'"';
 														$beerName = $results->data->name;
 														$ibu = $results->data->ibu;
@@ -657,16 +670,17 @@ include('scripts/connect.php');
 														$style = $results->data->style->name;
 														$image = $results->data->labels->medium;
 														$beerID = $results->data->id;
-														$barcode = $barcodeSession;
+														$barcode = $_GET['upc'];
 														$isCommercial = 1;
 													}
 													
 													
 													
-													echo  "<form action='insertBeer.php' method='post'><h2>$beerName</h2>";
+													echo  "<form action='scripts/insertBeer.php' method='post'><h2>$beerName</h2>";
 													echo "<div class='col-lg-5'>";
 
 													//unset the barcode so the api interface doesnt re run the call
+													
 													unset($_POST['barcode']);
 
 													//set the session to trigger the API
@@ -754,7 +768,7 @@ include('scripts/connect.php');
 													echo "<form action='scripts/beersearch.php' method='post'>";
 													echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
 													echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
-													echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='Search'>Search</button>";
+													echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='".$_GET['upc']."'>Search</button>";
 													echo "</form>";
 													
 													

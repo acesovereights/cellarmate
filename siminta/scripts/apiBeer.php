@@ -33,7 +33,7 @@ if(isset($_POST['searchSubmit']))
 
 		$_SESSION['results'] = $decoded;
 		$_SESSION['fromSearch'] = true;
-		header('location: ../addbeer.php');
+		header('location: ../addbeer.php?upc='.$_POST['searchSubmit']);
 	}
 	
 }

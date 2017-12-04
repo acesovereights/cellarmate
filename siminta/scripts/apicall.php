@@ -37,7 +37,7 @@ if(isset($_POST['barcode']))
 	$_SESSION['barcode'] = $upc;
 		
 		
-	header('location: ../addbeer.php');
+	header('location: ../addbeer.php?upc='.$upc);
 			
 	
 }
