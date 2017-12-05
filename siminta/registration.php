@@ -31,6 +31,15 @@ include('scripts/connect.php');
     <link href="assets/css/main-style.css" rel="stylesheet" />
     <!-- Page-Level CSS -->
     <link href="assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+		form input{
+			margin-bottom: 2%;
+		}
+	
+	</style>
+    
+    
    </head>
 <body>
     <!--  wrapper -->
@@ -98,73 +107,8 @@ include('scripts/connect.php');
                 </div>
                 <!--end  Welcome -->
             </div>
-
-			<!--
-            <div class="row">
-                <!--quick info section 
-                <div class="col-lg-3">
-                    <div class="alert alert-danger text-center">
-                        <i class="fa fa-calendar fa-3x"></i>&nbsp;<b>20 </b>Meetings Sheduled This Month
-
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="alert alert-success text-center">
-                        <i class="fa  fa-beer fa-3x"></i>&nbsp;<b>27 % </b>Profit Recorded in This Month  
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="alert alert-info text-center">
-                        <i class="fa fa-rss fa-3x"></i>&nbsp;<b>1,900</b> New Subscribers This Year
-
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="alert alert-warning text-center">
-                        <i class="fa  fa-pencil fa-3x"></i>&nbsp;<b>2,000 $ </b>Payment Dues For Rejected Items
-                    </div>
-                </div>
-                <!--end quick info section 
-            </div>
-            -->
-
             <div class="row">
                 <div class="col-lg-8">
-
-
-
-                    <!--Area chart example -->
-                    <!--
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Area Chart Example
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel-body">
-                            <div id="morris-area-chart"></div>
-                        </div>
-
-                    </div>
-                    -->
                     <!--End area chart example -->
                     <!--Simple table example -->
                     <div class="panel panel-primary">
@@ -193,62 +137,35 @@ include('scripts/connect.php');
 
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-hover table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Beer Name</th>
-                                                    <th>Brewery</th>
-                                                    <th>Time</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                               	<?php
-													//lets get the distinct beers from the database
-													$query = $db->query("SELECT USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_CHECK_IN_DATE FROM users_beer GROUP BY USERS_CHECK_IN_DATE ORDER BY max(USERS_CHECK_IN_DATE) desc LIMIT 10;");
-													$query->setFetchMode(PDO::FETCH_ASSOC);
+                                <div class="col-lg-8">
+                                   <h2>New User Registration</h2>
+                                   	<div class="col-lg-6">
+										<form action="scripts/register.php" method="post" enctype="multipart/form-data">
+											<input class="form-control" id="firstName" type="text" name="firstName" placeholder="First Name" required> 
+											<input class="form-control" id="lastName" type="text" name="lastName" placeholder="Last Name" required> 
+											<input class="form-control" id="email" type="text" name="email" placeholder="Email Address" required> 
+											<input class="form-control" id="emailVer" type="text" name="emailVer" placeholder="Retype Email Address" onfocusout="checkEmail()" required>
+											<div class="red" id="noEMatch"></div>
+											<input class="form-control" id="location" type="text" name="location" placeholder="Location (optional)">
+											<input class="form-control" id="cellarName" type="text" name="cellarName" placeholder="Cellar Name" required>
+											<span class="row">
+												<span>Make cellar visible to others users?</span>
+												<label>Yes </label><input id="publicYes" type="radio" name="public" value="yes">
+												<label>No </label><input id="publicNo" type="radio" name="public" value="no" checked>
+											</span>
+						<!--					check that the username does not exist before registration-->
+											<input class="form-control" id="username" type="text" name="username" placeholder="Desired User Name" onfocusout="checkUser()" onKeyDown="$('#userCheck').val("")"> <label class="userResult" id="userCheck"></label>
+											<input class="form-control" id="password" type="password" name="password" placeholder="Password" required> 
+											<input class="form-control" id="passwordVer" type="password" name="passwordVer" placeholder="Retype Password" onfocusout="checkPass()" required>
+											<div class="red" id="noPWMatch"></div>
+											<br><br>
+											<label>Upload a profile picture <input type="file" name="file" id="file"></label>
+											<br>
+											<br>
+											<button class="btn btn-success" type="submit" name="submitRegistration">Register</button>
 
-													$beerResult = $query->fetchAll();
-												
-													
-												
-													foreach($beerResult as $beer)
-													{
-														$beerName = $beer['USERS_BEER_NAME'];
-														$breweryName = $beer['USERS_BREWERY_NAME'];
-														$timestamp = $beer['USERS_CHECK_IN_DATE'];
-														
-														$dateTimeArray = explode(" ",$timestamp);
-														$date = $dateTimeArray[0];
-														$time = $dateTimeArray[1];
-														
-														$formattedDate = date('m-d-Y',strtotime($date));
-														$formattedTime = date('G:i:s', strtotime($time));
-														//$vintage = $beer['USERS_BEER_VINTAGE'];
-														echo "<tr>
-																<td>$beerName</td>
-																<td>$breweryName</td>
-																<td>$formattedDate - $formattedTime</td>
-																</tr>";
-																
-																
-
-																
-														
-														
-																
-																
-																
- 													}
-												
-												
-												?>
-                                               
-                                            </tbody>
-                                        </table>
-                                    </div>
-
+										</form>
+                               		</div>
                                 </div>
 
                             </div>
@@ -351,7 +268,7 @@ include('scripts/connect.php');
     <!-- end wrapper -->
 
     <!-- Core Scripts - Include with every page -->
-    <script src="assets/plugins/jquery-1.10.2.js"></script>
+
     <script src="assets/plugins/bootstrap/bootstrap.min.js"></script>
     <script src="assets/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="assets/plugins/pace/pace.js"></script>
@@ -360,7 +277,72 @@ include('scripts/connect.php');
     <script src="assets/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="assets/plugins/morris/morris.js"></script>
     <script src="assets/scripts/dashboard-demo.js"></script>
-
+<!--    <script src="assets/plugins/jquery-1.10.2.js"></script>-->
+	<script>
+		function checkUser()
+		{
+			var username = $('#username').val();
+			//check to make sure the username is available.
+			$.ajax({
+					type: "POST",
+					url: "scripts/usercheck.php",
+					data: {user: username},
+					cache: false,					
+					success: function(html)
+					{
+						var currentUserName = $('#username').val();
+												
+						$("#userCheck").html(html);
+						
+						var result = $('#userCheck').html();
+						
+						//username exists, have user input a new one
+						if(!result.includes("OK"))
+						{
+							
+							$('#username').val("");
+							/*$("#userCheck").removeClass("green");
+							$("#userCheck").addClass("red");*/
+							//$("#userCheck").html(currentUserName + " already exists, choose another" );
+						}
+						else
+							{
+								//$("#userCheck").removeClass("red");
+								//$("#userCheck").addClass("green");
+								$("#userCheck").html(html);
+							}
+						
+					}
+				});
+		}
+		
+		function checkPass(){
+			
+			//check to see if the passwords match
+			var pass1 = $('#password').val();
+			var pass2 = $('#passwordVer').val();
+			
+			if(pass1 != pass2)
+			{
+				//passwords do not match
+				$('#passwordVer').val("");
+				$('#noPWMatch').html("Passwords do not match!");
+			}
+		}
+		
+		function checkEmail()
+		{
+			var email1 = $('#email').val();
+			var email2 = $('#emailVer').val();
+			
+			if(email1 != email2)
+			{
+				//emails do not match
+				$('#emailVer').val("");
+				$('#noEMatch').html("Emails do not match!");
+			}
+		}
+	</script>
 </body>
 
 </html>

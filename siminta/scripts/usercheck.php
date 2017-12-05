@@ -12,7 +12,11 @@ if(isset($_POST['user']))
 
 	if(!$result)
 	{
-		echo "<span class='available' id='userQuery'>Username OK</span>";
+		echo "<span style='color:green;' class='fa fa-check'>Username OK</span>";
+	}
+	else
+	{
+		echo "<span style='color:red;' class='fa fa-thumbs-down'>Choose a new username</span>";
 	}
 
 }

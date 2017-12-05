@@ -24,14 +24,15 @@
 						if(!isset($_SESSION['USER']))
 						{
 							//there is no current logged in user
-							echo "<h3>Register &nbsp;</h3>";
+							echo "<a class='btn btn-success' href='registration.php'>Register</a> ";
 						}
 				?>
                 <li class="dropdown">
                    
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                      
+                      	
                    		<i class='fa fa-user fa-3x'></i>
+                   		
                     </a>
                     <!-- dropdown user-->
                     <ul class="dropdown-menu dropdown-user">
