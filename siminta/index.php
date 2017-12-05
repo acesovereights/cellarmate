@@ -13,6 +13,10 @@
 */
 session_start();
 include('scripts/connect.php');
+if($_SESSION['USER']['role'] = "admin")
+{
+	header('location: admin.php');
+}
 
 ?>
 

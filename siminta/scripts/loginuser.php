@@ -24,6 +24,7 @@ if(isset($_POST['Login']))
 		$_SESSION['USER']['lastName'] = $result['USER_LAST_NAME'];
 		$_SESSION['USER']['cellarName'] = $result['USER_CELLAR_NAME'];
 		$_SESSION['USER']['image'] = $result['USER_PROFILE_PICTURE'];
+		$_SESSION['USER']['role'] = $result['USER_ROLE'];
 		
 		if($result['USER_ROLE'] == 'user')
 		{
@@ -46,7 +47,7 @@ if(isset($_POST['Login']))
 	{
 		//login failed. prompt user to try again
 		$_SESSION['fail'] = true;
-		header('location: login.php');
+		header('location: ../login.php');
 	}
 	
 }

@@ -1,13 +1,4 @@
 
-<!-- edit this page so that if the page was acessed by admin sending over the userID to edit via $_POST, it brings up that data-->
-<!--maybe with a $_SESSION['USER']['role'] = "admin" && isset($_POST['editUser']) -->
-<!--where that POST value contains the userID to display.-->
-
-
-
-
-
-
 <?php
 /* enable this once the site is passing post data, for now its commented out so it works
 	if(!isset($_POST['id']))
@@ -23,7 +14,7 @@
 session_start();
 include('scripts/connect.php');
 //prevent unauthoized access to the page
-if(!isset($_SESSION['USER']))
+if($_SESSION['USER']['role'] != "admin")
 {
 	header('location: login.php');
 }
@@ -36,7 +27,7 @@ if(!isset($_SESSION['USER']))
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cellarmate</title>
+    <title>Cellarmate Admin</title>
 <!--    Bootstrap templace courtesy of Bootsrtap Free Admin Template - SIMINTA | Admin Dashboad Template -->
     <!-- Core CSS - Include with every page -->
     <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -122,13 +113,22 @@ if(!isset($_SESSION['USER']))
                 </div>
                 <!--end  Welcome -->
             </div>
+            
+            
+            
+            
+            
+            
+            
+<!--   only display this once the admin selects a user to edit.-->
+           
             <div class="row">
                 <div class="col-lg-8">
                     <!--End area chart example -->
                     <!--Simple table example -->
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Your User Profile
+                            <i class="fa fa-bar-chart-o fa-fw"></i>Admin Users
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -153,79 +153,11 @@ if(!isset($_SESSION['USER']))
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-8">
-                                   <h2>User Profile</h2>
-                                   <?php 
-									if(isset($_GET['result']))
-									{
-										//successful update of user data
-										if($_GET['result'] == "successful")
-										{
-											echo "<h2 class='green'>Update Successful</h2>";
-										}
-										else
-										{
-											echo "<h2 class='red'>Update Failed!</h2>";
-										}
-									}
-									?>
-                                   <?php
-										//retrieve the user data from the database
-										$userId = $_SESSION['USER']['id'];
-										$query = $db->prepare("SELECT USER_USERNAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_LOCATION, USER_CELLAR_NAME, USER_CELLAR_VISIBLE, USER_PROFILE_PICTURE FROM user WHERE USER_ID = ?;");
-										$query->execute(array($userId));
-										$query->setFetchMode(PDO::FETCH_ASSOC);
+                                  <?php
+										//get the list of users from the database
+										include('scripts/loadusers.php');
 
-										$user = $query->fetch();
-										
-									
-									?>
-                                   	<div class="col-lg-12">
-										<form action="scripts/updateuser.php" method="post" enctype="multipart/form-data">
-											<label class="form-inline">First Name </label><input class="form-control" id="firstName" type="text" name="firstName" value="<?php echo $user['USER_FIRST_NAME']; ?>" required> 
-											<label class="form-inline">Last Name </label><input class="form-control" id="lastName" type="text" name="lastName" value="<?php echo $user['USER_LAST_NAME']; ?>" required>
-<!--			left off here, finidsh adding the query results to the inputs-->
-											<label class="form-inline">Email </label><input class="form-control" id="email" type="text" name="email" value="<?php echo $user['USER_EMAIL']; ?>" required> 
-											<label class="form-inline">Verify Email </label><input class="form-control" id="emailVer" type="text" name="emailVer" placeholder="Retype Email Address" onfocusout="checkEmail()" required>
-											<div class="red" id="noEMatch"></div>
-											<label class="form-inline">Location </label><input class="form-control" id="location" type="text" name="location"value="<?php echo $user['USER_LOCATION']; ?>">
-											<label class="form-inline">Cellar Name </label><input class="form-control" id="cellarName" type="text" name="cellarName" value="<?php echo $user['USER_CELLAR_NAME']; ?>" required>
-											<span class="row">
-											<?php
-												//show the user the whether or not their cellar is currently visible
-												if($user['USER_CELLAR_VISIBLE'] == 1)
-												{
-													echo"<strong>Make cellar visible to others users?</strong>
-														<label>Yes </label><input id='publicYes' type='radio' name='public' value='yes' checked>
-														<label>No </label><input id='publicNo' type='radio' name='public' value='no' >";
-												}
-												else{
-													echo"<strong>Make cellar visible to others users?</strong>
-														<label>Yes </label><input id='publicYes' type='radio' name='public' value='yes' >
-														<label>No </label><input id='publicNo' type='radio' name='public' value='no' checked>";
-												}
-											?>
-											</span>
-											<br>
-						<!--					check that the username does not exist before registration-->
-											<label class="form-inline">Username </label><input class="form-control" id="username" type="text" name="username" placeholder="<?php echo $user['USER_USERNAME']; ?>" value="<?php echo $user['USER_USERNAME']; ?>" onfocusout="checkUser()" onKeyDown="$('#userCheck').val("")"><label class="userResult" id="userCheck"></label>
-											<?php echo hash('sha512',"newhouse29"); ?>
-											<!--<label class="form-inline">Password </label>
-											<input class="form-control" id="password" type="password" name="password" placeholder="Password" required> 
-											<label class="form-inline">Verify Password </label>
-											<input class="form-control" id="passwordVer" type="password" name="passwordVer" placeholder="Retype Password" onfocusout="checkPass()" required>
-											-->
-											<div class="red" id="noPWMatch"></div>
-											<br><br>
-											<img src="userImages/<?php echo $user['USER_PROFILE_PICTURE']; ?>" alt="No Image Selected" width='100px'>
-											<br>
-											<br>
-											<label>Upload a new profile picture <input type="file" name="file" id="file"></label>
-											<br>
-											<br>
-											<button class="btn btn-success" type="submit" value="<?php echo $userId; ?>" name="submitRegistration">Update Profile</button>
-
-										</form>
-                               		</div>
+									?>                                   	
                                 </div>
 
                             </div>
