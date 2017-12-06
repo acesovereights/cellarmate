@@ -46,14 +46,14 @@ if(isset($_POST['submitRegistration']))
 			//check if there is an error
 			if($_FILES["file"]["error"]>0)
 			{
-//do I need an echo? where am I echoing to?
+
 				echo "Return code: " .$_FILES["file"]["error"] . "<br>";
 			}
 
 			//checsk if the specific file already exists in teh directory
 			elseif( file_exists("../userImages/" . $_FILES["file"]["name"]))
 			{
-//do I need an echo? where am I echoing to?
+
 				echo $_FILES["file"]["name"] . "Image upload already exists";
 			}
 

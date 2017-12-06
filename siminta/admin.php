@@ -42,6 +42,13 @@ if($_SESSION['USER']['role'] != "admin")
 		form input{
 			margin-bottom: 2%;
 		}
+		.center{
+			text-align: center;
+		}
+		td {
+			vertical-align: middle;
+		}
+		
 	
 	</style>
     
@@ -76,7 +83,7 @@ if($_SESSION['USER']['role'] != "admin")
                         <!--end search section-->
                     </li>
                     <?php
-							include('scripts/nav.html');
+							include('scripts/navAdmin.html');
 						?>
                 </ul>
                 <!-- end side-menu -->
@@ -91,7 +98,7 @@ if($_SESSION['USER']['role'] != "admin")
                 <!-- Page Header -->
                 <div class="col-lg-12">
                     <h1 class="page-header">
-                    	Cellarmate Beer Inventory System
+                    	Cellarmate Admin Users 
                     </h1>
                 </div>
                 <!--End Page Header -->
@@ -123,7 +130,7 @@ if($_SESSION['USER']['role'] != "admin")
 <!--   only display this once the admin selects a user to edit.-->
            
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     <!--End area chart example -->
                     <!--Simple table example -->
                     <div class="panel panel-primary">
@@ -152,7 +159,7 @@ if($_SESSION['USER']['role'] != "admin")
 
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-lg-8">
+                                <div class="col-lg-12">
                                   <?php
 										//get the list of users from the database
 										include('scripts/loadusers.php');
@@ -166,88 +173,6 @@ if($_SESSION['USER']['role'] != "admin")
                         <!-- /.panel-body -->
                     </div>
                     <!--End simple table example -->
-
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body yellow"><!-- TOTAL NUMBER OF BEERS AREA -->
-                        
-<!--                            <i class="fa fa-bar-chart-o fa-3x"></i>-->
-                           <?php
-								//lets get the total number of beers in the users cellar
-								$query = $db->query("SELECT count(*)
-														FROM users_beer;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$beerCount = $query->fetch();
-							
-							?>
-                            <h3><?php echo $beerCount['count(*)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Total Number of Beers in ALL cellars
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body blue"><!-- UNIQUE BEER COUNT AREA -->
-<!--                            <i class="fa fa-pencil-square-o fa-3x"></i>-->
-                           	<?php
-								$query = $db->query("SELECT count(*)
-														FROM (SELECT DISTINCT USERS_BARCODE
-																				, USERS_BEER_NAME
-																FROM users_beer) distinctBeer;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$uniqueCount = $query->fetch();
-							
-							
-							?>
-                            <h3><?php echo $uniqueCount['count(*)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Unique Beers across ALL cellars
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body green"><!-- CONSUMED BEERS COUNT AREA -->
-<!--                            <i class="fa fa fa-floppy-o fa-3x"></i>-->
-                           <?php
-								$query = $db->query("SELECT sum(USER_CONSUMED_BEERS)
-														FROM user;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$consumedCount = $query->fetch();
-							
-							
-							?>
-                            <h3><?php echo $consumedCount['sum(USER_CONSUMED_BEERS)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Consumed Beers from ALL cellars
-                            </span>
-                        </div>
-                    </div>
-     <!-- Don think i need this element
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body red">
-                            <i class="fa fa-thumbs-up fa-3x"></i>
-                            <h3>2,700 </h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">New User Registered
-                            </span>
-                        </div>
-                    </div>
-                    -->
-
-
-
-
-
-
 
                 </div>
 

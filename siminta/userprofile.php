@@ -85,7 +85,14 @@ if(!isset($_SESSION['USER']))
                         <!--end search section-->
                     </li>
                     <?php
-							include('scripts/nav.html');
+							if(!isset($_POST['editUser']))
+							{
+								include('scripts/nav.html');
+							}
+							else
+							{
+								include('scripts/navAdmin.html');
+							}
 						?>
                 </ul>
                 <!-- end side-menu -->
@@ -128,7 +135,16 @@ if(!isset($_SESSION['USER']))
                     <!--Simple table example -->
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Your User Profile
+                           <?php
+							if(isset($_POST['editUser']))
+							{
+								echo "<i class='fa fa-bar-chart-o fa-fw'></i> ADMIN User Profile Editor";
+							}
+							else
+							{
+								echo "<i class='fa fa-bar-chart-o fa-fw'></i> Your User Profile";
+							}
+                            ?>
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -169,9 +185,18 @@ if(!isset($_SESSION['USER']))
 									}
 									?>
                                    <?php
-										//retrieve the user data from the database
-										$userId = $_SESSION['USER']['id'];
-										$query = $db->prepare("SELECT USER_USERNAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_LOCATION, USER_CELLAR_NAME, USER_CELLAR_VISIBLE, USER_PROFILE_PICTURE FROM user WHERE USER_ID = ?;");
+										if(!isset($_POST['editUser']))
+										{
+											//retrieve the logged in user data from the database
+											$userId = $_SESSION['USER']['id'];
+										
+										}
+										else
+										{
+											//retrieve the user data from the $_POST from the admin page
+											$userId = $_POST['editUser'];
+										}
+									   $query = $db->prepare("SELECT USER_USERNAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_LOCATION, USER_CELLAR_NAME, USER_CELLAR_VISIBLE, USER_PROFILE_PICTURE FROM user WHERE USER_ID = ?;");
 										$query->execute(array($userId));
 										$query->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -208,7 +233,7 @@ if(!isset($_SESSION['USER']))
 											<br>
 						<!--					check that the username does not exist before registration-->
 											<label class="form-inline">Username </label><input class="form-control" id="username" type="text" name="username" placeholder="<?php echo $user['USER_USERNAME']; ?>" value="<?php echo $user['USER_USERNAME']; ?>" onfocusout="checkUser()" onKeyDown="$('#userCheck').val("")"><label class="userResult" id="userCheck"></label>
-											<?php echo hash('sha512',"newhouse29"); ?>
+										
 											<!--<label class="form-inline">Password </label>
 											<input class="form-control" id="password" type="password" name="password" placeholder="Password" required> 
 											<label class="form-inline">Verify Password </label>
