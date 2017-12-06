@@ -40,7 +40,14 @@ else
     <link href="assets/css/main-style.css" rel="stylesheet" />
     <!-- Page-Level CSS -->
     <link href="assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <style>
+		.centering{
+			text-align: center;
+		}
+		
+	</style>
    </head>
+   
 <body>
     <!--  wrapper -->
     <div id="wrapper">
@@ -220,10 +227,10 @@ else
 														if(!isset($_POST['search']))
 														{
 															//only show this column if the user did not search for a beer
-															echo "<th>Quantity</th>";
+															echo "<th class='centering'>Quantity</th>";
 														}
 													?>
-                                                   	<th>Vintage</th>
+                                                   	<th class='centering'>Vintage</th>
                                                     <th>&nbsp;</th>
                                                 </tr>
                                             </thead>
@@ -256,7 +263,7 @@ else
 															$breweryName = $beer['USERS_BREWERY_NAME'];
 															$vintage = $beer['USERS_BEER_VINTAGE'];
 															echo "<tr>
-																	<td>$beerName</td>
+																	<td><b>$beerName</b></td>
 																	<td>$breweryName</td>";
 															
 																	//account for apostrophes in the beer name
@@ -281,8 +288,8 @@ else
 
 
 																	$distinctCount = $distinctBeers['count(*)'];
-																	echo "<td>$distinctCount</td>";
-																	echo "<td>$vintage</td><td><a href=''><span class='fa fa-pencil'></span></a></tr>";
+																	echo "<td class='centering'>$distinctCount</td>";
+																	echo "<td class='centering'>$vintage</td><td><a href=''><span class='fa fa-pencil'></span></a></tr>";
 														}															
 													}
 													else
@@ -439,23 +446,9 @@ else
                         </div>
                     </div>
                     -->
-
-
-
-
-
-
-
                 </div>
 
             </div>
-
-            
-
-
-         
-
-
         </div>
         <!-- end page-wrapper -->
 
@@ -472,6 +465,9 @@ else
     <script src="assets/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="assets/plugins/morris/morris.js"></script>
     <script src="assets/scripts/dashboard-demo.js"></script>
+    <script>
+		$("#cellar").addClass("selected");
+	</script>
 
 </body>
 

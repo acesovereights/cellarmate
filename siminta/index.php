@@ -54,18 +54,30 @@ if($_SESSION['USER']['role'] == "admin")
                     <li>
                         <!-- user image section-->
                         <?php
-							include('scripts/userimagesection.php');
+							if(isset($_SESSION['USER']))
+							{
+								include('scripts/userimagesection.php');
+							}
 						?>
                         <!--end user image section-->
                     </li>
-                    <li class="sidebar-search">
+                    <li class="sidebar-search"></li>
                         <!-- search section-->
                         
   
                         <!--end search section-->
-                    </li>
+                   
                     <?php
-							include('scripts/nav.html');
+						if(isset($_SESSION['USER']))
+						{
+						include('scripts/nav.html');
+						}
+						else
+						{
+							echo "<li class='selected'>
+								<a href='login.php'><i class='fa fa-user'></i> Log In</a>
+							</li>";
+						}
 						?>
                 </ul>
                 <!-- end side-menu -->
@@ -80,7 +92,7 @@ if($_SESSION['USER']['role'] == "admin")
                 <!-- Page Header -->
                 <div class="col-lg-12">
                     <h1 class="page-header">
-                    	Cellarmate Beer Inventory System
+                    	Cellarmate - <span class='h2'>Beer Inventory System</span>
                     </h1>
                 </div>
                 <!--End Page Header -->
@@ -90,7 +102,7 @@ if($_SESSION['USER']['role'] == "admin")
                 <!-- Welcome -->
                 <div class="col-lg-12">
                     <div class="alert alert-info">
-                        <i class="fa fa-folder-open"></i><b>&nbsp;Hello ! </b>Welcome Back <b>
+                        <b>Better beer tracking through barcodes<b>
                         <?php 
 							if(isset($_SESSION['USER']))
 							{
@@ -173,7 +185,7 @@ if($_SESSION['USER']['role'] == "admin")
                     <!--Simple table example -->
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Most Recently Added Beers
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Most Recently Added Beers
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -205,12 +217,13 @@ if($_SESSION['USER']['role'] == "admin")
                                                     <th>Beer Name</th>
                                                     <th>Brewery</th>
                                                     <th>Time</th>
+                                                    <th>Username</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                	<?php
 													//lets get the distinct beers from the database
-													$query = $db->query("SELECT USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_CHECK_IN_DATE FROM users_beer GROUP BY USERS_CHECK_IN_DATE ORDER BY max(USERS_CHECK_IN_DATE) desc LIMIT 10;");
+													$query = $db->query("SELECT ub.USERS_BEER_NAME, ub.USERS_BREWERY_NAME, ub.USERS_CHECK_IN_DATE, u.USER_USERNAME, u.USER_CELLAR_VISIBLE FROM users_beer ub JOIN user u ON u.USER_ID = ub.USERS_BEER_USER_ID GROUP BY ub.USERS_CHECK_IN_DATE ORDER BY max(ub.USERS_CHECK_IN_DATE) desc LIMIT 10;");
 													$query->setFetchMode(PDO::FETCH_ASSOC);
 
 													$beerResult = $query->fetchAll();
@@ -229,11 +242,20 @@ if($_SESSION['USER']['role'] == "admin")
 														
 														$formattedDate = date('m-d-Y',strtotime($date));
 														$formattedTime = date('G:i:s', strtotime($time));
+														if($beer['USER_CELLAR_VISIBLE'] == 1)
+														{
+															$username = $beer['USER_USERNAME'];
+														}
+														else
+														{
+															$username - "Provate User";
+														}
 														//$vintage = $beer['USERS_BEER_VINTAGE'];
 														echo "<tr>
 																<td>$beerName</td>
 																<td>$breweryName</td>
 																<td>$formattedDate - $formattedTime</td>
+																<td>$username</td>
 																</tr>";
 																
 																

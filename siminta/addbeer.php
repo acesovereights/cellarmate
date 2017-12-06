@@ -111,7 +111,8 @@ include('scripts/connect.php');
                         <!--end search section-->
                     </li>
                     	<?php
-							include('scripts/nav.html');
+							include('scripts/nav.html');	
+													
 						?>
                    <!--
                     <li>
@@ -727,6 +728,9 @@ include('scripts/connect.php');
     <script src="assets/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="assets/plugins/morris/morris.js"></script>
     <script src="assets/scripts/dashboard-demo.js"></script>
+    <script>
+		$("#add").addClass("selected");
+	</script>
 
 </body>
 

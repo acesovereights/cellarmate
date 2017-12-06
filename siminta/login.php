@@ -30,7 +30,7 @@
        
         <div class="row">
             <div class="col-md-4 col-md-offset-4 text-center logo-margin ">
-              <img src="images/cellarmatelogo275.png" alt="cellarmate logo"/>
+              <a href="index.php"><img src="images/cellarmatelogo275.png" alt="cellarmate logo"/></a>
                 </div>
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">                  

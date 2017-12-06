@@ -76,12 +76,12 @@ if($_SESSION['USER']['role'] != "admin")
 						?>
                         <!--end user image section-->
                     </li>
-                    <li class="sidebar-search">
+                    <li class="sidebar-search"></li>
                         <!-- search section-->
                         
   
                         <!--end search section-->
-                    </li>
+                    
                     <?php
 							include('scripts/navAdmin.html');
 						?>
