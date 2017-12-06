@@ -129,7 +129,7 @@ else
 
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3><i class="fa fa-bar-chart-o fa-fw"></i> Your cellar contents</h3>
+                            <h3><i class="fa fa-bar-chart-o fa-fw"></i> Remove a beer</h3>
                             <div class="pull-right">
                                 <div class="btn-group actionMove">
                                     <?php
@@ -142,6 +142,10 @@ else
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
+                                   <form action="scripts/removebeer.php" method="post">
+                                   		<input type="text" class="form-group" name="removal" placeholder="Scan barcode or type name" size="30"> <button type="submit" class="btn btn-info" name="search">Remove</button><br>
+                                   </form>
+                                   <br>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-hover table-striped">
                                             <thead>
@@ -156,7 +160,6 @@ else
 														}
 													?>
                                                    	<th class='centering'><h4>Vintage</h4></th>
-                                                    <th><h4>&nbsp;</h4></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -214,7 +217,7 @@ else
 
 																	$distinctCount = $distinctBeers['count(*)'];
 																	echo "<td class='centering'>$distinctCount</td>";
-																	echo "<td class='centering'>$vintage</td><td><a href=''><span class='fa fa-pencil'></span></a></tr>";
+																	echo "<td class='centering'>$vintage</td></tr>";
 														}															
 													}
 													else
@@ -266,7 +269,12 @@ else
 
 																		$distinctCount = $distinctBeers['count(*)'];
 																		echo "<td>$distinctCount</td>";*/
-																		echo "<td>$vintage</td><td><a href=''><span class='fa fa-pencil'></span></a></tr>";
+																		echo "<td>$vintage</td>
+																			  <td>
+																			  		<form action='removebeer.php' method='post'>
+																						<button type='submit' class='btn btn-info' name='directSelect'>Drink!</button>
+																					</form>
+																			  <td></tr>";
 															}	
 														}
 													}

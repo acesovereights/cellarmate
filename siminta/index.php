@@ -1,16 +1,5 @@
 
 <?php
-/* enable this once the site is passing post data, for now its commented out so it works
-	if(!isset($_POST['id']))
-	{
-		//a user not logged in is trying to access this page, send them back to the login page
-		header('location: login.php');
-	}
-	else
-	{
-		include('scripts/connect.php');
-	}
-*/
 session_start();
 include('scripts/connect.php');
 if($_SESSION['USER']['role'] == "admin")
@@ -35,6 +24,11 @@ if($_SESSION['USER']['role'] == "admin")
     <link href="assets/css/main-style.css" rel="stylesheet" />
     <!-- Page-Level CSS -->
     <link href="assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <style>
+		.actionMove{
+			margin-top: -120%;
+		}
+	</style>
    </head>
 <body>
     <!--  wrapper -->
@@ -70,7 +64,7 @@ if($_SESSION['USER']['role'] == "admin")
                     <?php
 						if(isset($_SESSION['USER']))
 						{
-						include('scripts/nav.html');
+							include('scripts/nav.html');
 						}
 						else
 						{
@@ -102,11 +96,17 @@ if($_SESSION['USER']['role'] == "admin")
                 <!-- Welcome -->
                 <div class="col-lg-12">
                     <div class="alert alert-info">
-                        <b>Better beer tracking through barcodes<b>
+                        
                         <?php 
 							if(isset($_SESSION['USER']))
 							{
-								echo $_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName']; 
+								$fullname = $_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName'];
+								echo "<i class='fa fa-folder-open'></i><b>&nbsp;Hello ! </b>Welcome Back <b>$fullname</b>";
+								//echo $_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName']; 
+							}
+							else
+							{
+								echo "<b>Better beer tracking through barcodes<b>";
 							}
 						?> </b>
  						<!--<i class="fa  fa-pencil"></i>-->
@@ -115,95 +115,18 @@ if($_SESSION['USER']['role'] == "admin")
                 <!--end  Welcome -->
             </div>
 
-			<!--
-            <div class="row">
-                <!--quick info section 
-                <div class="col-lg-3">
-                    <div class="alert alert-danger text-center">
-                        <i class="fa fa-calendar fa-3x"></i>&nbsp;<b>20 </b>Meetings Sheduled This Month
-
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="alert alert-success text-center">
-                        <i class="fa  fa-beer fa-3x"></i>&nbsp;<b>27 % </b>Profit Recorded in This Month  
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="alert alert-info text-center">
-                        <i class="fa fa-rss fa-3x"></i>&nbsp;<b>1,900</b> New Subscribers This Year
-
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="alert alert-warning text-center">
-                        <i class="fa  fa-pencil fa-3x"></i>&nbsp;<b>2,000 $ </b>Payment Dues For Rejected Items
-                    </div>
-                </div>
-                <!--end quick info section 
-            </div>
-            -->
 
             <div class="row">
                 <div class="col-lg-8">
 
 
 
-                    <!--Area chart example -->
-                    <!--
+                   
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Area Chart Example
+                            <h3><i class="fa fa-bar-chart-o fa-fw"></i> Most Recently Added Beers</h3>
                             <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel-body">
-                            <div id="morris-area-chart"></div>
-                        </div>
-
-                    </div>
-                    -->
-                    <!--End area chart example -->
-                    <!--Simple table example -->
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Most Recently Added Beers
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -248,7 +171,7 @@ if($_SESSION['USER']['role'] == "admin")
 														}
 														else
 														{
-															$username - "Provate User";
+															$username - "Private User";
 														}
 														//$vintage = $beer['USERS_BEER_VINTAGE'];
 														echo "<tr>
@@ -256,15 +179,7 @@ if($_SESSION['USER']['role'] == "admin")
 																<td>$breweryName</td>
 																<td>$formattedDate - $formattedTime</td>
 																<td>$username</td>
-																</tr>";
-																
-																
-
-																
-														
-														
-																
-																
+															  </tr>";
 																
  													}
 												
@@ -347,26 +262,7 @@ if($_SESSION['USER']['role'] == "admin")
                             </span>
                         </div>
                     </div>
-     <!-- Don think i need this element
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body red">
-                            <i class="fa fa-thumbs-up fa-3x"></i>
-                            <h3>2,700 </h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">New User Registered
-                            </span>
-                        </div>
-                    </div>
-                    -->
-
-
-
-
-
-
-
-                </div>
+    		      </div>
 
             </div>
 
