@@ -28,11 +28,28 @@
 		
 	
 	}
+	
+	elseif(isset($_POST['purgeConfirm']))
+	{
+		include('connect.php');
+		try
+		{
+			$id = $_POST['purgeConfirm'];
+			$reason = $_POST['reason'];
+			$query = $db->prepare("UPDATE users_beer SET USERS_CHECK_OUT_DATE = CURRENT_TIMESTAMP, USERS_BEER_REMOVAL_REASON = ? WHERE USERS_UNIQUE_BEER_ID = ?;");
+			$query->execute(array($reason, $id));
+		}
+		catch(PDOException $e)
+		{
+			echo $e->getMessage();
+		}
+	}
 	else
 	{
 		//unauthorized access. Send them away!
 		header('location: ../index.php');
 	}
+
 
 
 

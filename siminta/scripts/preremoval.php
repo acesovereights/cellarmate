@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+//stuck here, need to find a way to pass the beer id to the drink.php so I can purge the correct one.
+
+
 if((isset($_POST['view']) || isset($_POST['remove'])) && isset($_SESSION['USER']))
 {
 	if(isset($_SESSION['aboutToRemove']))

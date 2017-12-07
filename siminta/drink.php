@@ -52,6 +52,9 @@ else
 		.middle{
 			vertical-align: middle;
 		}
+		#reason{
+			font-size: 1.75em;
+		}
 	</style>
    </head>
    
@@ -154,6 +157,20 @@ else
                                    		<input type="text" class="form-group" name="removal" placeholder="Scan barcode or type name" size="30"> <button type="submit" class="btn btn-info" name="search">Remove</button><br>
                                    </form>
                                    <br>
+                                   <?php
+									if(isset($_POST['purge']))
+									{
+									//the user wants to straight purge the beer from the database, not drink it.
+										$removalID = $_POST['purge'];
+										print_r($_POST);
+										echo "<form action='scripts/drinkbeer.php' method='post'>";
+										echo "<span id='reason'><input class='form-group' type='text' size='40' placeholder='Reason for deletion' name='reason' required></span>";
+										echo "<br>";
+										echo "<button class='btn btn-danger btn-lg' name='purgeConfirm' type='submit' value='$removalID'>Confirm DELETE!</button>";
+
+										echo "</form><br>";
+									}
+									?>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-hover table-striped">
                                             
@@ -187,118 +204,6 @@ else
 															
 														}
 														
-														/*
-														//lets get the distinct beers from the database
-														$query = $db->query("SELECT DISTINCT 
-																				USERS_BEER_NAME
-																				, USERS_BREWERY_NAME
-																				, USERS_BEER_VINTAGE 
-																			FROM 
-																			(SELECT USERS_BEER_NAME
-																					, USERS_BREWERY_NAME
-																					, USERS_BEER_VINTAGE
-																			 FROM users_beer
-																			 WHERE
-																				USERS_BEER_USER_ID = $id) subQuery;");
-														$query->setFetchMode(PDO::FETCH_ASSOC);
-
-														$beerResult = $query->fetchAll();
-
-
-//THis needs to be refined. It does not find all the proper results. I think a LIKE is needed in the query
-														foreach($beerResult as $beer)
-														{
-															$beerName = $beer['USERS_BEER_NAME'];
-															$breweryName = $beer['USERS_BREWERY_NAME'];
-															$vintage = $beer['USERS_BEER_VINTAGE'];
-															echo "<tr>
-																	<td><b>$beerName</b></td>
-																	<td>$breweryName</td>";
-															
-																	//account for apostrophes in the beer name
-																	$beerName = addslashes($beerName);
-																	//account or apostrophes in the brewery name
-																	$breweryName - addslashes($breweryName);
-																	
-																	//lets get the quantites for each beer
-																	$query = $db->query("SELECT count(*)
-																						FROM 
-																							(SELECT USERS_BEER_NAME
-																									, USERS_BREWERY_NAME
-																									, USERS_BEER_VINTAGE
-																							FROM users_beer
-																							WHERE USERS_BEER_NAME = '$beerName'
-																									 AND USERS_BREWERY_NAME = '$breweryName'
-																									 AND USERS_BEER_VINTAGE = '$vintage'
-																									 AND USERS_BEER_USER_ID = '$id') distinctBeerCount;");
-																	$query->setFetchMode(PDO::FETCH_ASSOC);
-
-																	$distinctBeers = $query->fetch();
-
-
-																	$distinctCount = $distinctBeers['count(*)'];
-																	echo "<td class='centering'>$distinctCount</td>";
-																	echo "<td class='centering'>$vintage</td></tr>";
-														}															
-													}
-													else
-													{
-														//lets get the searched for beer from the database
-														$searchedBeer = $_POST['search'];
-														$query = $db->query("SELECT 
-																				USERS_BEER_NAME
-																				, USERS_BREWERY_NAME
-																				, USERS_BEER_VINTAGE 
-																			FROM users_beer																			
-																			WHERE
-																				USERS_BEER_USER_ID = $id
-																				AND USERS_BEER_NAME = '$searchedBeer';");
-														$query->setFetchMode(PDO::FETCH_ASSOC);
-
-														$searchResult = $query->fetchAll();
-
-														if(!$searchResult)
-														{
-															echo "<h3>No results for '".$searchedBeer."'!</h3>";
-														}
-														else
-														{
-															foreach($searchResult as $beer)
-															{
-																$beerName = $beer['USERS_BEER_NAME'];
-																$breweryName = $beer['USERS_BREWERY_NAME'];
-																$vintage = $beer['USERS_BEER_VINTAGE'];
-																echo "<tr>
-																		<td>$beerName</td>
-																		<td>$breweryName</td>";
-
-																		//lets get the quantites for each beer
-																		/*$query = $db->query("SELECT count(*)
-																							FROM 
-																								(SELECT USERS_BEER_NAME
-																										, USERS_BREWERY_NAME
-																										, USERS_BEER_VINTAGE
-																								FROM users_beer
-																								WHERE USERS_BEER_NAME = '$beerName'
-																										 AND USERS_BREWERY_NAME = '$breweryName'
-																										 AND USERS_BEER_VINTAGE = '$vintage'
-																										 AND USERS_BEER_USER_ID = '$id') distinctBeerCount;");
-																		$query->setFetchMode(PDO::FETCH_ASSOC);
-
-																		$distinctBeers = $query->fetch();
-
-
-																		$distinctCount = $distinctBeers['count(*)'];
-																		echo "<td>$distinctCount</td>";*/
-														/*
-																		echo "<td>$vintage</td>
-																			  <td>
-																			  		<form action='removebeer.php' method='post'>
-																						<button type='submit' class='btn btn-info' name='directSelect'>Drink!</button>
-																					</form>
-																			  <td></tr>";
-															}	
-														}*/
 													}
 												
 													if(isset($_SESSION['aboutToRemove']))
@@ -318,22 +223,27 @@ else
 																echo "<form action='scripts/drinkbeer.php' method='post'>";
 																echo "<td colspan='2'><button class='btn btn-danger btn-lg' name='drinkConfirm' type='submit' value='$removalID'>Confirm Removal!</button></td>";
 																echo "</form>";
-//LEFT OFF HERE, now make the scripts/drinkbeer.php
 															}
 															elseif(isset($_POST['purge']))
 															{
 																//user wants to remove this beer from the database
 															}
+															
 														}
 														if($beerToRemove['removalMethod'] == "view")
 														{
 															//display the data for the beer, then give them the option to remove it for whatever reason
-															echo "<tbody>
-																<form action='drink.php' method='post'><tr><td colspan='2'><a class='pull-right' name='purge' type='submit'>DELETE from database</a></td>";
+															if(!isset($_POST['purge']))
+															{
+																echo "<tbody>
+																<form action='drink.php' method='post'><tr><td colspan='2'><button class='pull-right btn btn-default btn-sm' name='purge' type='submit' value=''>DELETE from database</button></td>";
+															}
 															include('scripts/displayremovalbeer.php');
+															
+															
 															if(!isset($_POST['drink']) && !isset($_POST['purge']))
 															{	
-								//Why do I get in here if the purge isnt set??? or why is it set?
+																//if both of the POSTS are NOT set
 																echo "<td colspan='2'><button class='btn btn-success btn-lg pull-right' name='drink' type='submit' value='".$beerToRemove['USERS_UNIQUE_BEER_ID']."'>DRINK THIS BEER!</button></td>";
 															}
 															
