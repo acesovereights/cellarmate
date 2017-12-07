@@ -154,14 +154,8 @@ else
                                                 <tr>
                                                     <th><h4>Beer Name</h4></th>
                                                     <th><h4>Brewery</h4></th>
-                                                     <?php
-														if(!isset($_POST['search']))
-														{
-															//only show this column if the user did not search for a beer
-															echo "<th class='centering'><h4>Quantity</h4></th>";
-														}
-													?>
                                                    	<th class='centering'><h4>Vintage</h4></th>
+                                                   	<th><h4>View / Remove</h4></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -170,15 +164,25 @@ else
 													if(isset($_SESSION['removal']))
 													{
 														$returnedBeers = $_SESSION['removal'];
-														echo "in";
 														
 														if(!is_array($returnedBeers))
 														{
+															//No beers found
 															echo $returnedBeers;
 														}
 														else
 														{
-															print_r($returnedBeers);
+															
+															foreach($returnedBeers as $beer)
+															{
+																echo "<tr>";
+																echo "<td class='centering'>".$beer['USERS_BEER_NAME']."</td>";
+																echo "<td class='centering'>".$beer['USERS_BREWERY_NAME']."</td>";
+																echo "<td class='centering'>".$beer['USERS_BEER_VINTAGE']."</td>";
+																echo "<td class='centering'><form action='scripts/preremoval.php' method='post'><button class='btn btn-info' type='submit' name='view' value='".$beer['USERS_UNIQUE_BEER_ID']."'>View</button> <button class='btn btn-danger' type='submit' name='remove' value='".$beer['USERS_UNIQUE_BEER_ID']."'>Remove</button></td>";
+																echo "</tr>";
+															}
+															
 														}
 														
 														/*
@@ -294,18 +298,18 @@ else
 															}	
 														}*/
 													}
+												
+													if(isset($_SESSION['aboutToRemove']))
+													{
+	//left off here. do the stuff here about removing. If the user selects  "remove" prompt the user to verify that it is the right beer.
+	//if they select "view" display the beer data. 
+														//the user seleceted a beer to remove
+													}
 												?>
                                                
                                             </tbody>
                                         </table>
-                                        <?php
-											//provide the user a way to exit the search they just did
-											if(isset($_POST['search']))
-											{
-												echo "<a href='cellar.php' type='button' class='btn btn-outline btn-primary'>Close</a>";
-											}
-										
-										?>
+                                        
                                     </div>
 
                                 </div>
@@ -404,7 +408,7 @@ else
     <script src="assets/plugins/morris/morris.js"></script>
     <script src="assets/scripts/dashboard-demo.js"></script>
     <script>
-		$("#cellar").addClass("selected");
+		$("#drink").addClass("selected");
 	</script>
 
 </body>
