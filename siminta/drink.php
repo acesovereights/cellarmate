@@ -155,12 +155,12 @@ else
                                                     <th><h4>Beer Name</h4></th>
                                                     <th><h4>Brewery</h4></th>
                                                    	<th class='centering'><h4>Vintage</h4></th>
-                                                   	<th><h4>View / Remove</h4></th>
+                                                   	<th class='centering'><h4>View / Remove</h4></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                	<?php
-													
+													print_r($_SESSION['USER']);
 													if(isset($_SESSION['removal']))
 													{
 														$returnedBeers = $_SESSION['removal'];
@@ -168,7 +168,7 @@ else
 														if(!is_array($returnedBeers))
 														{
 															//No beers found
-															echo $returnedBeers;
+															echo "<h2>".$returnedBeers."</h2>";
 														}
 														else
 														{

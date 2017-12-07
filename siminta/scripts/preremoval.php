@@ -1,4 +1,6 @@
 <?php
+print_r($_POST);
+// THIS IS BROKEN!
 if((isset($_POST['view']) || isset($_POST['remove'])) && isset($_SESSION['USER']))
 {
 	if(isset($_POST['view']))
@@ -19,7 +21,7 @@ if((isset($_POST['view']) || isset($_POST['remove'])) && isset($_SESSION['USER']
 }
 else
 {
-	header('location: ../index.html');
+	//header('location: ../index.php');
 }
 
 if($result)

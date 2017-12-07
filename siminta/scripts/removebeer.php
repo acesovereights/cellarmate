@@ -2,7 +2,7 @@
 	//remove a beer from the user's cellar
 	session_start();
 	
-	if(isset($_SESSION['USER']) && $_SESSION['USER']['role'] == "user")
+	if($_SESSION['USER']['role'] == "user")
 	{
 		include('connect.php');
 		//a logged in user is accessing
@@ -24,9 +24,12 @@
 				//no results found, lets try it as a beer name
 				//the search is a beer name
 				//query the database for the name, or partial name
-				$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_NAME LIKE '%".$searchValue."' AND USERS_BEER_USER_ID = ?");
+				$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL AND USERS_BEER_NAME LIKE '%".$searchValue."%';");
+				
 				$query->execute(array($userID));
 				$query->setFetchMode(PDO::FETCH_ASSOC);
+				
+				$result = $query->fetch();
 				
 				//all of the beers that match the supplied beer name for the logged in user
 				
@@ -41,6 +44,7 @@
 		
 		if(is_array($result))
 		{
+			
 			$beerArray = [];
 			while($result)
 			{
@@ -66,6 +70,6 @@
 	{
 		//trying to access this page without beign logged in, or logged in user is an admin
 		//send them back to the index
-		header('location: ../index.html');
+		header('location: ../index.php');
 	}
 ?>
