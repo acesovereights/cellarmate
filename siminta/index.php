@@ -146,6 +146,7 @@ if($_SESSION['USER']['role'] == "admin")
                                             <tbody>
                                                	<?php
 													//lets get the distinct beers from the database
+												//MOST RECENTLY ADDED BEERS
 													$query = $db->query("SELECT ub.USERS_BEER_NAME, ub.USERS_BREWERY_NAME, ub.USERS_CHECK_IN_DATE, u.USER_USERNAME, u.USER_CELLAR_VISIBLE FROM users_beer ub JOIN user u ON u.USER_ID = ub.USERS_BEER_USER_ID GROUP BY ub.USERS_CHECK_IN_DATE ORDER BY max(ub.USERS_CHECK_IN_DATE) desc LIMIT 10;");
 													$query->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -209,7 +210,7 @@ if($_SESSION['USER']['role'] == "admin")
                            <?php
 								//lets get the total number of beers in the users cellar
 								$query = $db->query("SELECT count(*)
-														FROM users_beer;");
+														FROM users_beer WHERE USERS_CHECK_OUT_DATE IS NULL;");
 								$query->setFetchMode(PDO::FETCH_ASSOC);
 
 								$beerCount = $query->fetch();
@@ -229,7 +230,7 @@ if($_SESSION['USER']['role'] == "admin")
 								$query = $db->query("SELECT count(*)
 														FROM (SELECT DISTINCT USERS_BARCODE
 																				, USERS_BEER_NAME
-																FROM users_beer) distinctBeer;");
+																FROM users_beer WHERE USERS_CHECK_OUT_DATE IS NULL) distinctBeer;");
 								$query->setFetchMode(PDO::FETCH_ASSOC);
 
 								$uniqueCount = $query->fetch();
