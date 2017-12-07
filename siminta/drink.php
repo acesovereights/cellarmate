@@ -305,13 +305,39 @@ else
 														//the user seleceted a beer to remove
 														$beerToRemove = $_SESSION['aboutToRemove'];
 														//print_r($_SESSION);
-														if($_SESSION['aboutToRemove']['removalMethod'] == "view")
+														if(isset($_POST['drink']) || isset($_POST['purge']))
+														{
+															if(isset($_POST['drink']))
+															{
+																//user wants to drink the beer
+																
+																//probably dont need this, I think i would still have access to the $beerToRemove, but thats OK, this should work and be 'safer'
+																$removalID = $_POST['drink'];
+										//confirm the user wants to drink this beer
+																echo "<form action='scripts/drinkbeer.php' method='post'>";
+																echo "<td colspan='2'><button class='btn btn-danger btn-lg' name='drink' type='submit' value='$removalID'>Confirm Removal!</button></td>";
+																echo "</form>";
+//LEFT OFF HERE, now make the scripts/drinkbeer.php
+															}
+															elseif(isset($_POST['purge']))
+															{
+																//user wants to remove this beer from the database
+															}
+														}
+														if($beerToRemove['removalMethod'] == "view")
 														{
 															//display the data for the beer, then give them the option to remove it for whatever reason
 															echo "<tbody>
-																<form action='' method='post'><tr><td colspan='2'><a class='pull-right' name='purge' type='submit'>DELETE from database</a></td>";
+																<form action='drink.php' method='post'><tr><td colspan='2'><a class='pull-right' name='purge' type='submit'>DELETE from database</a></td>";
 															include('scripts/displayremovalbeer.php');
-															echo "<td colspan='2'><button class='btn btn-success btn-lg pull-right' name='drink' type='submit' >DRINK THIS BEER!</button></td></form>";
+															if(!isset($_POST['drink']) && !isset($_POST['purge']))
+															{	
+																echo "<td colspan='2'><button class='btn btn-success btn-lg pull-right' name='drink' type='submit' value='".$beerToRemove['USERS_UNIQUE_BEER_ID']."'>DRINK THIS BEER!</button></td>";
+															}
+															
+															
+															
+															echo "</form>";
 														}
 														elseif($_SESSION['aboutToRemove']['removalMethod'] == "remove")
 														{
