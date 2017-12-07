@@ -23,6 +23,7 @@ else
 {
 	$id = $_SESSION['USER']['id'];
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -56,6 +57,7 @@ else
         <!-- navbar top -->
         <?php
 			include('scripts/topnav.php');
+		
 		?>
         <!-- end navbar top -->
 
@@ -106,7 +108,7 @@ else
                     	<?php
 								//USER CELLAR NAME
 								$cellar = $_SESSION['USER']['cellarName'];
-								echo $cellar;
+								
 							?> 
                     </h1>
                 </div>
@@ -164,9 +166,22 @@ else
                                             </thead>
                                             <tbody>
                                                	<?php
-												
-													if(!isset($_POST['search']))
+													
+													if(isset($_SESSION['removal']))
 													{
+														$returnedBeers = $_SESSION['removal'];
+														echo "in";
+														
+														if(!is_array($returnedBeers))
+														{
+															echo $returnedBeers;
+														}
+														else
+														{
+															print_r($returnedBeers);
+														}
+														
+														/*
 														//lets get the distinct beers from the database
 														$query = $db->query("SELECT DISTINCT 
 																				USERS_BEER_NAME
@@ -269,6 +284,7 @@ else
 
 																		$distinctCount = $distinctBeers['count(*)'];
 																		echo "<td>$distinctCount</td>";*/
+														/*
 																		echo "<td>$vintage</td>
 																			  <td>
 																			  		<form action='removebeer.php' method='post'>
@@ -276,7 +292,7 @@ else
 																					</form>
 																			  <td></tr>";
 															}	
-														}
+														}*/
 													}
 												?>
                                                

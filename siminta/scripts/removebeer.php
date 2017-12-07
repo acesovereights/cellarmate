@@ -10,23 +10,62 @@
 		{
 			//from the search input
 			$searchValue = $_POST['removal'];
-			if(is_int($searchValue) && strlen($searchValue) == 12)
+			$userID = $_SESSION['USER']['id'];
+			
+			$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BARCODE = ? AND USERS_BEER_USER_ID = ?;");
+			$query->execute(array($searchValue, $userID));
+			$query->setFetchMode(PDO::FETCH_ASSOC);
+
+			//all of the beers that match the supplied barcode for the logged in user
+			$result = $query->fetch();
+			
+			if(!$result)
 			{
-				//search is a barcode
-				//query the database and return the beers that fit that barcode
-			}
-			else
-			{
-				//search is a beer name
+				//no results found, lets try it as a beer name
+				//the search is a beer name
 				//query the database for the name, or partial name
+				$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_NAME LIKE '%".$searchValue."' AND USERS_BEER_USER_ID = ?");
+				$query->execute(array($userID));
+				$query->setFetchMode(PDO::FETCH_ASSOC);
+				
+				//all of the beers that match the supplied beer name for the logged in user
+				
+			}
+			
+			if(!$result)
+			{
+				//still no result, nothing found in the cellar by that search criteria
+				$result = "No beers found!";
 			}
 		}
+		
+		if(is_array($result))
+		{
+			$beerArray = [];
+			while($result)
+			{
+				$beerArray[] = $result;
+				$result = $query->fetch();
+				
+			}
+			$result = $beerArray;
+			//print_r($result);
+		}
+		else
+		{
+			$result = "No beer found!";
+			//echo $result;
+		}
+		
+		$_SESSION['removal'] = $result;
+		header('location: ../drink.php');
+		
 		
 	}
 	else
 	{
 		//trying to access this page without beign logged in, or logged in user is an admin
 		//send them back to the index
-		header('location: index.html');
+		header('location: ../index.html');
 	}
 ?>
