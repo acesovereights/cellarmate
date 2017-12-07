@@ -14,6 +14,9 @@
 include('scripts/connect.php');
 session_start();
 unset($_SESSION['insertedBeer']);
+unset($_SESSION['aboutToRemove']);
+unset($_SESSION['removal']);
+
 if(!isset($_SESSION['USER']))
 {
 	//non logged in user is trying to access the callar page, send them to the login page
@@ -161,7 +164,6 @@ else
                                             </thead>
                                             <tbody>
                                                	<?php
-												
 													if(!isset($_POST['search']))
 													{
 														//lets get the distinct beers from the database
@@ -239,6 +241,7 @@ else
 														}
 														else
 														{
+															
 															foreach($searchResult as $beer)
 															{
 																$beerName = $beer['USERS_BEER_NAME'];

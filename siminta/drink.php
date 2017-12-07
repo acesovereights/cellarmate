@@ -14,6 +14,7 @@
 include('scripts/connect.php');
 session_start();
 unset($_SESSION['insertedBeer']);
+
 if(!isset($_SESSION['USER']))
 {
 	//non logged in user is trying to access the callar page, send them to the login page
@@ -48,6 +49,9 @@ else
 		.actionMove{
 			margin-top: -120%;
 		}
+		.middle{
+			vertical-align: middle;
+		}
 	</style>
    </head>
    
@@ -71,6 +75,7 @@ else
                         <!-- user image section-->
                         <?php
 							include('scripts/userimagesection.php');
+							
 						?>
                         <!--end user image section-->
                     </li>
@@ -150,18 +155,11 @@ else
                                    <br>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-hover table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th><h4>Beer Name</h4></th>
-                                                    <th><h4>Brewery</h4></th>
-                                                   	<th class='centering'><h4>Vintage</h4></th>
-                                                   	<th class='centering'><h4>View / Remove</h4></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                            
+                                            
                                                	<?php
-													print_r($_SESSION['USER']);
-													if(isset($_SESSION['removal']))
+											
+													if(isset($_SESSION['removal']) && !isset($_SESSION['aboutToRemove']))
 													{
 														$returnedBeers = $_SESSION['removal'];
 														
@@ -169,10 +167,13 @@ else
 														{
 															//No beers found
 															echo "<h2>".$returnedBeers."</h2>";
+															
 														}
 														else
 														{
-															
+															//bring the table head in only when its a search for a beer to remove
+															include('scripts/tablehead.html');
+															echo "<tbody>";
 															foreach($returnedBeers as $beer)
 															{
 																echo "<tr>";
@@ -301,9 +302,23 @@ else
 												
 													if(isset($_SESSION['aboutToRemove']))
 													{
-	//left off here. do the stuff here about removing. If the user selects  "remove" prompt the user to verify that it is the right beer.
-	//if they select "view" display the beer data. 
 														//the user seleceted a beer to remove
+														$beerToRemove = $_SESSION['aboutToRemove'];
+														//print_r($_SESSION);
+														if($_SESSION['aboutToRemove']['removalMethod'] == "view")
+														{
+															//display the data for the beer, then give them the option to remove it for whatever reason
+															echo "<tbody>
+																<form action='' method='post'><tr><td colspan='2'><a class='pull-right' name='purge' type='submit'>DELETE from database</a></td>";
+															include('scripts/displayremovalbeer.php');
+															echo "<td colspan='2'><button class='btn btn-success btn-lg pull-right' name='drink' type='submit' >DRINK THIS BEER!</button></td></form>";
+														}
+														elseif($_SESSION['aboutToRemove']['removalMethod'] == "remove")
+														{
+															//prompt them to verify removal
+															echo "<h3>Are you sure you want to remove ".$_SESSION['USERS_BEER_NAME']."?";
+														}
+														
 													}
 												?>
                                                

@@ -4,6 +4,10 @@
 	
 	if($_SESSION['USER']['role'] == "user")
 	{
+		if(isset($_SESSION['removal']))
+		{
+			unset($_SESSION['removal']);
+		}
 		include('connect.php');
 		//a logged in user is accessing
 		if(isset($_POST['search']))
