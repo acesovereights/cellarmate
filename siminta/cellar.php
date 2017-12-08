@@ -120,7 +120,7 @@ else
                 <!-- Welcome -->
                 <div class="col-lg-12">
                     <div class="alert alert-info">
-                        <i class="fa fa-folder-open"></i><b>&nbsp;Hello ! </b>Welcome Back <b><?php echo $fullname; ?> </b>
+                        <i class="fa fa-folder-open"></i><b>&nbsp;Hello! </b>Welcome Back <b><?php echo $fullname; ?> </b>
  						<!--<i class="fa  fa-pencil"></i>-->
                     </div>
                 </div>
@@ -166,8 +166,45 @@ else
                                                	<?php
 													if(!isset($_POST['search']))
 													{
+														//start the pagination at 0
+														$start = 0;
+														
+														//set the limit per page = 10
+														$limit = 10;
+														
+														//if the page number is set
+														if(isset($_GET['page']))
+														{
+															$current_page = $_GET['page'];
+															$start = ($current_page-1)*$limit;
+														}
+														else
+														{
+															$current_page = 1;
+															$start = ($current_page-1)*$limit;
+														}
+
+														
 														//lets get the distinct beers from the database
-														$query = $db->query("SELECT DISTINCT 
+														$query = $db->prepare("SELECT DISTINCT 
+																				USERS_BEER_NAME
+																				, USERS_BREWERY_NAME
+																				, USERS_BEER_VINTAGE 
+																			FROM 
+																			(SELECT USERS_BEER_NAME
+																					, USERS_BREWERY_NAME
+																					, USERS_BEER_VINTAGE
+																			 FROM users_beer
+																			 WHERE
+																				USERS_BEER_USER_ID = $id AND USERS_CHECK_OUT_DATE IS NULL) subQuery 
+																			LIMIT $start, $limit;");
+														//$query->execute(array($id, $start, $limit));
+														$query->execute();
+														$query->setFetchMode(PDO::FETCH_ASSOC);
+
+														$beerResult = $query->fetchAll();
+														
+														$data = $db->prepare("SELECT DISTINCT 
 																				USERS_BEER_NAME
 																				, USERS_BREWERY_NAME
 																				, USERS_BEER_VINTAGE 
@@ -178,9 +215,9 @@ else
 																			 FROM users_beer
 																			 WHERE
 																				USERS_BEER_USER_ID = $id AND USERS_CHECK_OUT_DATE IS NULL) subQuery;");
-														$query->setFetchMode(PDO::FETCH_ASSOC);
-
-														$beerResult = $query->fetchAll();
+														$data->execute(array($id));
+														$totalRecd = $data->rowCount();
+														$num_of_pages = ceil($totalRecd/$limit);
 
 
 //THis needs to be refined. It does not find all the proper results. I think a LIKE is needed in the query
@@ -218,8 +255,75 @@ else
 																	$distinctCount = $distinctBeers['count(*)'];
 																	echo "<td class='centering'>$distinctCount</td>";
 																	echo "<td class='centering'>$vintage</td><td><a href=''><span class='fa fa-pencil'></span></a></tr>";
-														}															
+														}
+														
+														if($num_of_pages != 1)
+														{
+															if($current_page>1)
+															{ 
+																$prevPage = $current_page -1;
+																echo "<a class='btn fa fa-chevron-left' href='?page=".$prevPage."'></a>";
+
+															 }
+
+															if($current_page == 1){
+																$minPage = 1;
+															}
+															else
+															{
+																$minPage = $current_page -1;
+															}
+															$applied = false;
+															for($i=$minPage;$i<=$minPage+2;$i++)
+															{
+																if($minPage <> 1 && !$applied)
+																{
+																	$url = "?page=1";
+																	echo "<a class='' href='".$url."'>1</a><span>. . . </span>";
+																	$applied=true;
+																}
+																//page number of currently viewing page
+																if($i==$current_page)
+																{
+																	echo "<span class=''>".$i." </span>";
+																}
+																//page number of other pages with link to naviagte
+																else
+																{
+																	if($i<$num_of_pages)
+																	{
+																	$url = "?page=".$i."'";
+																	echo "<a class='' href='".$url."'>".$i."</a> ";
+																	}
+																}
+															}
+															$url = "?page=".$num_of_pages."'";
+															echo "<span>. . . </span><a class='' href='".$url."'>".$num_of_pages."</a>";
+															//if current page is lesser tha nnumber of pages as next button
+															if($current_page < $num_of_pages)
+															{ 
+																$nextPage = $current_page+1;
+																echo "<a class='btn fa fa-chevron-right' href='?page=".$nextPage."'></a>";
+
+															}
+														}
+														
+														
+														
+														
+														
+														
+														
+														
+														
 													}
+												
+												
+												
+												
+												
+												
+												
 													else
 													{
 														//lets get the searched for beer from the database

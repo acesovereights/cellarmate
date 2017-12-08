@@ -8,6 +8,10 @@
 		{
 			unset($_SESSION['removal']);
 		}
+		if(isset($_SESSION['aboutToRemove']))
+		{
+			unset($_SESSION['aboutToRemove']);
+		}
 		include('connect.php');
 		//a logged in user is accessing
 		if(isset($_POST['search']))
@@ -16,7 +20,7 @@
 			$searchValue = $_POST['removal'];
 			$userID = $_SESSION['USER']['id'];
 			
-			$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BARCODE = ? AND USERS_BEER_USER_ID = ?;");
+			$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BARCODE = ? AND USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL;");
 			$query->execute(array($searchValue, $userID));
 			$query->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -28,7 +32,7 @@
 				//no results found, lets try it as a beer name
 				//the search is a beer name
 				//query the database for the name, or partial name
-				$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL AND USERS_BEER_NAME LIKE '%".$searchValue."%';");
+				$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL AND USERS_BEER_NAME LIKE '%".$searchValue."%' AND USERS_CHECK_OUT_DATE IS NULL;");
 				
 				$query->execute(array($userID));
 				$query->setFetchMode(PDO::FETCH_ASSOC);
@@ -66,6 +70,7 @@
 		}
 		
 		$_SESSION['removal'] = $result;
+		//$_SESSION['removal']['triedOnce'] = true;
 		header('location: ../drink.php');
 		
 		

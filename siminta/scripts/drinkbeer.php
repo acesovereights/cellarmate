@@ -1,7 +1,7 @@
 <?php
 	session_start();
 
-	print_r($_POST);
+	//print_r($_SESSION);
 
 	if(isset($_POST['drinkConfirm']))
 	{
@@ -17,6 +17,8 @@
 			
 			unset($_SESSION['removal']);
 			unset($_SESSION['aboutToRemove']);
+			
+			header('location: ../cellar.php');
 			
 			
 		}

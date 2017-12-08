@@ -15,6 +15,22 @@ include('scripts/connect.php');
 session_start();
 unset($_SESSION['insertedBeer']);
 
+if(isset($_SESSION['results']))
+{
+	unset($_SESSION['results']);
+}
+if(isset($_SESSION['brewery']))
+{
+	unset($_SESSION['brewery']);
+}
+
+//if(isset($_SESSION['removal']['triedOnce']))
+//{
+//	unset($_SESSION['removal']);
+//}
+
+
+
 if(!isset($_SESSION['USER']))
 {
 	//non logged in user is trying to access the callar page, send them to the login page
@@ -128,7 +144,7 @@ else
                 <!-- Welcome -->
                 <div class="col-lg-12">
                     <div class="alert alert-info">
-                        <i class="fa fa-folder-open"></i><b>&nbsp;Hello ! </b>Welcome Back <b><?php echo $fullname; ?> </b>
+                        <i class="fa fa-folder-open"></i><b>&nbsp;Hello, <?php echo $fullname; ?> </b>
  						<!--<i class="fa  fa-pencil"></i>-->
                     </div>
                 </div>
@@ -153,16 +169,24 @@ else
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                   <form action="scripts/removebeer.php" method="post">
-                                   		<input type="text" class="form-group" name="removal" placeholder="Scan barcode or type name" size="30"> <button type="submit" class="btn btn-info" name="search">Remove</button><br>
-                                   </form>
+                                  		
+									   <form action="scripts/removebeer.php" method="post">
+									   		
+											<input type="text" class="form-control" name="removal" placeholder="Scan barcode or type name" autofocus><br><button type="submit" class="btn btn-info" name="search">Remove</button><br>
+											
+									   </form>
+									
                                    <br>
                                    <?php
+									$hasPageLoaded = true;
 									if(isset($_POST['purge']))
 									{
 									//the user wants to straight purge the beer from the database, not drink it.
-										$removalID = $_POST['purge'];
-										print_r($_POST);
+										//$removalID = $_SESSION['USERS_UNIQUE_BEER_ID'];
+										//echo $removalID;
+										
+										//print_r($_SESSION['removal'][0]);
+										$removalID = $_SESSION['removal'][0]['USERS_UNIQUE_BEER_ID'];
 										echo "<form action='scripts/drinkbeer.php' method='post'>";
 										echo "<span id='reason'><input class='form-group' type='text' size='40' placeholder='Reason for deletion' name='reason' required></span>";
 										echo "<br>";

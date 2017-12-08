@@ -16,8 +16,11 @@ session_start();
 
 
 //manually set the session ID for testing
-$id = $_SESSION['user_id'];
+//print_r($_SESSION);
+$id = $_SESSION['USER']['id'];
 include('scripts/connect.php');
+unset($_SESSION['aboutToRemove']);
+unset($_SESSION['removal']);
 
 
 ?>
@@ -37,6 +40,11 @@ include('scripts/connect.php');
     <link href="assets/css/main-style.css" rel="stylesheet" />
     <!-- Page-Level CSS -->
     <link href="assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <style>
+	.actionMove{
+			margin-top: -120%;
+		}
+	</style>
    </head>
 <body>
     <!--  wrapper -->
@@ -156,9 +164,9 @@ include('scripts/connect.php');
                     <!--Simple table example -->
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Add a beer to your cellar
+                            <h3><i class="fa fa-bar-chart-o fa-fw"></i>Add a beer to your cellar</h3>
                             <div class="pull-right">
-                                <div class="btn-group">
+                                <div class="btn-group actionMove">
                                     <?php
 										include('scripts/actionbutton.html');
 									?>
@@ -214,7 +222,7 @@ include('scripts/connect.php');
 													echo "<button class='btn btn-success' type='submit' name='multipleBreweries' value='".$barcode."'>Select Brewery</button></form>";
 												}
 									
-											//where the beer results from the selection of the proper brewery are sent
+									//where the beer results from the selection of the proper brewery are sent
 											if(isset($_SESSION['MultiBeerNames']))
 											{
 												echo "<form action='scripts/apiBeer.php' method='post'>";

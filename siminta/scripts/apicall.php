@@ -33,10 +33,10 @@ if(isset($_POST['barcode']))
 		die('error occured: ' . $decoded->response->errormessage);
 		
 	}
-	$_SESSION['results'] = $decoded;
+	$_SESSION['apiBeer']['results'] = $decoded;
 	$_SESSION['barcode'] = $upc;
 		
-		
+	//print_r($decoded);
 	header('location: ../addbeer.php?upc='.$upc);
 			
 	

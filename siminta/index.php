@@ -147,7 +147,15 @@ if($_SESSION['USER']['role'] == "admin")
                                                	<?php
 													//lets get the distinct beers from the database
 												//MOST RECENTLY ADDED BEERS
-													$query = $db->query("SELECT ub.USERS_BEER_NAME, ub.USERS_BREWERY_NAME, ub.USERS_CHECK_IN_DATE, u.USER_USERNAME, u.USER_CELLAR_VISIBLE FROM users_beer ub JOIN user u ON u.USER_ID = ub.USERS_BEER_USER_ID GROUP BY ub.USERS_CHECK_IN_DATE ORDER BY max(ub.USERS_CHECK_IN_DATE) desc LIMIT 10;");
+													$query = $db->query("SELECT ub.USERS_BEER_NAME
+																		, ub.USERS_BREWERY_NAME
+																		, ub.USERS_CHECK_IN_DATE
+																		, u.USER_USERNAME
+																		, u.USER_CELLAR_VISIBLE 
+																		FROM users_beer ub 
+																		JOIN user u ON u.USER_ID = ub.USERS_BEER_USER_ID 
+																		GROUP BY ub.USERS_CHECK_IN_DATE 
+																		ORDER BY max(ub.USERS_CHECK_IN_DATE) desc LIMIT 10;");
 													$query->setFetchMode(PDO::FETCH_ASSOC);
 
 													$beerResult = $query->fetchAll();
