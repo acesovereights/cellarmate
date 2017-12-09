@@ -50,6 +50,7 @@
                                 <input type="submit" class="btn btn-lg btn-success btn-block" name="Login" value="Login">
                             </fieldset>
                             <?php
+								print_r($_SESSION);
 								if(isset($_SESSION['fail']))
 								{
 									//user entered incorrect credentials, lets prompt them to try again

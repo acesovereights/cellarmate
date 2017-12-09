@@ -68,10 +68,8 @@ unset($_SESSION['removal']);
 <!--                               User image from database-->
                               <?php 
 								
-								//set temp ID, this should be passed via post from the login page
-								$id = 1;
-								$_POST['id'] = 1;
-								$id = $_POST['id'];
+								
+								$id = $_SESSION['USER']['id'];
 								
 								$query = $db->query("SELECT USER_FIRST_NAME, USER_LAST_NAME, USER_CELLAR_NAME, USER_PROFILE_PICTURE FROM user WHERE USER_ID = $id");
 								$query->setFetchMode(PDO::FETCH_ASSOC);
@@ -355,6 +353,7 @@ unset($_SESSION['removal']);
 													}
 													else	//from manual beer search
 													{
+														
 														//this is for the data sent back from the API when user searched by name
 														//put double quotes around the beername so that apostrophes dont break in the input
 														
@@ -492,6 +491,15 @@ unset($_SESSION['removal']);
 												{
 													// no results returned
 													//print_r($_SESSION);
+						//insert the code to check the local db here...	
+													//Scan the cellarmate database for a beer when there are no results returned.
+													//$_SESSION['DBSCAN']['barcode'] = 
+													
+													
+													
+		//left off here, get teh ['DBSCAN'] session and check for results.
+													include('scripts/dbscan.php');
+													
 													
 													echo "<h3>No beers found with that barcode</h3>";
 													echo "<h4>Try searching by Beer Name and Brewery</h4><br>";

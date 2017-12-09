@@ -65,8 +65,6 @@ function breweryNameApi($breweryName)
 			return $decoded;
 	}
 
-
-
 //the post comes from the section where proper brewery is selected from multiple breweries displayed, the post['breweryID'] contains a breweryID
 if(isset($_POST['multipleBreweries']))
 {
@@ -172,8 +170,51 @@ elseif(isset($_POST['searchUnfoundBeer']))
 			//print_r($returnedBrewery);
 			$breweryId = $returnedBrewery->data[0]->id;
 			$singleBrewery = breweryIdAPI($breweryId);
-			print_r($singleBrewery);
+			//print_r($singleBrewery);
+			//print_r($_POST);
+			$beerName = strtoupper($_POST['searchBeerName']);
+			$beerData = $singleBrewery->data;
+			$nameOptionArray=[];
+			$idOptionArray=[];
+			//print_r($beerData);
+			//echo $beerName."<br>";
+			foreach($beerData as $beerItem)
+			{
+
+				$breweryBeerName = strtoupper($beerItem->name);
+
+				$breweryBeerDisplayName = strtoupper($beerItem->nameDisplay);
+				/*
+				foreach($beerNameArray as $i=>$beerSegment)
+				{
+					preg_match('/'.$beerSegment.'/', $breweryBeerName, $nameMatch[]);
+
+				}
+
+				*/
+
+				preg_match('/'.$beerName.'/', $breweryBeerName, $nameMatch);
+				preg_match('/'.$beerName.'/', $breweryBeerDisplayName, $nameDisplayMatch);
+
+
+
+
+				if( $nameMatch || $nameDisplayMatch) //($breweryBeerName, $beerName) || strpos($breweryBeerDisplayName, $beerName))
+				{
+					/*print_r($beerItem);
+					echo "<br><br>";*/
+					$nameOptionArray[] = $beerItem->nameDisplay;
+					$idOptionArray[] = $beerItem->id;
+					//find a better function
+					//echo $beerItem->name." ".$beerItem->id."<br>";
+				}
+
+			}
+			$_SESSION['MultiBeerNames']['names'] = $nameOptionArray;
+			$_SESSION['MultiBeerNames']['ids'] = $idOptionArray;
+			$_SESSION['MultiBeerNames']['barcode'] = $barcode;
 			
+			header('location: ../addbeer.php?upc='.$barcode);
 //left off here, $singleBrewery contains all of the beers that the supplied brewery makes, I think I need to make a function out of the pregmatch area of the 
 //multipleBrewery section, so I can find the beers that match the name the user supplied. 
 		}
