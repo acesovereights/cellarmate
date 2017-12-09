@@ -1,7 +1,5 @@
 <?php
 
-// this might need to be re written completely. Its so messy it doesnt make sense. Keep the funtions though
-
 session_start();
 
 function breweryIdAPI($breweryID)
@@ -62,6 +60,8 @@ function breweryNameApi($breweryName)
 			}
 			//print_r($decoded);
 			//find the number of results returned for that brewery
+			//echo "Brewery Name API <br>";
+			//print_r($decoded);
 			return $decoded;
 	}
 
@@ -70,13 +70,14 @@ function breweryNameApi($breweryName)
 //the post comes from the section where proper brewery is selected from multiple breweries displayed, the post['breweryID'] contains a breweryID
 if(isset($_POST['multipleBreweries']))
 {
+	
 	//get the breweryID from the post data of the seleceted radio button
 	$breweryID = $_POST['BreweryID'];
 	//set the case to upper to eliminate case sensitivity
 	$beerName = strtoupper($_SESSION['Multi']['beerName']);
 	//print_r($beerNameArray = explode(" ",$beerName));
 	
-	echo "<br>";
+	//echo "<br>";
 	
 	$barcode = $_POST['multipleBreweries'];
 	//get the list of beers from the API by using the breweryID
@@ -89,6 +90,7 @@ if(isset($_POST['multipleBreweries']))
 	//echo $beerName."<br>";
 	foreach($beerData as $beerItem)
 	{
+	
 		$breweryBeerName = strtoupper($beerItem->name);
 		
 		$breweryBeerDisplayName = strtoupper($beerItem->nameDisplay);
@@ -109,7 +111,9 @@ if(isset($_POST['multipleBreweries']))
 		
 		if( $nameMatch || $nameDisplayMatch) //($breweryBeerName, $beerName) || strpos($breweryBeerDisplayName, $beerName))
 		{
-			$nameOptionArray[] = $beerItem->name;
+			/*print_r($beerItem);
+			echo "<br><br>";*/
+			$nameOptionArray[] = $beerItem->nameDisplay;
 			$idOptionArray[] = $beerItem->id;
 			//find a better function
 			//echo $beerItem->name." ".$beerItem->id."<br>";
@@ -128,7 +132,7 @@ if(isset($_POST['multipleBreweries']))
 
 
 //the post comes from the section where the user enters a barcde and nothing is found, so the user manually enters brewery and beer names
-if(isset($_POST['searchUnfoundBeer']))
+elseif(isset($_POST['searchUnfoundBeer']))
 {
 	$barcode = $_POST['searchUnfoundBeer'];
 	$breweryName = $_POST['searchBreweryName'];
@@ -138,7 +142,7 @@ if(isset($_POST['searchUnfoundBeer']))
 	//print_r($returnedBrewery);
 	
 	$numResults = $returnedBrewery->totalResults;
-
+	
 		if($numResults>1)
 		{
 			//There are more then 1 brewery returned for that name, lets list them to the user and have them choose before proceeding
@@ -163,7 +167,21 @@ if(isset($_POST['searchUnfoundBeer']))
 
 			header('location: ../addbeer.php?upc='.$barcode);
 		}
+		elseif($numResults == 1)
+		{
+			//print_r($returnedBrewery);
+			$breweryId = $returnedBrewery->data[0]->id;
+			$singleBrewery = breweryIdAPI($breweryId);
+			print_r($singleBrewery);
+			
+//left off here, $singleBrewery contains all of the beers that the supplied brewery makes, I think I need to make a function out of the pregmatch area of the 
+//multipleBrewery section, so I can find the beers that match the name the user supplied. 
+		}
 	
+}
+else
+{
+	echo "well.....";
 }
 
 

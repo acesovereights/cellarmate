@@ -242,6 +242,9 @@ unset($_SESSION['removal']);
 											if(isset($_SESSION['names']) && isset($_SESSION['IDs']) && !isset($_SESSION['Multi']['multiBreweryIdArray']))
 											{
 												//The barcode returned no results, and the user manually entered beer details
+												
+												
+												
 												echo "<form action='scripts/apiBeer.php' method='post'>";
 												//print_r($_SESSION['names']);
 												foreach($_SESSION['names'] as $index=>$beer)
@@ -344,7 +347,10 @@ unset($_SESSION['removal']);
 														}
 														$image = $results->data[0]->labels->medium;
 														$beerID = $results->data[0]->id;
-														$barcode = $_GET['upc'];
+														if(isset($_GET['upc']))
+														{
+															$barcode = $_GET['upc'];
+														}														
 														$isCommercial = 1;
 													}
 													else	//from manual beer search
@@ -389,7 +395,10 @@ unset($_SESSION['removal']);
 														}
 														$image = $results->data->labels->medium;
 														$beerID = $results->data->id;
-														$barcode = $_GET['upc'];
+														if(isset($_GET['upc']))
+														{
+															$barcode = $_GET['upc'];
+														}														
 														$isCommercial = 1;
 													}
 													
@@ -435,7 +444,10 @@ unset($_SESSION['removal']);
 													echo "<br><button class='btn btn-success' name='submitBeer' value='submit'>Add to Cellar</button>
 														</div></form>";
 													//manually set some post variables
-													$_SESSION['barcode'] = $barcode;
+													if(isset($_GET['upc']))
+													{
+														$_SESSION['barcode'] = $barcode;
+													}													
 													$_SESSION['commercial'] = $isCommercial;
 													$_SESSION['ID'] = $id;
 													$_SESSION['image'] = $image;
@@ -479,7 +491,7 @@ unset($_SESSION['removal']);
 												elseif(!isset($_SESSION['Multi']) && !isset($_SESSION['MultiBeerNames']) && isset($_SESSION['apiBeer']['results']))
 												{
 													// no results returned
-													print_r($_SESSION);
+													//print_r($_SESSION);
 													
 													echo "<h3>No beers found with that barcode</h3>";
 													echo "<h4>Try searching by Beer Name and Brewery</h4><br>";
