@@ -16,6 +16,7 @@
 		<?php 
 			if(isset($_SESSION['USER']))
 			{
+				//display user icon, username, and online status
 				$fullname = ucfirst($_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName']);
 				$username = $_SESSION['USER']['username'];
 				echo $username;

@@ -143,275 +143,93 @@ elseif($_SESSION['USER']['role'] == "admin")
 <!--                                 	section to scan a barcode-->
                                   	<form action="scripts/apicall.php" method="post">
                                   		<?php
-												if(isset($_SESSION['insertedBeer']))
+			//do I need this in this page?
+												/*if(isset($_SESSION['insertedBeer']))
 												{
 													$insertedBeerName = $_SESSION['insertedBeer'];
 													echo "<h3>$insertedBeerName was added to your cellar</h3><h4>Ready to add another</h4>";
 													unset($_SESSION['apiBeer']);
 													unset($_SESSION['DBSCAN']);
 												}
-										
+										*/
 											
 										?>
+								  	<!--
 									  	<div class="input-group custom-search-form">
 											<input type="text" class="form-control" placeholder="Scan or type the barcode" name="barcode" autofocus>
 										</div>
 										<a href='newbeer.php' class='btn btn-info pull-right'>No Barcode</a>
+										-->
 									</form>
                              		
 										<?php
-									
-									//if there are multiple breweries returned from the manual search
-											if(isset($_SESSION['Multi']))
-												{
-													//there were more than one brewery returned
-													$BreweryID = $_SESSION['Multi']['multiBreweryIdArray'];
-													$BreweryName = $_SESSION['Multi']['multiBreweryNameArray'];
-													$BreweryDesc = $_SESSION['Multi']['multiBreweryDescArray'];
-													$barcode = $_SESSION['Multi']['barcode'];
 													
-													echo "<form action='scripts/beersearch.php' method='post'>";
-													foreach($BreweryID as $index=>$brewery)
+													if(!isset($_POST['choice']))
 													{
-														//pad with "'s in case there are apostrophes in the name
-														$quotedBreweryName = '"'.$BreweryName[$index].'"';
-														//echo "<input type='radio' class='radio-inline' name='breweryChoice' value='$brewery'><h4>$BreweryName[$index]</h4><p>$BreweryDesc[$index]</p>";
-														echo "<label class='radio-inline'><input type='radio' name='BreweryID' value='$brewery'> <strong>$BreweryName[$index]</strong></label><p>$BreweryDesc[$index]</p><br>";
+														echo "<div class='col-lg-4'>";
+														echo "<form action='newbeer.php' method='post'>";
+														echo "<button class='btn btn-info' name='choice' value='search' type='submit'>Search by name</button>";
+														echo "<button class='btn btn-info pull-right' name='choice' value='manual' type='submit'>Enter a new beer</button>";
+														echo "</div>";
+													}
+													elseif($_POST['choice'] == "manual")
+													{
+														//the user chose to manually enter a beer
 														
 														
+														//echo  "<form action='scripts/insertBeer.php' method='post'><h2>$beerName</h2>";
+														echo "<div class='col-lg-5'>";
+
+														//unset the barcode so the api interface doesnt re run the call
+
+														unset($_POST['barcode']);
+
+														//set the session to trigger the API
+														//$_SESSION['id']=$beerID;
+
+														//call the api to get teh brewery name, because for whatever reason the brewery name isnt listed in the UPC results, just a beer code
+														//that you need to search for and get the brewery name from there
+														//include('scripts/apiBrewery.php');
+
+
+														echo "<label>Beer Name</label><input type='text' class='form-control'  name='beerName'>";
+														echo "<label>Brewery</label><input type='text' class='form-control'  name='breweryName'>";
+														echo "<label>Container Size</label><input type='text' class='form-control' name='containerSize'>";
+														echo "<label>IBU</label><input type='text' class='form-control' ' name='ibu'>";
+														echo "<label>ABV</label><input type='text' class='form-control' ' name='abv'>";
+														echo "<label>Beer Style</label><input type='text' class='form-control'  name='style'>";
+														//echo "<img src='$image' alt='No Image Found' name='image' value='$image'>";
+										//setup image upload here, store that image in the user images folder, and store that location in the database.
+
+
+														echo "</div>
+																<div class='col-lg-5'>";
+
+
+														echo "<label>Vintage</label><input type='text' class='form-control'  name='beerVintage'>";
+														echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace'>";
+														echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice'>";
+						//if I get time maybe add a date picker calendar....
+														echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
+														echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
+														echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'></textarea>";
+														echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
+														echo "<br><button class='btn btn-success' name='submitBeer' value='submit'>Add to Cellar</button>
+															</div></form>";
 													}
-													//print_r($_SESSION);
-													
-													//sends to beersearch.php
-													echo "<button class='btn btn-success' type='submit' name='multipleBreweries' value='".$barcode."'>Select Brewery</button></form>";
-												}
-									
-									//where the beer results from the selection of the proper brewery are sent
-											if(isset($_SESSION['MultiBeerNames']))
-											{
-												echo "<form action='scripts/apiBeer.php' method='post'>";
-												$names = $_SESSION['MultiBeerNames']['names'];
-												foreach($names as $i=>$beerName)
-												{
-													$beerID = $_SESSION['MultiBeerNames']['ids'][$i];
-													echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$beerID'> $beerName</label><br>";
-												}
-												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other'> Not Listed</label><br>";
-												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button>";
-												echo "</form>";
-											}
-									
-									
-	//setup the not listed funtion. Should point to new beer, manual search								
-											if(isset($_SESSION['names']) && isset($_SESSION['IDs']) && !isset($_SESSION['Multi']['multiBreweryIdArray']))
-											{
-												//The barcode returned no results, and the user manually entered beer details
-												
-												
-												
-												echo "<form action='scripts/apiBeer.php' method='post'>";
-												//print_r($_SESSION['names']);
-												foreach($_SESSION['names'] as $index=>$beer)
-												{
-													$foundBeerId = $_SESSION['IDs'][$index];
-													echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$foundBeerId''> $beer</label><br>";
-												}
-												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other'> Not Listed</label><br>";
-												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button></form>";
-												
-												
-												
-												//so we are here. This properly displays the returned beers, right now it can handle the partial name of a beer, but not a partial name of a brewery
-												//what i need it to do is to call the api and feed it the value of the selected radio box. 
-												//that should return it to the same area that a successful barcode scan does.
-												
-												
-												//WHY CAN I NOT SAVE THE BARCODE!!!!!! I NEED THAT TO INSERT INTO THE DB!!!!
-												
-												
-												
-												
-											}
-											if(isset($_SESSION['apiBeer']['results']))
-											{
-												
-												unset($_SESSION['insertedBeer']);
-												$results = $_SESSION['apiBeer']['results'];
-												//print_r($results);
-												
-												//cast the results as an array so we can count the number of items
-												//2 items means no results found. more than 2 means results are found
-												$foundResults = count((array)$results);
-												//echo"<br><br>";
-												//print_r($results->data[0]);
-												//$numResults = $results[0];
-												/*
-												echo "<br>";
-												print_r($results[1]->{'data'});//->{'name'});
-												echo "<br>";
-												*/
-												if(!isset($_SESSION['apiBeer']['fromSearch']))
-												{
-													if($foundResults >2)
+													elseif($_POST['choice'] == "search")
 													{
-														$numResults = $results->totalResults;
+														echo "<div class='col-lg-4'>";
+														echo "<form action='scripts/beersearch.php' method='post'>";
+														echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
+														echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
+														echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='00000000000000000000'>Search</button>";
+														echo "</form>";
+
+														echo "</div>";
 													}
-													else
-													{
-														$numResults = 0;
-													}
-												}
-												else
-												{
-													//set results to 0 so the if condition below fails the AND portion
-													$numResults = 0;
-												}
-												
-												
-												
-												
-												if( ($foundResults >2 && $numResults == 1) || isset($_SESSION['apiBeer']['fromSearch']))
-												{
-													if(!isset($_SESSION['apiBeer']['fromSearch']))	//from successful barcode retrieval
-													{
-														//put double quotes around the beername so that apostrophes dont break in the input
-														$displayBeerName = '"'.$results->data[0]->name.'"';
-														$beerName = $results->data[0]->name;
-														if(isset($results->data[0]->ibu))
-														{
-															$ibu = $results->data[0]->ibu;
-														}
-														else
-														{
-															$ibu =NULL;
-														}
-														if(isset($results->data[0]->abv))
-														{
-															$abv = $results->data[0]->abv;
-														}
-														else
-														{
-															$abv =NULL;
-														}
-														if(isset($results->data[0]->description))
-														{
-															$description = $results->data[0]->description;
-														}
-														else
-														{
-															$description =NULL;
-														}
-														if(isset($results->data[0]->style->name))
-														{
-															$style = $results->data[0]->style->name;
-														}
-														else
-														{
-															$style =NULL;
-														}
-														$image = $results->data[0]->labels->medium;
-														$beerID = $results->data[0]->id;
-														if(isset($_GET['upc']))
-														{
-															$barcode = $_GET['upc'];
-														}														
-														$isCommercial = 1;
-													}
-													else	//from manual beer search
-													{
-														
-														//this is for the data sent back from the API when user searched by name
-														//put double quotes around the beername so that apostrophes dont break in the input
-														
-														//print_r($_SESSION);
-														$displayBeerName = '"'.$results->data->name.'"';
-														$beerName = $results->data->name;
-														if(isset($results->data->ibu))
-														{
-															$ibu = $results->data->ibu;
-														}
-														else
-														{
-															$ibu =NULL;
-														}
-														if(isset($results->data->abv))
-														{
-															$abv = $results->data->abv;
-														}
-														else
-														{
-															$abv =NULL;
-														}
-														if(isset($results->data->description))
-														{
-															$description = $results->data->description;
-														}
-														else
-														{
-															$description =NULL;
-														}
-														if(isset($results->data->style->name))
-														{
-															$style = $results->data->style->name;
-														}
-														else
-														{
-															$style =NULL;
-														}
-														if(isset($results->data->labels->medium))
-														{
-															$image = $results->data->labels->medium;
-														}
-														$beerID = $results->data->id;
-														if(isset($_GET['upc']))
-														{
-															$barcode = $_GET['upc'];
-														}														
-														$isCommercial = 1;
-													}
-													
-													
-													
-													echo  "<form action='scripts/insertBeer.php' method='post'><h2>$beerName</h2>";
-													echo "<div class='col-lg-5'>";
-
-													//unset the barcode so the api interface doesnt re run the call
-													
-													unset($_POST['barcode']);
-
-													//set the session to trigger the API
-													$_SESSION['id']=$beerID;
-
-													//call the api to get teh brewery name, because for whatever reason the brewery name isnt listed in the UPC results, just a beer code
-													//that you need to search for and get the brewery name from there
-													include('scripts/apiBrewery.php');
-													$breweryName = $_SESSION['brewery']->data[0]->name;
-													$DisplayBreweryName = '"'.$_SESSION['brewery']->data[0]->name.'"';
-
-													echo "<label>Beer Name</label><input type='text' class='form-control' value=$displayBeerName name='beerName'>";
-													echo "<label>Brewery</label><input type='text' class='form-control' value=$DisplayBreweryName name='breweryName'>";
-													echo "<label>Container Size</label><input type='text' class='form-control' name='containerSize'>";
-													echo "<label>IBU</label><input type='text' class='form-control' value='$ibu' name='ibu'>";
-													echo "<label>ABV</label><input type='text' class='form-control' value='$abv' name='abv'>";
-													echo "<label>Beer Style</label><input type='text' class='form-control' value='$style' name='style'>";
-													echo "<img src='$image' alt='No Image Found' name='image' value='$image'>";
-
-
-													echo "</div>
-															<div class='col-lg-5'>";
-
-
-													echo "<label>Vintage</label><input type='text' class='form-control' value='2017'' name='beerVintage'>";
-													echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace'>";
-													echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice'>";
-					//if I get time maybe add a date picker calendar....
-													echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
-													echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
-													echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>$description</textarea>";
-													echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
-													echo "<br><button class='btn btn-success' name='submitBeer' value='submit'>Add to Cellar</button>
-														</div></form>";
 													//manually set some post variables
+									/*
 													if(isset($_GET['upc']))
 													{
 														$_SESSION['apiBeer']['barcode'] = $barcode;
@@ -565,7 +383,7 @@ elseif($_SESSION['USER']['role'] == "admin")
 													
 												}
 											}
-												
+												*/
 										?>
                             			
                              			<br>

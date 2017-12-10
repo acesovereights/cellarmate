@@ -10,16 +10,14 @@
                 <a class="navbar-brand" href="index.php">
                     <img src="images/cellarmatelogo.png" alt="Cellarmate">
                 </a>
+                
             </div>
             <!-- end navbar-header -->
             <!-- navbar-top-links -->
             <ul class="nav navbar-top-links navbar-right">
                 <!-- main dropdown -->
-                
-                
-<!--                //left off here, need to fix this to stay to the left of the user icon-->
-                
-                
+                <a class="btn btn-info btn-sm" href="about.php">About Cellarmate</a>
+                <a class="btn btn-info btn-sm" href="faq.php">FAQ</a>
 				<?php
 						if(!isset($_SESSION['USER']))
 						{

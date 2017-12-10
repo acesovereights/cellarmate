@@ -1,10 +1,21 @@
 
 <?php
-session_start();
+
 include('scripts/connect.php');
+session_start();
+unset($_SESSION['insertedBeer']);
+unset($_SESSION['aboutToRemove']);
+unset($_SESSION['removal']);
+unset($_SESSION['brewery']);
+
+
 if($_SESSION['USER']['role'] == "admin")
 {
 	header('location: admin.php');
+}
+elseif($_SESSION['USER']['role'] == "user")
+{
+	$id = $_SESSION['USER']['id'];
 }
 
 ?>
@@ -14,7 +25,7 @@ if($_SESSION['USER']['role'] == "admin")
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cellarmate</title>
+    <title>Cellarmate - Your Cellar</title>
 <!--    Bootstrap templace courtesy of Bootsrtap Free Admin Template - SIMINTA | Admin Dashboad Template -->
     <!-- Core CSS - Include with every page -->
     <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -25,11 +36,30 @@ if($_SESSION['USER']['role'] == "admin")
     <!-- Page-Level CSS -->
     <link href="assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
     <style>
+		.centering{
+			text-align: center;
+		}
 		.actionMove{
 			margin-top: -120%;
 		}
+		.purged{
+			color:red;
+		}
+		.bold{
+			font-weight: bold;
+		}
+		<?php if(!isset($_SESSION['USER']))
+		{
+			echo "#wrapper{
+					margin-top: 0px!important;
+				}";	
+		}
+		?>
+		
 	</style>
+   	
    </head>
+   
 <body>
     <!--  wrapper -->
     <div id="wrapper">
@@ -52,18 +82,15 @@ if($_SESSION['USER']['role'] == "admin")
 							{
 								include('scripts/userimagesection.php');
 							}
+							
 						?>
                         <!--end user image section-->
                     </li>
-                    <li class="sidebar-search"></li>
-                        <!-- search section-->
-                        
-  
-                        <!--end search section-->
-                   
+                   	<li class="sidebar-search"></li>
                     <?php
-						if(isset($_SESSION['USER']))
+							if(isset($_SESSION['USER']))
 						{
+							include('scripts/searchbar.php');
 							include('scripts/nav.html');
 						}
 						else
@@ -72,7 +99,9 @@ if($_SESSION['USER']['role'] == "admin")
 								<a href='login.php'><i class='fa fa-user'></i> Log In</a>
 							</li>";
 						}
+							
 						?>
+                    
                 </ul>
                 <!-- end side-menu -->
             </div>
@@ -86,7 +115,15 @@ if($_SESSION['USER']['role'] == "admin")
                 <!-- Page Header -->
                 <div class="col-lg-12">
                     <h1 class="page-header">
-                    	Cellarmate - <span class='h2'>Beer Inventory System</span>
+                    	<?php
+								//USER CELLAR NAME
+								if(isset($_SESSION['USER']))
+								{
+									$cellar = $_SESSION['USER']['cellarName'];
+									echo $cellar;
+								}
+								
+							?> 
                     </h1>
                 </div>
                 <!--End Page Header -->
@@ -96,108 +133,69 @@ if($_SESSION['USER']['role'] == "admin")
                 <!-- Welcome -->
                 <div class="col-lg-12">
                     <div class="alert alert-info">
-                        
-                        <?php 
-							if(isset($_SESSION['USER']))
-							{
-								$fullname = $_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName'];
-								echo "<i class='fa fa-folder-open'></i><b>&nbsp;Hello ! </b>Welcome Back <b>$fullname</b>";
-								//echo $_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName']; 
-							}
-							else
-							{
-								echo "<b>Better beer tracking through barcodes<b>";
-							}
-						?> </b>
+                        <i class="fa fa-folder-open"></i><b>&nbsp;Hello! </b><?php if(isset($_SESSION['USER']))
+																				{
+																					echo "Welcome Back <b>$fullname</b>";
+																				}
+																				else
+																				{
+																					echo "Welcome to Cellarmate!";
+																				}
+																				?>
  						<!--<i class="fa  fa-pencil"></i>-->
                     </div>
                 </div>
                 <!--end  Welcome -->
             </div>
 
-
             <div class="row">
                 <div class="col-lg-8">
 
-
-
-                   
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3><i class="fa fa-bar-chart-o fa-fw"></i> Most Recently Added Beers</h3>
+                            <h3><i class="fa fa-bar-chart-o fa-fw"></i> About Cellarmate</h3>
                             <div class="pull-right">
-                                
+                                <div class="btn-group actionMove">
+                                    <?php
+										if(isset($_SESSION['USER']))
+										{
+											include('scripts/actionbutton.html');
+										}
+										
+									
+									?>
+                                </div>
                             </div>
                         </div>
 
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-hover table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Beer Name</th>
-                                                    <th>Brewery</th>
-                                                    <th>Time</th>
-                                                    <th>Username</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                               	<?php
-													//lets get the distinct beers from the database
-												//MOST RECENTLY ADDED BEERS
-													$query = $db->query("SELECT ub.USERS_BEER_NAME
-																		, ub.USERS_BREWERY_NAME
-																		, ub.USERS_CHECK_IN_DATE
-																		, u.USER_USERNAME
-																		, u.USER_CELLAR_VISIBLE 
-																		FROM users_beer ub 
-																		JOIN user u ON u.USER_ID = ub.USERS_BEER_USER_ID 
-																		GROUP BY ub.USERS_CHECK_IN_DATE 
-																		ORDER BY max(ub.USERS_CHECK_IN_DATE) desc LIMIT 10;");
-													$query->setFetchMode(PDO::FETCH_ASSOC);
+									<h3><i><strong>Better beer tracking through barcodes</strong></i></h3>
+										<br>
 
-													$beerResult = $query->fetchAll();
-												
-													
-												
-													foreach($beerResult as $beer)
-													{
-														$beerName = $beer['USERS_BEER_NAME'];
-														$breweryName = $beer['USERS_BREWERY_NAME'];
-														$timestamp = $beer['USERS_CHECK_IN_DATE'];
-														
-														$dateTimeArray = explode(" ",$timestamp);
-														$date = $dateTimeArray[0];
-														$time = $dateTimeArray[1];
-														
-														$formattedDate = date('m-d-Y',strtotime($date));
-														$formattedTime = date('G:i:s', strtotime($time));
-														if($beer['USER_CELLAR_VISIBLE'] == 1)
-														{
-															$username = $beer['USER_USERNAME'];
-														}
-														else
-														{
-															$username - "Private User";
-														}
-														//$vintage = $beer['USERS_BEER_VINTAGE'];
-														echo "<tr>
-																<td>$beerName</td>
-																<td>$breweryName</td>
-																<td>$formattedDate - $formattedTime</td>
-																<td>$username</td>
-															  </tr>";
-																
- 													}
-												
-												
-												?>
-                                               
-                                            </tbody>
-                                        </table>
-                                    </div>
+										<div class="col-lg-11 col-sm-11">
+											<ul>
+												<li>
+													<label>What if I dont have a barcode scanner?</label>
+													<p>You can simply type the UPC (barcode) number in. Remember to include the numbers on the outer edges of the barcode!</p>
+												</li>
+												<li>
+													<label>What if I have multiple beers with the same barcode?</label>
+													<p>That happens often. Seasonal release beers often have the same barcode information as other seasonal releases from the same brewery. Cellarmate will display all of the beers found with that barcode then you can select the proper beer and enter it into your cellar. If the proper beer is not found, you can add that beer's data and it will be associated with that barcode in your cellar.</p>
+												</li>
+												<li>
+													<label>What if my beer has no barcode?</label>
+													<p>Not all beers have barcodes. Some taproom only releases do not have barcodes because they were neer intended for retail sales. You have quite a special beer there! Another case is that the beer you want to enter is a homebrew. In either case, select the "No Barcode" option, and then fill out the data about the beer. It wil then be entered into your cellar.</p>
+												</li>
+												<li>
+													<label>What if the beer I have was not in the list of beers to choose from?</label>
+													<p>You can select the "Not Listed" option and enter the data about the beer and it will be added to your cellar and associated with the barcode you scanned.</p>
+												</li>
+											</ul>
+										</div>
+										
+                                    
 
                                 </div>
 
@@ -209,15 +207,21 @@ if($_SESSION['USER']['role'] == "admin")
                     <!--End simple table example -->
 
                 </div>
-
-                <div class="col-lg-4">
-                	<?php
+				<div class="col-lg-4">
+                <?php
+					if(isset($_SESSION['user']))
+					{
+						include('scripts/usercellarcount.php');
+					}
+					else
+					{
 						include('scripts/allcellarcount.php');
-					?>
-    		    </div>
+					}
+					
+				?>
+				</div>
 
             </div>
-
         </div>
         <!-- end page-wrapper -->
 
@@ -234,6 +238,10 @@ if($_SESSION['USER']['role'] == "admin")
     <script src="assets/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="assets/plugins/morris/morris.js"></script>
     <script src="assets/scripts/dashboard-demo.js"></script>
+    <script>
+		$("#cellar").addClass("selected");
+		
+	</script>
 
 </body>
 
