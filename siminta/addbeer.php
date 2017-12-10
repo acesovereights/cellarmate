@@ -21,6 +21,14 @@ $id = $_SESSION['USER']['id'];
 include('scripts/connect.php');
 unset($_SESSION['aboutToRemove']);
 unset($_SESSION['removal']);
+if(!isset($_GET['upc']))
+{
+	unset($_SESSION['brewery']);
+	unset($_SESSION['id']);
+	unset($_SESSION['commercial']);
+	unset($_SESSION['image']);
+}
+
 if(!isset($_SESSION['USER']))
 {
 	header('location: lognin.php');
@@ -149,6 +157,15 @@ elseif($_SESSION['USER']['role'] == "admin")
 													echo "<h3>$insertedBeerName was added to your cellar</h3><h4>Ready to add another</h4>";
 													unset($_SESSION['apiBeer']);
 													unset($_SESSION['DBSCAN']);
+													unset($_SESSION['brewery']);
+													unset($_SESSION['id']);
+													unset($_SESSION['commercial']);
+													unset($_SESSION['insertedBeer']);
+													unset($_SESSION['MultiBeerNames']);
+													unset($_SESSION['barcode']);
+													unset($_SESSION['image']);
+													
+													
 												}
 										
 											
@@ -156,7 +173,12 @@ elseif($_SESSION['USER']['role'] == "admin")
 									  	<div class="input-group custom-search-form">
 											<input type="text" class="form-control" placeholder="Scan or type the barcode" name="barcode" autofocus>
 										</div>
-										<a href='newbeer.php' class='btn btn-info pull-right'>No Barcode</a>
+										<?php
+											if(!isset($_SESSION['apiBeer']) && !isset($_SESSION['MultiBeerNames']))
+											{
+												echo "<a href='newbeer.php' class='btn btn-info pull-right'>No Barcode</a>";
+											}
+										?>
 									</form>
                              		
 										<?php
@@ -190,15 +212,33 @@ elseif($_SESSION['USER']['role'] == "admin")
 											if(isset($_SESSION['MultiBeerNames']))
 											{
 												echo "<form action='scripts/apiBeer.php' method='post'>";
+												echo "<br>";
 												$names = $_SESSION['MultiBeerNames']['names'];
-												foreach($names as $i=>$beerName)
+												if(count($names) > 0)
 												{
-													$beerID = $_SESSION['MultiBeerNames']['ids'][$i];
-													echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$beerID'> $beerName</label><br>";
+													//there are 1 or more results returned
+													foreach($names as $i=>$beerName)
+													{
+														$beerID = $_SESSION['MultiBeerNames']['ids'][$i];
+														echo "<label class='radio-inline'><input type='radio' name='beerChoice' value='$beerID'> $beerName</label><br>";
+													}
+													echo "<br>";
 												}
-												echo "<br><label class='radio-inline'><input type='radio' name='beerChoice' value='other'> Not Listed</label><br>";
-												echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button>";
+												else
+												{
+													//there are no results returned
+													echo "No results found <br><br>";
+												}
+												
+												if (count($names) > 0)
+												{
+													//let the user get teh beer details if there are results
+													echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button>";
+												}
+												
+												echo "&nbsp;<a href='newbeer.php?upc=".$_GET['upc']."' name='beerChoice' value='manual' class='btn btn-info'>Not Listed</a><br>";
 												echo "</form>";
+												
 											}
 									
 									
@@ -221,25 +261,17 @@ elseif($_SESSION['USER']['role'] == "admin")
 												
 												
 												
-												//so we are here. This properly displays the returned beers, right now it can handle the partial name of a beer, but not a partial name of a brewery
-												//what i need it to do is to call the api and feed it the value of the selected radio box. 
-												//that should return it to the same area that a successful barcode scan does.
-												
-												
-												//WHY CAN I NOT SAVE THE BARCODE!!!!!! I NEED THAT TO INSERT INTO THE DB!!!!
-												
-												
-												
-												
 											}
 											if(isset($_SESSION['apiBeer']['results']))
 											{
+												//beers returned from a successfule barcode scan
+												
 												
 												unset($_SESSION['insertedBeer']);
 												$results = $_SESSION['apiBeer']['results'];
 												//print_r($results);
 												
-												//cast the results as an array so we can count the number of items
+												
 												//2 items means no results found. more than 2 means results are found
 												$foundResults = count((array)$results);
 												//echo"<br><br>";
@@ -362,6 +394,13 @@ elseif($_SESSION['USER']['role'] == "admin")
 														{
 															$image = $results->data->labels->medium;
 														}
+														else
+														{
+															$image = NULL;
+														}
+														
+														
+														
 														$beerID = $results->data->id;
 														if(isset($_GET['upc']))
 														{
@@ -387,6 +426,8 @@ elseif($_SESSION['USER']['role'] == "admin")
 													include('scripts/apiBrewery.php');
 													$breweryName = $_SESSION['brewery']->data[0]->name;
 													$DisplayBreweryName = '"'.$_SESSION['brewery']->data[0]->name.'"';
+													
+													
 
 													echo "<label>Beer Name</label><input type='text' class='form-control' value=$displayBeerName name='beerName'>";
 													echo "<label>Brewery</label><input type='text' class='form-control' value=$DisplayBreweryName name='breweryName'>";
@@ -394,7 +435,14 @@ elseif($_SESSION['USER']['role'] == "admin")
 													echo "<label>IBU</label><input type='text' class='form-control' value='$ibu' name='ibu'>";
 													echo "<label>ABV</label><input type='text' class='form-control' value='$abv' name='abv'>";
 													echo "<label>Beer Style</label><input type='text' class='form-control' value='$style' name='style'>";
-													echo "<img src='$image' alt='No Image Found' name='image' value='$image'>";
+													if($image != NULL)
+													{
+														echo "<img src='$image' alt='No Image Available' name='image' value='$image'>";
+													}
+													else
+													{
+														echo "<br><br>No Image Available";
+													}
 
 
 													echo "</div>
@@ -466,7 +514,8 @@ elseif($_SESSION['USER']['role'] == "admin")
 													
 													
 													
-		//why isnt this working????
+		//why isnt this working????	
+													$_SESSION['barcode'] = $_GET['upc'];
 													include('scripts/dbscan.php');
 													$dbBeer = $_SESSION['DBSCAN'];
 													

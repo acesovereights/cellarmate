@@ -135,6 +135,7 @@ elseif(isset($_POST['searchUnfoundBeer']))
 	$barcode = $_POST['searchUnfoundBeer'];
 	$breweryName = $_POST['searchBreweryName'];
 	
+	//search for the brewery name first
 	$returnedBrewery = breweryNameApi($breweryName);
 	//echo $breweryName."<br>";
 	//print_r($returnedBrewery);
@@ -167,6 +168,7 @@ elseif(isset($_POST['searchUnfoundBeer']))
 		}
 		elseif($numResults == 1)
 		{
+			//there is only 1 brewery returned for that name
 			//print_r($returnedBrewery);
 			$breweryId = $returnedBrewery->data[0]->id;
 			$singleBrewery = breweryIdAPI($breweryId);
@@ -213,10 +215,9 @@ elseif(isset($_POST['searchUnfoundBeer']))
 			$_SESSION['MultiBeerNames']['names'] = $nameOptionArray;
 			$_SESSION['MultiBeerNames']['ids'] = $idOptionArray;
 			$_SESSION['MultiBeerNames']['barcode'] = $barcode;
-			
+			//print_r($singleBrewery->data);
 			header('location: ../addbeer.php?upc='.$barcode);
-//left off here, $singleBrewery contains all of the beers that the supplied brewery makes, I think I need to make a function out of the pregmatch area of the 
-//multipleBrewery section, so I can find the beers that match the name the user supplied. 
+
 		}
 	
 }

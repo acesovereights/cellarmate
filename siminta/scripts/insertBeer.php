@@ -4,7 +4,7 @@ session_start();
 	if(isset($_POST['submitBeer']))
 	{
 		include('connect.php');
-		
+		$userID = $_SESSION['ID'];
 		$beerName = $_POST['beerName'];
 		$breweryName = $_POST['breweryName'];
 		if(isset($_POST['ibu']))
@@ -24,7 +24,23 @@ session_start();
 		{
 			$image = $_SESSION['image'];
 		}
-		$barcode = $_SESSION['barcode'];
+		if(isset($_POST['beerType']))
+		{
+			//assigning a barcode to 
+			if($_POST['beerType'] == "commercial")
+			{
+				$barcode = 20000000000000+(int)$userID;
+			}
+			elseif($_POST['beerType'] == "homebrew")
+			{
+				$barcode = 10000000000000+(int)$userID;
+			}
+		}
+		else
+		{
+			$barcode = $_SESSION['barcode'];
+		}
+		
 		$isCommercial = $_SESSION['commercial'];
 		$quantity = $_POST['beerQuantity'];
 		$purDate = NULL; //$_POST['purchaseDate']; set to null now until I make all the entered dates fit date time format
@@ -33,7 +49,7 @@ session_start();
 		$vintage = $_POST['beerVintage'];
 		$notes = $_POST['notes'];
 		$container = $_POST['containerSize'];
-		$userID = $_SESSION['ID'];
+		
 
 		
 		
