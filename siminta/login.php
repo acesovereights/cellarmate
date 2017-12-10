@@ -14,7 +14,7 @@
 <head>
   <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cellarmate Login</title>
+    <title>Cellarmate - Login</title>
     <!-- Core CSS - Include with every page -->
     <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
     <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
@@ -50,7 +50,7 @@
                                 <input type="submit" class="btn btn-lg btn-success btn-block" name="Login" value="Login">
                             </fieldset>
                             <?php
-								print_r($_SESSION);
+								
 								if(isset($_SESSION['fail']))
 								{
 									//user entered incorrect credentials, lets prompt them to try again

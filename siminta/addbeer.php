@@ -21,6 +21,14 @@ $id = $_SESSION['USER']['id'];
 include('scripts/connect.php');
 unset($_SESSION['aboutToRemove']);
 unset($_SESSION['removal']);
+if(!isset($_SESSION['USER']))
+{
+	header('location: lognin.php');
+}
+elseif($_SESSION['USER']['role'] == "admin")
+{
+	header('location: admin.php');
+}
 
 
 ?>
@@ -30,7 +38,7 @@ unset($_SESSION['removal']);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cellarmate</title>
+    <title>Cellarmate - Add A Beer</title>
 <!--    Bootstrap templace courtesy of Bootsrtap Free Admin Template - SIMINTA | Admin Dashboad Template -->
     <!-- Core CSS - Include with every page -->
     <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -63,43 +71,12 @@ unset($_SESSION['removal']);
                 <ul class="nav" id="side-menu">
                     <li>
                         <!-- user image section-->
-                        <div class="user-section">
-                            <div class="user-section-inner">
-<!--                               User image from database-->
-                              <?php 
-								
-								
-								$id = $_SESSION['USER']['id'];
-								
-								$query = $db->query("SELECT USER_FIRST_NAME, USER_LAST_NAME, USER_CELLAR_NAME, USER_PROFILE_PICTURE FROM user WHERE USER_ID = $id");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$result = $query->fetch();
-								
-								if($result)
-								{
-									$image = $result['USER_PROFILE_PICTURE'];
-									echo "<img src='userImages/$image' alt=''>";
-								}
-								else
-								{
-									echo "failed";
-								}
-								?>
-                               
-                            </div>
-                            <div class="user-info">
-                                <div>
-                                <?php 
-									$fullname = ucfirst($result['USER_FIRST_NAME']." ".$result['USER_LAST_NAME']);
-									echo $fullname;
-								?>
-								</div>
-                                <div class="user-text-online">
-                                    <span class="user-circle-online btn btn-success btn-circle "></span>&nbsp;Online
-                                </div>
-                            </div>
-                        </div>
+                        <?php
+							if(isset($_SESSION['USER']))
+							{
+								include('scripts/userimagesection.php');
+							}
+						?>
                         <!--end user image section-->
                     </li>
                     <li class="sidebar-search">
@@ -182,8 +159,8 @@ unset($_SESSION['removal']);
 												{
 													$insertedBeerName = $_SESSION['insertedBeer'];
 													echo "<h3>$insertedBeerName was added to your cellar</h3><h4>Ready to add another</h4>";
-													//session_destroy();
-													//instead of destroy, lets just unset the variables we need cleared, leaving the user data set.
+													unset($_SESSION['apiBeer']);
+													unset($_SESSION['DBSCAN']);
 												}
 										
 											
@@ -392,7 +369,10 @@ unset($_SESSION['removal']);
 														{
 															$style =NULL;
 														}
-														$image = $results->data->labels->medium;
+														if(isset($results->data->labels->medium))
+														{
+															$image = $results->data->labels->medium;
+														}
 														$beerID = $results->data->id;
 														if(isset($_GET['upc']))
 														{
@@ -425,7 +405,7 @@ unset($_SESSION['removal']);
 													echo "<label>IBU</label><input type='text' class='form-control' value='$ibu' name='ibu'>";
 													echo "<label>ABV</label><input type='text' class='form-control' value='$abv' name='abv'>";
 													echo "<label>Beer Style</label><input type='text' class='form-control' value='$style' name='style'>";
-													echo "<img src='$image' alt='Beer Label Image' name='image' value='$image'>";
+													echo "<img src='$image' alt='No Image Found' name='image' value='$image'>";
 
 
 													echo "</div>
@@ -445,7 +425,7 @@ unset($_SESSION['removal']);
 													//manually set some post variables
 													if(isset($_GET['upc']))
 													{
-														$_SESSION['barcode'] = $barcode;
+														$_SESSION['apiBeer']['barcode'] = $barcode;
 													}													
 													$_SESSION['commercial'] = $isCommercial;
 													$_SESSION['ID'] = $id;
@@ -497,21 +477,103 @@ unset($_SESSION['removal']);
 													
 													
 													
-		//left off here, get teh ['DBSCAN'] session and check for results.
+		//why isnt this working????
 													include('scripts/dbscan.php');
+													$dbBeer = $_SESSION['DBSCAN'];
+													
+													if($dbBeer)
+													{
+														$displayBeerName = '"'.$dbBeer[0]['USERS_BEER_NAME'].'"';
+														$beerName = $dbBeer[0]['USERS_BEER_NAME'];
+														if(isset($dbBeer[0]['USERS_BEER_IBU']))
+														{
+															$ibu = $dbBeer[0]['USERS_BEER_IBU'];
+														}
+														else
+														{
+															$ibu =NULL;
+														}
+														if(isset($dbBeer[0]['USERS_BEER_ABV']))
+														{
+															$abv = $dbBeer[0]['USERS_BEER_ABV'];
+														}
+														else
+														{
+															$abv =NULL;
+														}
+														if(isset($dbBeer[0]['USERS_BEER_DESCRIPTION']))
+														{
+															$description = $dbBeer[0]['USERS_BEER_DESCRIPTION'];
+														}
+														else
+														{
+															$description =NULL;
+														}
+														if(isset($dbBeer[0]['USERS_BEER_STYLE']))
+														{
+															$style = $dbBeer[0]['USERS_BEER_STYLE'];
+														}
+														else
+														{
+															$style =NULL;
+														}
+														$image = $dbBeer[0]['USERS_BEER_IMAGE'];
+														//$beerID = $dbBeer[0]->data->id;
+														
+														$barcode = $dbBeer[0]['USERS_BARCODE'];
+																												
+														$isCommercial = 1;
+														$breweryName = $dbBeer[0]['USERS_BREWERY_NAME'];
+														$DisplayBreweryName = '"'.$dbBeer[0]['USERS_BREWERY_NAME'].'"';
+														//print_r($dbBeer);
+														
+														echo  "<form action='scripts/insertBeer.php' method='post'><h2>$beerName</h2>";
+														echo "<div class='col-lg-5'>";
+														echo "<label>Beer Name</label><input type='text' class='form-control' value=$displayBeerName name='beerName'>";
+														echo "<label>Brewery</label><input type='text' class='form-control' value=$DisplayBreweryName name='breweryName'>";
+														echo "<label>Container Size</label><input type='text' class='form-control' name='containerSize'>";
+														echo "<label>IBU</label><input type='text' class='form-control' value='$ibu' name='ibu'>";
+														echo "<label>ABV</label><input type='text' class='form-control' value='$abv' name='abv'>";
+														echo "<label>Beer Style</label><input type='text' class='form-control' value='$style' name='style'>";
+														echo "<img src='$image' alt='Beer Label Image' name='image' value='$image'>";
+
+
+														echo "</div>
+																<div class='col-lg-5'>";
+
+
+														echo "<label>Vintage</label><input type='text' class='form-control' value='2017'' name='beerVintage'>";
+														echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace'>";
+														echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice'>";
+						//if I get time maybe add a date picker calendar....
+														echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
+														echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
+														echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>$description</textarea>";
+														echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
+														echo "<br><button class='btn btn-success' name='submitBeer' value='submit'>Add to Cellar</button>
+															</div></form>";	
+														
+														//clear the dbscan session so that it does not show up again after inserting.
+														unset($_SESSION['DBSCAN']);
+													}
+													else
+													{
+														//no beers found in the API or the local database
+														
+														echo "<h3>No beers found with that barcode</h3>";
+														echo "<h4>Try searching by Beer Name and Brewery</h4><br>";
+														//session_destroy();
+														echo "<div class='col-lg-4'>";
+														echo "<form action='scripts/beersearch.php' method='post'>";
+														echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
+														echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
+														echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='".$_GET['upc']."'>Search</button>";
+														echo "</form>";
+
+														echo "</div>";
+													}
 													
 													
-													echo "<h3>No beers found with that barcode</h3>";
-													echo "<h4>Try searching by Beer Name and Brewery</h4><br>";
-													//session_destroy();
-													echo "<div class='col-lg-4'>";
-													echo "<form action='scripts/beersearch.php' method='post'>";
-													echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
-													echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
-													echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='".$_GET['upc']."'>Search</button>";
-													echo "</form>";
-													
-													echo "</div>";
 												}
 											}
 												

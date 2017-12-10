@@ -45,6 +45,11 @@
 		{
 			echo $e->getMessage();
 		}
+		
+		
+		$beerName = $_SESSION['removal'][0]['USERS_BEER_NAME'];
+		$_SESSION['PURGED'] = $beerName;
+		header('location: ../cellar.php');
 	}
 	else
 	{

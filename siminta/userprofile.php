@@ -85,7 +85,7 @@ if(!isset($_SESSION['USER']))
                         <!--end search section-->
                     </li>
                     <?php
-							if(!isset($_POST['editUser']))
+							if(!$_SESSION['USER']['role'] == "admin")
 							{
 								include('scripts/nav.html');
 							}
@@ -107,7 +107,16 @@ if(!isset($_SESSION['USER']))
                 <!-- Page Header -->
                 <div class="col-lg-12">
                     <h1 class="page-header">
-                    	Cellarmate Beer Inventory System
+                    	<?php
+							if($_SESSION['USER']['id'] == "admin")
+							{
+								echo "Admin User Update";
+							}
+							else 
+							{
+								echo "User Profile Update";
+							}
+						?>
                     </h1>
                 </div>
                 <!--End Page Header -->

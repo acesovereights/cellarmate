@@ -38,8 +38,12 @@
                     <ul class="dropdown-menu dropdown-user">
                         <li>
                         	
-							
-							<a href="userprofile.php"><i class="fa fa-user fa-fw"></i>User Profile</a>
+							<?php
+								if(isset($_SESSION['USER']))
+								{
+									echo "<a href='userprofile.php'><i class='fa fa-user fa-fw'></i>User Profile</a>";
+								}
+							?>
                         </li>
 <!--
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i>Settings</a>

@@ -16,15 +16,26 @@ session_start();
 unset($_SESSION['insertedBeer']);
 unset($_SESSION['aboutToRemove']);
 unset($_SESSION['removal']);
+unset($_SESSION['brewery']);
+
 
 if(!isset($_SESSION['USER']))
 {
 	//non logged in user is trying to access the callar page, send them to the login page
 	header('location: login.php');
 }
-else
+elseif($_SESSION['USER']['role'] == "admin")
+{
+	header('location: admin.php');
+}
+elseif($_SESSION['USER']['role'] = "user")
 {
 	$id = $_SESSION['USER']['id'];
+}
+else
+{
+	//catch all for someone somehow slipping through
+	header('location: index.php');
 }
 ?>
 
@@ -33,7 +44,7 @@ else
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cellarmate</title>
+    <title>Cellarmate - Your Cellar</title>
 <!--    Bootstrap templace courtesy of Bootsrtap Free Admin Template - SIMINTA | Admin Dashboad Template -->
     <!-- Core CSS - Include with every page -->
     <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -50,7 +61,12 @@ else
 		.actionMove{
 			margin-top: -120%;
 		}
+		.purged{
+			color:red;
+		}
+		
 	</style>
+   	
    </head>
    
 <body>
@@ -136,7 +152,9 @@ else
                             <div class="pull-right">
                                 <div class="btn-group actionMove">
                                     <?php
+										
 										include('scripts/actionbutton.html');
+									
 									?>
                                 </div>
                             </div>
@@ -145,6 +163,15 @@ else
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
+                                   <?php
+										if(isset($_SESSION['PURGED']))
+										{
+											$purgedBeer = $_SESSION['PURGED'];
+											echo "<h3 class='purged'>$purgedBeer has been purged from your cellar</h3>";
+											unset($_SESSION['PURGED']);
+										}
+									
+									?>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-hover table-striped">
                                             <thead>
@@ -164,6 +191,7 @@ else
                                             </thead>
                                             <tbody>
                                                	<?php
+													
 													if(!isset($_POST['search']))
 													{
 														//start the pagination at 0
@@ -231,9 +259,9 @@ else
 																	<td>$breweryName</td>";
 															
 																	//account for apostrophes in the beer name
-																	$beerName = addslashes($beerName);
+																	$slashBeerName = addslashes($beerName);
 																	//account or apostrophes in the brewery name
-																	$breweryName - addslashes($breweryName);
+																	$slashBreweryName = addslashes($breweryName);
 																	
 																	//lets get the quantites for each beer
 																	$query = $db->query("SELECT count(*)
@@ -242,8 +270,8 @@ else
 																									, USERS_BREWERY_NAME
 																									, USERS_BEER_VINTAGE
 																							FROM users_beer
-																							WHERE USERS_BEER_NAME = '$beerName'
-																									 AND USERS_BREWERY_NAME = '$breweryName'
+																							WHERE USERS_BEER_NAME = '$slashBeerName'
+																									 AND USERS_BREWERY_NAME = '$slashBreweryName'
 																									 AND USERS_BEER_VINTAGE = '$vintage'
 																									 AND USERS_BEER_USER_ID = '$id'
 																									 AND USERS_CHECK_OUT_DATE IS NULL) distinctBeerCount;");
@@ -254,11 +282,42 @@ else
 
 																	$distinctCount = $distinctBeers['count(*)'];
 																	echo "<td class='centering'>$distinctCount</td>";
-																	echo "<td class='centering'>$vintage</td><td><a href=''><span class='fa fa-pencil'></span></a></tr>";
+																	echo "<td class='centering'>$vintage</td><td class='centering'><form action='scripts/removebeer.php' method='post'><button type='submit' class='btn btn-sm btn-warning' value='$beerName' name='directRemoval'>Remove</button></form></tr>";
 														}
 														
-														if($num_of_pages != 1)
+														if($totalRecd >10)
 														{
+															//only show pagination if there is more than one page able to be shown
+															
+				//working on pagination right here, trying to start over from scratch. 
+				// trying to do a < 2 > of 10     style setup, and maybe a text box to jump to another page?
+															
+															if($current_page == 1)
+															{
+																//we are on the first page, only show the right chevron to go to page 2
+																$next = $current_page+1;
+																echo $current_page."&nbsp;&nbsp;<a class='fa fa-chevron-right' href='?page=".$next."'></a>";
+															}
+															elseif($current_page > 1 && $current_page == $num_of_pages)
+															{
+																//we are at the last page
+																//show only left chevron
+																$prev = $current_page-1;
+																echo "<a class='fa fa-chevron-left' href='?page=".$prev."'></a>&nbsp;&nbsp;".$current_page;
+															}
+															else
+															{
+																//we are not at the first, nor the last, lets show both chevrons
+																$next = $current_page+1;
+																$prev = $current_page-1;
+																echo "<a class='fa fa-chevron-left' href='?page=".$prev."'></a>&nbsp;&nbsp;".$current_page."&nbsp;&nbsp;<a class='fa fa-chevron-right' href='?page=".$next."'></a>";
+															}
+															
+															
+															
+															
+															
+															/*
 															if($current_page>1)
 															{ 
 																$prevPage = $current_page -1;
@@ -293,19 +352,20 @@ else
 																	if($i<$num_of_pages)
 																	{
 																	$url = "?page=".$i."'";
-																	echo "<a class='' href='".$url."'>".$i."</a> ";
+																	echo "<a class='' href='".$url."'>".$i."</a>&nbsp;";
 																	}
 																}
 															}
 															$url = "?page=".$num_of_pages."'";
 															echo "<span>. . . </span><a class='' href='".$url."'>".$num_of_pages."</a>";
-															//if current page is lesser tha nnumber of pages as next button
+															//if current page is lesser than number of pages as next button
 															if($current_page < $num_of_pages)
 															{ 
 																$nextPage = $current_page+1;
 																echo "<a class='btn fa fa-chevron-right' href='?page=".$nextPage."'></a>";
 
 															}
+															*/
 														}
 														
 														
@@ -427,6 +487,7 @@ else
     <script src="assets/scripts/dashboard-demo.js"></script>
     <script>
 		$("#cellar").addClass("selected");
+		
 	</script>
 
 </body>

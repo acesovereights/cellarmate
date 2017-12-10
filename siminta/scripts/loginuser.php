@@ -10,7 +10,7 @@ if(isset($_POST['Login']))
 	$password = hash('sha512',$_POST['password']);
 	
 	
-	$query = $db->prepare("SELECT USER_ID, USER_FIRST_NAME, USER_LAST_NAME, USER_CELLAR_NAME, USER_ROLE, USER_PROFILE_PICTURE FROM user WHERE USER_USERNAME = ? AND USER_PASSWORD = ?;");
+	$query = $db->prepare("SELECT USER_ID, USER_FIRST_NAME, USER_LAST_NAME, USER_CELLAR_NAME, USER_ROLE, USER_PROFILE_PICTURE, USER_USERNAME FROM user WHERE USER_USERNAME = ? AND USER_PASSWORD = ?;");
 	$query->execute(array($username, $password));
 	$query->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -25,6 +25,7 @@ if(isset($_POST['Login']))
 		$_SESSION['USER']['cellarName'] = $result['USER_CELLAR_NAME'];
 		$_SESSION['USER']['image'] = $result['USER_PROFILE_PICTURE'];
 		$_SESSION['USER']['role'] = $result['USER_ROLE'];
+		$_SESSION['USER']['username'] = $result['USER_USERNAME'];
 		
 		if($result['USER_ROLE'] == 'user')
 		{

@@ -5,6 +5,7 @@ if(isset($_POST['barcode']))
 	unset($_SESSION['fromSearch']);
 	unset($_SESSION['names']);
 	unset($_SESSION['IDs']);
+	unset($_SESSION['insertedBeer']);
 	$upc = $_POST['barcode'];
 
 			
@@ -34,7 +35,7 @@ if(isset($_POST['barcode']))
 		
 	}
 	$_SESSION['apiBeer']['results'] = $decoded;
-	$_SESSION['barcode'] = $upc;
+	$_SESSION['apiBeer']['barcode'] = $upc;
 		
 	//print_r($decoded);
 	header('location: ../addbeer.php?upc='.$upc);

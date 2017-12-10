@@ -32,7 +32,7 @@
 				//no results found, lets try it as a beer name
 				//the search is a beer name
 				//query the database for the name, or partial name
-				$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL AND USERS_BEER_NAME LIKE '%".$searchValue."%' AND USERS_CHECK_OUT_DATE IS NULL;");
+				$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL AND USERS_BEER_NAME LIKE '%".$searchValue."%';");
 				
 				$query->execute(array($userID));
 				$query->setFetchMode(PDO::FETCH_ASSOC);
@@ -46,13 +46,30 @@
 			if(!$result)
 			{
 				//still no result, nothing found in the cellar by that search criteria
-				$result = "No beers found!";
+				$result = "No beers found! search";
 			}
+		}
+		elseif(isset($_POST['directRemoval']))
+		{
+			$userID = $_SESSION['USER']['id'];
+			$searchValue = $_POST['directRemoval'];
+			//the user clicked on the remove button from their cellar view
+			$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL AND USERS_BEER_NAME = ?;");
+				
+			$query->execute(array($userID, $searchValue));
+			$query->setFetchMode(PDO::FETCH_ASSOC);
+
+			$result = $query->fetch();
+			if(!$result)
+			{
+				//still no result, nothing found in the cellar by that search criteria
+				$result = "No beers found! direct!";
+			}
+			
 		}
 		
 		if(is_array($result))
 		{
-			
 			$beerArray = [];
 			while($result)
 			{
@@ -65,7 +82,7 @@
 		}
 		else
 		{
-			$result = "No beer found!";
+			$result = "No beer found! empty";
 			//echo $result;
 		}
 		

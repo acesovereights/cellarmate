@@ -11,19 +11,21 @@
 		?>
 
 	</div>
-	<div class="user-info">
+	<div class="user-info squeeze">
 		<div>
 		<?php 
 			if(isset($_SESSION['USER']))
 			{
-			$fullname = ucfirst($_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName']);
-			echo $fullname;
-			
-		
-			echo "</div>
-			<div class='user-text-online'>
-				<span class='user-circle-online btn btn-success btn-circle '></span>&nbsp;Online
-			</div>";
+				$fullname = ucfirst($_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName']);
+				$username = $_SESSION['USER']['username'];
+				echo $username;
+				
+
+
+				echo "</div>
+				<div class='user-text-online'>
+					<span class='user-circle-online btn btn-success btn-circle '></span>&nbsp;Online
+				</div>";
 			}
 				?>
 	</div>

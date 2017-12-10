@@ -4,7 +4,7 @@
 	if(isset($_SESSION['USER']) && $_SESSION['USER']['role'] == "admin")
 	{
 		// a logged in Admin is accessing the page
-		$query = $db->prepare("SELECT USER_ID, USER_USERNAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_LOCATION, USER_CELLAR_NAME, USER_CELLAR_VISIBLE, USER_PROFILE_PICTURE FROM user WHERE USER_ROLE != 'admin';");
+		$query = $db->prepare("SELECT USER_ID, USER_USERNAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_LOCATION, USER_CELLAR_NAME, USER_CELLAR_VISIBLE, USER_PROFILE_PICTURE, USER_ROLE FROM user;");
 		$query->execute();
 		$query->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -24,6 +24,7 @@
 					<th>Cellar Name</th>
 					<th>Public Cellar</th>
 					<th>User Image</th>					
+					<th>Role</th>					
 					<th>&nbsp;</th>					
 				</tr>
 			</thead>
@@ -49,6 +50,7 @@
 						}
 						echo "<td class='center'>".$visible."</td>";
 						echo "<td>".$result['USER_PROFILE_PICTURE']."</td>";
+						echo "<td>".$result['USER_ROLE']."</td>";
 						echo "<td class='center'><form action='userprofile.php' method='post'><button class='btn btn-warning' name='editUser' value='".$result['USER_ID']."' type='submit'>Edit</button></td>";
 						echo "</tr>";
 

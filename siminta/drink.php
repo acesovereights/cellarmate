@@ -24,6 +24,15 @@ if(isset($_SESSION['brewery']))
 	unset($_SESSION['brewery']);
 }
 
+if(!isset($_SESSION['USER']))
+{
+	header('location: lognin.php');
+}
+elseif($_SESSION['USER']['role'] == "admin")
+{
+	header('location: admin.php');
+}
+
 //if(isset($_SESSION['removal']['triedOnce']))
 //{
 //	unset($_SESSION['removal']);
@@ -48,7 +57,7 @@ else
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cellarmate</title>
+    <title>Cellarmate - Remove A Beer</title>
 <!--    Bootstrap templace courtesy of Bootsrtap Free Admin Template - SIMINTA | Admin Dashboad Template -->
     <!-- Core CSS - Include with every page -->
     <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" />

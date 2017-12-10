@@ -20,16 +20,23 @@ if(isset($_POST['submitRegistration']))
 	}
 	$cellarName = $_POST['cellarName'];
 	$username = $_POST['username'];
-	$password = hash('sha512',$_POST['password']);
+	//$password = hash('sha512',$_POST['password']);
 	
 	
 	if(isset($_FILES))
 	{
+		
 		$filename = $_FILES['file']['name'];
 		$allowedExts = array("gif","jpeg","jpg","png");
 											
 		//using explode() to separarate file name and extension 
 		$temp = explode (".", $_FILES["file"]["name"]);
+		if(!isset($temp[1]))
+		{
+			//there is no file name to explode, so its the same file
+			echo "No file given?";
+			$filename=$_SESSION['USER']['image'];
+		}
 
 		//the end() func returns the last element of the array. First part = file name, last part = extension
 		$extension = end($temp); //grabs the extension
@@ -72,21 +79,34 @@ if(isset($_POST['submitRegistration']))
 	}
 	
 	//get the value of the is cellar visible radio button
-	if($_POST['public'] = "yes")
+	
+	
+	if($_POST['public'] == "yes")
 	{
 		//user opted into being public
 		$public = 1;
 	}
-	else
+	elseif($_POST['public'] == "no")
 	{
-		$public=0;
+		
+		$public = 0;
 	}
+	echo "<br>Public After= ".$public;
 	
 	try
 	{
 		
-		$userId = $_POST['submitRegistration'];
+		if(isset($_POST['submitRegistration']))
+		{
+			$userId = $_POST['submitRegistration'];
+		}
+		else
+		{
+			$userId = $_SESSION['USER']['id'];
+		}
 		//update user data
+		
+		
 		$query = $db->prepare("UPDATE user SET USER_USERNAME=?, USER_EMAIL=?, USER_FIRST_NAME=?, USER_LAST_NAME=?, USER_LOCATION=?, USER_CELLAR_NAME=?, USER_PROFILE_PICTURE=?, USER_CELLAR_VISIBLE=? WHERE USER_ID = ?;");
 		$query->execute([$username, $email, $firstName, $lastName, $location, $cellarName, $username.$filename, $public, $userId]);
 		
