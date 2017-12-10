@@ -604,6 +604,7 @@ elseif($_SESSION['USER']['role'] == "admin")
 														echo "<div class='col-lg-4'>";
 														echo "<form action='scripts/beersearch.php' method='post'>";
 														echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
+														echo "<p>Due to limitations in the API, please enter the most important SINGLE word in the brewery name for best results";
 														echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
 														echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='".$_GET['upc']."'>Search</button>";
 														echo "</form>";

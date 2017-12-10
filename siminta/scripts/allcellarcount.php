@@ -25,6 +25,7 @@
 			$query = $db->query("SELECT count(*)
 									FROM (SELECT DISTINCT USERS_BARCODE
 															, USERS_BEER_NAME
+															, USERS_BEER_VINTAGE
 											FROM users_beer WHERE USERS_CHECK_OUT_DATE IS NULL) distinctBeer;");
 			$query->setFetchMode(PDO::FETCH_ASSOC);
 

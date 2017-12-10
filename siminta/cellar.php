@@ -167,7 +167,7 @@ else
                                                     <th><h4>Beer Name</h4></th>
                                                     <th><h4>Brewery</h4></th>
                                                      <?php
-														if(!isset($_POST['search']))
+														if(!isset($_GET['searchValue']))
 														{
 															//only show this column if the user did not search for a beer
 															echo "<th class='centering'><h4>Quantity</h4></th>";
@@ -180,7 +180,7 @@ else
                                             <tbody>
                                                	<?php
 													
-													if(!isset($_POST['search']))
+													if(!isset($_GET['searchValue']) && !isset($_GET['searchPage']))
 													{
 														//start the pagination at 0
 														$start = 0;
@@ -213,6 +213,7 @@ else
 																			 FROM users_beer
 																			 WHERE
 																				USERS_BEER_USER_ID = $id AND USERS_CHECK_OUT_DATE IS NULL) subQuery 
+																			ORDER BY USERS_BEER_NAME
 																			LIMIT $start, $limit;");
 														//$query->execute(array($id, $start, $limit));
 														$query->execute();
@@ -270,15 +271,13 @@ else
 
 																	$distinctCount = $distinctBeers['count(*)'];
 																	echo "<td class='centering'>$distinctCount</td>";
-																	echo "<td class='centering'>$vintage</td><td class='centering'><form action='scripts/removebeer.php' method='post'><button type='submit' class='btn btn-sm btn-warning' value='$beerName' name='directRemoval'>Remove</button></form></tr>";
+																	echo "<td class='centering'>$vintage</td><td class='centering'><form action='scripts/removebeer.php' method='post'><button type='submit' class='btn btn-sm btn-warning' value='$beerName' name='directRemoval'>Remove</button></form></td></tr>";
 														}
 														
 														if($totalRecd >10)
 														{
 															//only show pagination if there is more than one page able to be shown
 															
-				//working on pagination right here, trying to start over from scratch. 
-				// trying to do a < 2 > of 10     style setup, and maybe a text box to jump to another page?
 															
 															if($current_page == 1)
 															{
@@ -301,93 +300,111 @@ else
 																echo "<a class='fa fa-chevron-left' href='?page=".$prev."'></a>&nbsp;&nbsp;".$current_page."&nbsp;&nbsp;<a class='fa fa-chevron-right' href='?page=".$next."'></a>";
 															}
 															
-															
-															
-															
-															
-															/*
-															if($current_page>1)
-															{ 
-																$prevPage = $current_page -1;
-																echo "<a class='btn fa fa-chevron-left' href='?page=".$prevPage."'></a>";
-
-															 }
-
-															if($current_page == 1){
-																$minPage = 1;
-															}
-															else
-															{
-																$minPage = $current_page -1;
-															}
-															$applied = false;
-															for($i=$minPage;$i<=$minPage+2;$i++)
-															{
-																if($minPage <> 1 && !$applied)
-																{
-																	$url = "?page=1";
-																	echo "<a class='' href='".$url."'>1</a><span>. . . </span>";
-																	$applied=true;
-																}
-																//page number of currently viewing page
-																if($i==$current_page)
-																{
-																	echo "<span class=''>".$i." </span>";
-																}
-																//page number of other pages with link to naviagte
-																else
-																{
-																	if($i<$num_of_pages)
-																	{
-																	$url = "?page=".$i."'";
-																	echo "<a class='' href='".$url."'>".$i."</a>&nbsp;";
-																	}
-																}
-															}
-															$url = "?page=".$num_of_pages."'";
-															echo "<span>. . . </span><a class='' href='".$url."'>".$num_of_pages."</a>";
-															//if current page is lesser than number of pages as next button
-															if($current_page < $num_of_pages)
-															{ 
-																$nextPage = $current_page+1;
-																echo "<a class='btn fa fa-chevron-right' href='?page=".$nextPage."'></a>";
-
-															}
-															*/
 														}
-														
-														
-														
-														
-														
-														
-														
-														
-														
 													}
-												
-												
-												
-												
-												
-												
-												
 													else
 													{
 														//lets get the searched for beer from the database
-														$searchedBeer = $_POST['search'];
-														$query = $db->query("SELECT 
+														
+														//start the pagination at 0
+														$start = 0;
+														
+														//set the limit per page = 10
+														$limit = 10;
+														
+														//if the page number is set
+														if(isset($_GET['searchPage']))
+														{
+															$current_page = $_GET['searchPage'];
+															$start = ($current_page-1)*$limit;
+														}
+														else
+														{
+															$current_page = 1;
+															$start = ($current_page-1)*$limit;
+														}
+														
+														$searchedBeer = $_GET['searchValue'];
+														
+														$query = $db->prepare("SELECT DISTINCT 
 																				USERS_BEER_NAME
 																				, USERS_BREWERY_NAME
 																				, USERS_BEER_VINTAGE 
-																			FROM users_beer																			
-																			WHERE
-																				USERS_BEER_USER_ID = $id
-																				AND USERS_BEER_NAME = '$searchedBeer'
-																				AND USERS_CHECK_OUT_DATE IS NULL;");
+																				, USERS_UNIQUE_BEER_ID
+																			FROM users_beer
+																			WHERE USERS_BEER_USER_ID = '$id'
+																				AND USERS_BEER_NAME LIKE '%".$searchedBeer."%'
+																				AND USERS_CHECK_OUT_DATE IS NULL																			 
+																			ORDER BY USERS_BEER_NAME
+																			LIMIT $start, $limit;");
+														//$query->execute(array($id, $start, $limit));
+														$query->execute();
 														$query->setFetchMode(PDO::FETCH_ASSOC);
 
 														$searchResult = $query->fetchAll();
+														
+														$data = $db->prepare("SELECT 
+																				USERS_BEER_NAME
+																				, USERS_BREWERY_NAME
+																				, USERS_BEER_VINTAGE 
+																				, USERS_UNIQUE_BEER_ID
+																			FROM users_beer																			
+																			WHERE
+																				USERS_BEER_USER_ID = '$id'
+																				AND USERS_BEER_NAME LIKE '%".$searchedBeer."%'
+																				AND USERS_CHECK_OUT_DATE IS NULL;");
+														$data->execute(array($id));
+														$totalRecd = $data->rowCount();
+														$num_of_pages = ceil($totalRecd/$limit);
+														/*$query = $db->query("SELECT 
+																				USERS_BEER_NAME
+																				, USERS_BREWERY_NAME
+																				, USERS_BEER_VINTAGE 
+																				, USERS_UNIQUE_BEER_ID
+																			FROM users_beer																			
+																			WHERE
+																				USERS_BEER_USER_ID = '$id'
+																				AND USERS_BEER_NAME LIKE '%".$searchedBeer."%'
+																				AND USERS_CHECK_OUT_DATE IS NULL;");
+														$query->setFetchMode(PDO::FETCH_ASSOC);
+
+														$searchResult = $query->fetch();
+														
+														
+														
+														
+														$totalRecd = $searchResult->rowCount();
+														$num_of_pages = ceil($totalRecd/$limit);
+														echo $totalRecd;
+														*/
+														if($totalRecd >10)
+														{
+															//only show pagination if there is more than one page able to be shown
+															
+															
+															if($current_page == 1)
+															{
+																//we are on the first page, only show the right chevron to go to page 2
+																$searchedBeer = $_GET['searchValue'];
+																$next = $current_page+1;
+																echo $current_page."&nbsp;&nbsp;<a class='fa fa-chevron-right' href='?searchPage=".$next."&searchValue=".$searchedBeer."'></a>";
+															}
+															elseif($current_page > 1 && $current_page == $num_of_pages)
+															{
+																//we are at the last page
+																//show only left chevron
+																$prev = $current_page-1;
+																echo "<a class='fa fa-chevron-left' href='?searchPage=".$prev."&searchValue=".$searchedBeer."'></a>&nbsp;&nbsp;".$current_page;
+															}
+															else
+															{
+																//we are not at the first, nor the last, lets show both chevrons
+																$next = $current_page+1;
+																$prev = $current_page-1;
+																echo "<a class='fa fa-chevron-left' href='?searchPage=".$prev."&searchValue=".$searchedBeer."'></a>&nbsp;&nbsp;".$current_page."&nbsp;&nbsp;<a class='fa fa-chevron-right' href='?searchPage=".$next."&searchValue=".$searchedBeer."'></a>";
+															}
+															
+														}
 
 														if(!$searchResult)
 														{
@@ -401,29 +418,11 @@ else
 																$beerName = $beer['USERS_BEER_NAME'];
 																$breweryName = $beer['USERS_BREWERY_NAME'];
 																$vintage = $beer['USERS_BEER_VINTAGE'];
+																$beerID = $beer['USERS_UNIQUE_BEER_ID'];
 																echo "<tr>
 																		<td>$beerName</td>
 																		<td>$breweryName</td>";
-
-																		//lets get the quantites for each beer
-																		/*$query = $db->query("SELECT count(*)
-																							FROM 
-																								(SELECT USERS_BEER_NAME
-																										, USERS_BREWERY_NAME
-																										, USERS_BEER_VINTAGE
-																								FROM users_beer
-																								WHERE USERS_BEER_NAME = '$beerName'
-																										 AND USERS_BREWERY_NAME = '$breweryName'
-																										 AND USERS_BEER_VINTAGE = '$vintage'
-																										 AND USERS_BEER_USER_ID = '$id') distinctBeerCount;");
-																		$query->setFetchMode(PDO::FETCH_ASSOC);
-
-																		$distinctBeers = $query->fetch();
-
-
-																		$distinctCount = $distinctBeers['count(*)'];
-																		echo "<td>$distinctCount</td>";*/
-																		echo "<td>$vintage</td><td><a href=''><span class='fa fa-pencil'></span></a></tr>";
+																echo "<td>$vintage</td><td class='centering'><form action='scripts/removebeer.php' method='post'><button type='submit' class='btn btn-sm btn-warning' value='$beerID' name='searchRemoval'>Remove</button></form></td></tr>";
 															}	
 														}
 													}

@@ -171,11 +171,14 @@ elseif($_SESSION['USER']['role'] == "admin")
 														echo "<button class='btn btn-info' name='choice' value='search' type='submit'>Search by name</button>";
 														echo "<button class='btn btn-info pull-right' name='choice' value='manual' type='submit'>Enter a new beer</button>";
 														echo "</form></div>";
+														
 													}
 													elseif($_POST['choice'] == "manual")
 													{
 														//the user chose to manually enter a beer
 														
+														$barcode = 99999999999999-(int)$_SESSION['USER']['id'];
+														$_SESSION['barcode'] = $barcode;
 														
 														//echo  "<form action='scripts/insertBeer.php' method='post'><h2>$beerName</h2>";
 														echo "<div class='col-lg-5'>";
@@ -193,10 +196,10 @@ elseif($_SESSION['USER']['role'] == "admin")
 
 														echo "<form action='scripts/insertBeer.php' method='post'>";
 														echo "<label>Beer Type</label><br>";
-														echo "<label class='radio-inline'><input type='radio' name='beerType' value='commercial'> Commercial</label>";
+														echo "<label class='radio-inline'><input type='radio' name='beerType' value='commercial' required> Commercial</label>";
 														echo "<label class='radio-inline'><input type='radio' name='beerType' value='homebrew'> Homebrew</label><br><br>";
-														echo "<label>Beer Name</label><input type='text' class='form-control'  name='beerName'>";
-														echo "<label>Brewery</label><input type='text' class='form-control'  name='breweryName'>";
+														echo "<label>Beer Name</label><input type='text' class='form-control'  name='beerName' required>";
+														echo "<label>Brewery</label><input type='text' class='form-control'  name='breweryName' required>";
 														echo "<label>Container Size</label><input type='text' class='form-control' name='containerSize'>";
 														echo "<label>IBU</label><input type='text' class='form-control' name='ibu'>";
 														echo "<label>ABV</label><input type='text' class='form-control' name='abv'>";
@@ -217,16 +220,18 @@ elseif($_SESSION['USER']['role'] == "admin")
 														echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
 														echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'></textarea>";
 														echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
-														echo "<br><button class='btn btn-success' name='submitBeer' value=''>Add to Cellar</button>
+														echo "<br><button class='btn btn-success' name='submitBeer' value='$barcode'>Add to Cellar</button>
 															</div></form>";
 													}
 													elseif($_POST['choice'] == "search")
 													{
+														$barcode = 99999999999999-(int)$_SESSION['USER']['id'];
+														$_SESSION['barcode'] = $barcode;
 														echo "<div class='col-lg-4'>";
 														echo "<form action='scripts/beersearch.php' method='post'>";
 														echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
 														echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
-														echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value=''>Search</button>";
+														echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='$barcode'>Search</button>";
 														echo "</form>";
 
 														echo "</div>";

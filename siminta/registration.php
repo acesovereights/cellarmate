@@ -150,7 +150,7 @@ include('scripts/connect.php');
 											<input class="form-control" id="cellarName" type="text" name="cellarName" placeholder="Cellar Name" required>
 											<span class="row">
 												<span>Make cellar visible to others users?</span>
-												<label>Yes </label><input id="publicYes" type="radio" name="public" value="yes">
+												<label>Yes </label><input id="publicYes" type="radio" name="public" value="yes" required>
 												<label>No </label><input id="publicNo" type="radio" name="public" value="no" checked>
 											</span>
 						<!--					check that the username does not exist before registration-->

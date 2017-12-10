@@ -152,6 +152,7 @@ elseif(isset($_POST['searchUnfoundBeer']))
 
 			foreach($returnedBrewery->data as $index=>$brewery)
 			{
+				
 				$multiBreweryIDArray[] = $brewery->id;
 				$multiBreweryNameArray[] = $brewery->name;
 				$multiBreweryDescArray[] = $brewery->description;
@@ -186,14 +187,6 @@ elseif(isset($_POST['searchUnfoundBeer']))
 				$breweryBeerName = strtoupper($beerItem->name);
 
 				$breweryBeerDisplayName = strtoupper($beerItem->nameDisplay);
-				/*
-				foreach($beerNameArray as $i=>$beerSegment)
-				{
-					preg_match('/'.$beerSegment.'/', $breweryBeerName, $nameMatch[]);
-
-				}
-
-				*/
 
 				preg_match('/'.$beerName.'/', $breweryBeerName, $nameMatch);
 				preg_match('/'.$beerName.'/', $breweryBeerDisplayName, $nameDisplayMatch);

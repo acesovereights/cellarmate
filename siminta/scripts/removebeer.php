@@ -14,6 +14,24 @@
 		}
 		include('connect.php');
 		//a logged in user is accessing
+		if(isset($_POST['searchRemoval']))
+		{
+			$userID = $_SESSION['USER']['id'];
+			$searchValue = $_POST['searchRemoval'];
+			//the user clicked on the remove button from their cellar view
+			$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL AND USERS_UNIQUE_BEER_ID = ?;");
+				
+			$query->execute(array($userID, $searchValue));
+			$query->setFetchMode(PDO::FETCH_ASSOC);
+
+			$result = $query->fetch();
+			
+			if(!$result)
+			{
+				//still no result, nothing found in the cellar by that search criteria
+				$result = "No beers found!";
+			}
+		}
 		if(isset($_POST['search']))
 		{
 			//from the search input
@@ -46,7 +64,7 @@
 			if(!$result)
 			{
 				//still no result, nothing found in the cellar by that search criteria
-				$result = "No beers found! search";
+				$result = "No beers found!";
 			}
 		}
 		elseif(isset($_POST['directRemoval']))
@@ -63,10 +81,11 @@
 			if(!$result)
 			{
 				//still no result, nothing found in the cellar by that search criteria
-				$result = "No beers found! direct!";
+				$result = "No beers found!";
 			}
 			
 		}
+		
 		
 		if(is_array($result))
 		{
@@ -88,6 +107,8 @@
 		
 		$_SESSION['removal'] = $result;
 		//$_SESSION['removal']['triedOnce'] = true;
+		
+		
 		header('location: ../drink.php');
 		
 		
