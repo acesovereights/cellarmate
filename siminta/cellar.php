@@ -271,7 +271,7 @@ else
 
 																	$distinctCount = $distinctBeers['count(*)'];
 																	echo "<td class='centering'>$distinctCount</td>";
-																	echo "<td class='centering'>$vintage</td><td class='centering'><form action='scripts/removebeer.php' method='post'><button type='submit' class='btn btn-sm btn-warning' value='$beerName' name='directRemoval'>Remove</button></form></td></tr>";
+																	echo "<td class='centering'>$vintage</td><td class='centering'><form action='scripts/removebeer.php' method='post'><button type='submit' class='btn btn-sm btn-warning' value='$beerName' name='directRemoval'>View</button></form></td></tr>";
 														}
 														
 														if($totalRecd >10)

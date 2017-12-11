@@ -3,6 +3,10 @@ session_start();
 
 	if(isset($_POST['submitBeer']))
 	{
+		
+		//user is entering a new beer
+		
+		
 		include('connect.php');
 		$userID = $_SESSION['ID'];
 		$beerName = $_POST['beerName'];
@@ -124,5 +128,60 @@ session_start();
 		
 
 	}
+	elseif(isset($_POST['updateBeer']))
+	{
+//left off here, fix the place the variables get their data from.
+		include('connect.php');
+		$userID = $_SESSION['ID'];
+		$uniqueBeerId = $_POST['editBeer'];
+		$beerName = $_POST['beerName'];
+		$breweryName = $_POST['breweryName'];
+		$barcode = $_POST['barcode'];
+		if(isset($_POST['ibu']))
+		{
+			$ibu = $_POST['ibu'];
+		}
+		if(isset($_POST['abv']))
+		{
+			$abv = $_POST['abv'];
+		}
+		$description = $_POST['description'];
+		if(isset($_POST['style']))
+		{
+			$style = $_POST['style'];
+		}
+		
+		
+		
+		$isCommercial = $_SESSION['commercial'];
+		//$quantity = $_POST['beerQuantity'];
+		$purDate = NULL; //$_POST['purchaseDate']; set to null now until I make all the entered dates fit date time format
+		$purPlace = $_POST['purchasePlace'];
+		$purPrice = $_POST['purchasePrice'];
+		$vintage = $_POST['beerVintage'];
+		$notes = $_POST['notes'];
+		$container = $_POST['containerSize'];
+		
+		try
+		{
+			$query = $db->prepare("UPDATE users_beer SET USERS_BEER_NAME = ?, USERS_BREWERY_NAME = ?, USERS_BEER_IBU = ?, USERS_BEER_ABV = ?, USERS_BEER_DESCRIPTION = ?, USERS_BEER_STYLE = ?, USERS_PURCHASE_PLACE = ?, USERS_PURCHASE_PRICE = ?, USERS_BEER_VINTAGE = ?, USERS_BEER_NOTES = ?, USERS_BEER_CONTAINER_SIZE = ? WHERE USERS_UNIQUE_BEER_ID = ?;");
+			
+			$query->execute(array($beerName, $breweryName, $ibu, $abv, $description, $style, $purPlace, $purPrice, $vintage, $notes, $container, $uniqueBeerId));
+			
+			$_SESSION['updatedBeer'] = "success";
+			//header('location: ../drink.php');
+		}
+		catch(PDOException $error)
+		{
+			echo "Failed to insert. ".$error->getMessage();
+		}
+		
+		
+	}
+	else
+	{
+		echo "huh";
+	}
+
 
 ?>

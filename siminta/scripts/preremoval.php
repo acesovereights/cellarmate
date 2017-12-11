@@ -14,7 +14,7 @@ if((isset($_POST['view']) || isset($_POST['remove'])) && isset($_SESSION['USER']
 	if(isset($_POST['view']))
 	{
 		$id = $_POST['view'];
-		$reason = "view";
+		$reason = "edit";	//yes, this value and the value for remove, below, seem backwards. It Is. its just a hacky work around right now.
 	}
 	else
 	{

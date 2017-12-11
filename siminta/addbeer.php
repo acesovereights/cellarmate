@@ -458,7 +458,7 @@ elseif($_SESSION['USER']['role'] == "admin")
 													echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
 													echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>$description</textarea>";
 													echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
-													echo "<br><button class='btn btn-success' name='submitBeer' value='submit'>Add to Cellar</button>
+													echo "<br><button class='btn btn-success pull-right' name='submitBeer' value='submit'>Add to Cellar</button>
 														</div></form>";
 													//manually set some post variables
 													if(isset($_GET['upc']))

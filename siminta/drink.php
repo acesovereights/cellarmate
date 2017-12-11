@@ -153,7 +153,25 @@ else
 
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3><i class="fa fa-bar-chart-o fa-fw"></i> Remove a beer</h3>
+                            <h3><i class="fa fa-bar-chart-o fa-fw"></i><?php 
+																		if(isset($_SESSION['aboutToRemove']))
+																		{
+																			if($_SESSION['aboutToRemove']['removalMethod'] == "edit")
+																			{
+																				echo " Edit a beer";
+																			}
+																			else
+																			{
+																				echo " Remove a beer";
+																			}	
+																		}
+																		else
+																		{
+																			echo " Beer Details";
+																		}
+																		
+																		?>
+																			</h3>
                             <div class="pull-right">
                                 <div class="btn-group actionMove">
                                     <?php
@@ -166,12 +184,19 @@ else
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                  		
-									   <form action="scripts/removebeer.php" method="post">
-									   		
-											<input type="text" class="form-control" name="removal" placeholder="Scan barcode or type name" autofocus><br><button type="submit" class="btn btn-info" name="search">Remove</button><br>
+                                 		<?php
+                                  		if(!isset($_POST['drink']) && !isset($_SESSION['aboutToRemove']) && !isset($_SESSION['removal']))
+                                  		{
 											
-									   </form>
+											echo "<form action='scripts/removebeer.php' method='post'>
+									   		
+											<input type='text' class='form-control' name='removal' placeholder='Scan barcode or type name' autofocus><br><button type='submit' class='btn btn-info' name='search'>Remove</button><br>
+											
+									   		</form>";
+											print_r($_SESSION);
+                                 		
+                                  		}
+										?>
 									
                                    <br>
                                    <?php
@@ -219,7 +244,7 @@ else
 																echo "<td class='centering'>".$beer['USERS_BEER_NAME']."</td>";
 																echo "<td class='centering'>".$beer['USERS_BREWERY_NAME']."</td>";
 																echo "<td class='centering'>".$beer['USERS_BEER_VINTAGE']."</td>";
-																echo "<td class='centering'><form action='scripts/preremoval.php' method='post'><button class='btn btn-info' type='submit' name='view' value='".$beer['USERS_UNIQUE_BEER_ID']."'>View</button> <button class='btn btn-danger' type='submit' name='remove' value='".$beer['USERS_UNIQUE_BEER_ID']."'>Remove</button></td>";
+																echo "<td class='centering'><form action='scripts/preremoval.php' method='post'><button class='btn btn-info' type='submit' name='view' value='".$beer['USERS_UNIQUE_BEER_ID']."'>View</button> <button class='btn btn-success' type='submit' name='remove' value='".$beer['USERS_UNIQUE_BEER_ID']."'>Drink</button></td>";
 																echo "</tr>";
 															}
 															
@@ -241,9 +266,9 @@ else
 																//probably dont need this, I think i would still have access to the $beerToRemove, but thats OK, this should work and be 'safer'
 																$removalID = $_POST['drink'];
 										//confirm the user wants to drink this beer
-																echo "<form action='scripts/drinkbeer.php' method='post'>";
-																echo "<td colspan='2'><button class='btn btn-danger btn-lg' name='drinkConfirm' type='submit' value='$removalID'>Confirm Removal!</button></td>";
-																echo "</form>";
+																
+																echo "<td colspan='2'><form action='scripts/drinkbeer.php' method='post'><h3>Are you sure you want to remove this beer from your cellar?</h3><h3>{$_SESSION['removal'][0]['USERS_BEER_NAME']}</h3><br><button class='btn btn-danger btn-lg' name='drinkConfirm' type='submit' value='$removalID'>Click to Drink!</button></form><a class='btn btn-success pull-right' href='cellar.php'>Cancel</a></td>";
+																
 															}
 															elseif(isset($_POST['purge']))
 															{
@@ -251,34 +276,98 @@ else
 															}
 															
 														}
-														if($beerToRemove['removalMethod'] == "view")
+														if($beerToRemove['removalMethod'] == "view" && !isset($_POST['drink']))
 														{
 															//display the data for the beer, then give them the option to remove it for whatever reason
 															if(!isset($_POST['purge']))
 															{
 																echo "<tbody>
-																<form action='drink.php' method='post'><tr><td colspan='2'><button class='pull-right btn btn-default btn-sm' name='purge' type='submit' value=''>DELETE from database</button></td>";
+																<form action='drink.php' method='post'><tr><td colspan='2'><button class='btn btn-success btn-lg pull-right' name='drink' type='submit' value='".$beerToRemove['USERS_UNIQUE_BEER_ID']."'>DRINK THIS BEER!</button></td>";
 															}
 															include('scripts/displayremovalbeer.php');
 															
+															echo "<td colspan='2'><a href='cellar.php' class='pull-right btn btn-info btn-sm'>Cancel</a></td>";
 															
+															/*
 															if(!isset($_POST['drink']) && !isset($_POST['purge']))
 															{	
 																//if both of the POSTS are NOT set
-																echo "<td colspan='2'><button class='btn btn-success btn-lg pull-right' name='drink' type='submit' value='".$beerToRemove['USERS_UNIQUE_BEER_ID']."'>DRINK THIS BEER!</button></td>";
+																echo "<td colspan='2'><button class='pull-right btn btn-default btn-sm' name='purge' type='submit' value=''>DELETE from database</button></td>";
 															}
-															
+															*/
 															
 															
 															echo "</form>";
 														}
-														elseif($_SESSION['aboutToRemove']['removalMethod'] == "remove")
+														elseif($_SESSION['aboutToRemove']['removalMethod'] == "edit")
 														{
-															//prompt them to verify removal
-															echo "<h3>Are you sure you want to remove ".$_SESSION['USERS_BEER_NAME']."?";
-														}
-														
-													}
+															//this is where we display the beer to edit the details.
+															//all the needed data is in the session['aboutToRemove']
+															//print_r($_SESSION);
+															$uniqueBeerId = $_SESSION['aboutToRemove']['USERS_UNIQUE_BEER_ID'];
+															
+															$query = $db->prepare("SELECT USERS_BARCODE
+																						, USERS_BEER_NAME
+																						, USERS_BEER_ABV
+																						, USERS_BEER_CONTAINER_SIZE
+																						, USERS_BEER_IBU
+																						, USERS_BEER_IMAGE
+																						, USERS_BEER_NOTES
+																						, USERS_BEER_STYLE
+																						, USERS_BEER_VINTAGE
+																						, USERS_BREWERY_NAME
+																						, USERS_BEER_USER_ID
+																						, USERS_PURCHASE_PLACE
+																						, USERS_PURCHASE_PRICE
+																						, USERS_PURCHASE_DATE
+																						, USERS_BEER_DESCRIPTION 
+																					FROM users_beer
+																					WHERE USERS_UNIQUE_BEER_ID = ?");
+															$query->execute(array($uniqueBeerId));
+															$query->setFetchMode(PDO::FETCH_ASSOC);
+															$result = $query->fetch();
+															echo "<div class='col-lg-5'>";
+															if(isset($_SESSION['updatedBeer']))
+															{
+																echo "<h3 class='green'>Beer updated successfully</h3>";
+																unset($_SESSION['updatedBeer']);
+																
+															}
+															echo "<form action='scripts/insertBeer.php' method='post'>";
+															
+															echo "<label>Beer Name</label><input type='text' class='form-control' value='{$result['USERS_BEER_NAME']}' name='beerName'>";
+															echo "<label>Brewery</label><input type='text' class='form-control' value='{$result['USERS_BREWERY_NAME']}' name='breweryName'>";
+															echo "<label>Container Size</label><input type='text' class='form-control' name='containerSize' value='{$result['USERS_BEER_CONTAINER_SIZE']}'>";
+															echo "<label>IBU</label><input type='text' class='form-control' value='{$result['USERS_BEER_IBU']}' name='ibu'>";
+															echo "<label>ABV</label><input type='text' class='form-control' value='{$result['USERS_BEER_ABV']}' name='abv'>";
+															echo "<label>Beer Style</label><input type='text' class='form-control' value='{$result['USERS_BEER_STYLE']}' name='style'>";
+															if($result['USERS_BEER_IMAGE'] != NULL)
+															{
+																echo "<img src='{$result['USERS_BEER_IMAGE']}' alt='No Image Available' name='image' value='{$result['USERS_BEER_IMAGE']}'>";
+															}
+															else
+															{
+																echo "<br><br>No Image Available";
+															}
+
+
+															echo "</div>
+																	<div class='col-lg-5'>";
+
+
+															echo "<label>Vintage</label><input type='text' class='form-control' value='{$result['USERS_BEER_VINTAGE']}' name='beerVintage'>";
+															echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace' value ='{$result['USERS_PURCHASE_PLACE']}'>";
+															echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice' value='{$result['USERS_PURCHASE_PRICE']}'>";
+							//if I get time maybe add a date picker calendar....
+															echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate' value='{$result['USERS_PURCHASE_DATE']}'>";
+																								
+															echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>{$result['USERS_BEER_DESCRIPTION']}</textarea>";
+															echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'>{$result['USERS_BEER_NOTES']}</textarea>";
+															echo "<br><button class='btn btn-success pull-right' name='updateBeer' value='$uniqueBeerId'>Update Details</button>
+																</div></form>";																	
+																}
+
+															}
 												?>
                                                
                                             </tbody>
