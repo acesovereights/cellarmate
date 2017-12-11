@@ -51,6 +51,9 @@ if(!isset($_SESSION['USER']))
 		form input{
 			margin-bottom: 2%;
 		}
+		.actionMove{
+			margin-top: -120%;
+		}
 	
 	</style>
     
@@ -85,13 +88,14 @@ if(!isset($_SESSION['USER']))
                         <!--end search section-->
                     </li>
                     <?php
-							if(!$_SESSION['USER']['role'] == "admin")
+							
+							if($_SESSION['USER']['role'] == "admin")
+							{
+								include('scripts/navAdmin.html');								
+							}
+							elseif($_SESSION['USER']['role'] == "user")
 							{
 								include('scripts/nav.html');
-							}
-							else
-							{
-								include('scripts/navAdmin.html');
 							}
 						?>
                 </ul>
@@ -108,7 +112,7 @@ if(!isset($_SESSION['USER']))
                 <div class="col-lg-12">
                     <h1 class="page-header">
                     	<?php
-							if($_SESSION['USER']['id'] == "admin")
+							if($_SESSION['USER']['role'] == "admin")
 							{
 								echo "Admin User Update";
 							}
@@ -147,30 +151,20 @@ if(!isset($_SESSION['USER']))
                            <?php
 							if(isset($_POST['editUser']))
 							{
-								echo "<i class='fa fa-bar-chart-o fa-fw'></i> ADMIN User Profile Editor";
+								echo "<h3><i class='fa fa-bar-chart-o fa-fw'></i> ADMIN User Profile Editor</h3>";
 							}
 							else
 							{
-								echo "<i class='fa fa-bar-chart-o fa-fw'></i> Your User Profile";
+								echo "<h3><i class='fa fa-bar-chart-o fa-fw'></i> Your User Profile</h3>";
 							}
                             ?>
                             <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
-                                    </ul>
+                                <div class="btn-group actionMove">
+                                    <?php
+										
+										include('scripts/actionbutton.html');
+									
+									?>
                                 </div>
                             </div>
                         </div>
@@ -271,87 +265,13 @@ if(!isset($_SESSION['USER']))
 
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body yellow"><!-- TOTAL NUMBER OF BEERS AREA -->
-                        
-<!--                            <i class="fa fa-bar-chart-o fa-3x"></i>-->
-                           <?php
-								//lets get the total number of beers in the users cellar
-								$query = $db->query("SELECT count(*)
-														FROM users_beer;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
+               
+                    <?php
+						$id = $_SESSION['USER']['id'];
+						include('scripts/usercellarcount.php');
+					?>
 
-								$beerCount = $query->fetch();
-							
-							?>
-                            <h3><?php echo $beerCount['count(*)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Total Number of Beers in ALL cellars
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body blue"><!-- UNIQUE BEER COUNT AREA -->
-<!--                            <i class="fa fa-pencil-square-o fa-3x"></i>-->
-                           	<?php
-								$query = $db->query("SELECT count(*)
-														FROM (SELECT DISTINCT USERS_BARCODE
-																				, USERS_BEER_NAME
-																FROM users_beer) distinctBeer;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$uniqueCount = $query->fetch();
-							
-							
-							?>
-                            <h3><?php echo $uniqueCount['count(*)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Unique Beers across ALL cellars
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body green"><!-- CONSUMED BEERS COUNT AREA -->
-<!--                            <i class="fa fa fa-floppy-o fa-3x"></i>-->
-                           <?php
-								$query = $db->query("SELECT sum(USER_CONSUMED_BEERS)
-														FROM user;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$consumedCount = $query->fetch();
-							
-							
-							?>
-                            <h3><?php echo $consumedCount['sum(USER_CONSUMED_BEERS)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Consumed Beers from ALL cellars
-                            </span>
-                        </div>
-                    </div>
-     <!-- Don think i need this element
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body red">
-                            <i class="fa fa-thumbs-up fa-3x"></i>
-                            <h3>2,700 </h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">New User Registered
-                            </span>
-                        </div>
-                    </div>
-                    -->
-
-
-
-
-
-
-
-                </div>
+                
 
             </div>
 

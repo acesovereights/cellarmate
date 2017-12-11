@@ -170,12 +170,13 @@ elseif($_SESSION['USER']['role'] == "admin")
 										
 											
 										?>
-									  	<div class="input-group custom-search-form">
-											<input type="text" class="form-control" placeholder="Scan or type the barcode" name="barcode" autofocus>
-										</div>
+									  	
 										<?php
-											if(!isset($_SESSION['apiBeer']) && !isset($_SESSION['MultiBeerNames']))
+											if(!isset($_SESSION['apiBeer']) && !isset($_SESSION['MultiBeerNames']) && !isset($_SESSION['Multi']))
 											{
+												echo "<div class='input-group custom-search-form'>
+														<input type='text' class='form-control' placeholder='Scan or type the barcode' name='barcode'>
+													</div>";
 												echo "<a href='newbeer.php' class='btn btn-info pull-right'>No Barcode</a>";
 											}
 										?>
@@ -603,8 +604,8 @@ elseif($_SESSION['USER']['role'] == "admin")
 														//session_destroy();
 														echo "<div class='col-lg-4'>";
 														echo "<form action='scripts/beersearch.php' method='post'>";
-														echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
-														echo "<p>Due to limitations in the API, please enter the most important SINGLE word in the brewery name for best results";
+														echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required autofocus><br>";
+														//echo "<p>Due to limitations in the API, please enter the most important SINGLE word in the brewery name for best results";
 														echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
 														echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='".$_GET['upc']."'>Search</button>";
 														echo "</form>";

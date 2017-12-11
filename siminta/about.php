@@ -190,7 +190,7 @@ elseif($_SESSION['USER']['role'] == "user")
 											<h4 class="bold">Why does keeping track of the beer in your cellar have to be so hard?</h4>
 											<div class="offset-lg-1 offset-sm-1 colg-g-10 col-sm-10">
 												<p>Frankly, it doesn't. On almost every beer you own there is an under two square inch area that holds all the information you would ever want. The UPC barcode!</p>
-												<p>This trove of information allows you to simply scan each beer's barcode and add, edit or remove it from your cellar. Keeping track of your beers should be fun and easy!</p>
+												<p>This trove of information allows you to simply scan each beer's barcode and add, edit, or remove it from your cellar. Keeping track of your beers should be fun and easy!</p>
 											</div>
 										</div>
 										<div class="col-lg-11 col-sm-11">
@@ -200,7 +200,7 @@ elseif($_SESSION['USER']['role'] == "user")
 												<p>Luke had a sizable beer cellar that had no form of inventory control. He had tried the normal methods of keeping track of the bottles on the shelves in his basement cellar.
 												Lists on paper, spreadsheets, hanging tags around the necks of bottles, but nothing made it easier to know what he has or what he used to have.</p>
 												<p>Once day while purchasing some beer at the local liquor store, it dawned on him, why not use the barcode on the bottles to keep track his collection, in a similar way to 
-												how the check out register did at the store? This project was in teh back of his mind when he enrolled in Dunwoody, and when the opportunity to create a final project that was a 
+												how the check out register did at the store? This project was in the back of his mind when he enrolled in Dunwoody, and when the opportunity to create a final project that was a 
 												full-stack website, it only made sense that Cellarmate should be his project.</p>
 											</div>
 										</div>

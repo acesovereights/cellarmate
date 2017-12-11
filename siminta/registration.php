@@ -1,16 +1,6 @@
 
 <?php
-/* enable this once the site is passing post data, for now its commented out so it works
-	if(!isset($_POST['id']))
-	{
-		//a user not logged in is trying to access this page, send them back to the login page
-		header('location: login.php');
-	}
-	else
-	{
-		include('scripts/connect.php');
-	}
-*/
+
 session_start();
 include('scripts/connect.php');
 
@@ -69,9 +59,7 @@ include('scripts/connect.php');
   
                         <!--end search section-->
                     </li>
-                    <?php
-							include('scripts/nav.html');
-						?>
+                    
                 </ul>
                 <!-- end side-menu -->
             </div>
@@ -95,13 +83,7 @@ include('scripts/connect.php');
                 <!-- Welcome -->
                 <div class="col-lg-12">
                     <div class="alert alert-info">
-                        <i class="fa fa-folder-open"></i><b>&nbsp;Hello ! </b>Welcome Back <b>
-                        <?php 
-							if(isset($_SESSION['USER']))
-							{
-								echo $_SESSION['USER']['firstName']." ".$_SESSION['USER']['lastName']; 
-							}
-						?> </b>
+                        <i class="fa fa-folder-open"></i><b>Welcome to Cellarmate!</b>
  						<!--<i class="fa  fa-pencil"></i>-->
                     </div>
                 </div>
@@ -113,26 +95,7 @@ include('scripts/connect.php');
                     <!--Simple table example -->
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Most Recently Added Beers
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        	<h3>Create an Account</h3>
                         </div>
 
                         <div class="panel-body">
@@ -178,84 +141,9 @@ include('scripts/connect.php');
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body yellow"><!-- TOTAL NUMBER OF BEERS AREA -->
-                        
-<!--                            <i class="fa fa-bar-chart-o fa-3x"></i>-->
-                           <?php
-								//lets get the total number of beers in the users cellar
-								$query = $db->query("SELECT count(*)
-														FROM users_beer;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$beerCount = $query->fetch();
-							
-							?>
-                            <h3><?php echo $beerCount['count(*)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Total Number of Beers in ALL cellars
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body blue"><!-- UNIQUE BEER COUNT AREA -->
-<!--                            <i class="fa fa-pencil-square-o fa-3x"></i>-->
-                           	<?php
-								$query = $db->query("SELECT count(*)
-														FROM (SELECT DISTINCT USERS_BARCODE
-																				, USERS_BEER_NAME
-																FROM users_beer) distinctBeer;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$uniqueCount = $query->fetch();
-							
-							
-							?>
-                            <h3><?php echo $uniqueCount['count(*)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Unique Beers across ALL cellars
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body green"><!-- CONSUMED BEERS COUNT AREA -->
-<!--                            <i class="fa fa fa-floppy-o fa-3x"></i>-->
-                           <?php
-								$query = $db->query("SELECT sum(USER_CONSUMED_BEERS)
-														FROM user;");
-								$query->setFetchMode(PDO::FETCH_ASSOC);
-
-								$consumedCount = $query->fetch();
-							
-							
-							?>
-                            <h3><?php echo $consumedCount['sum(USER_CONSUMED_BEERS)']; ?></h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Consumed Beers from ALL cellars
-                            </span>
-                        </div>
-                    </div>
-     <!-- Don think i need this element
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body red">
-                            <i class="fa fa-thumbs-up fa-3x"></i>
-                            <h3>2,700 </h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">New User Registered
-                            </span>
-                        </div>
-                    </div>
-                    -->
-
-
-
-
-
-
+                    <?php
+						include('scripts/allcellarcount.php');
+					?>
 
                 </div>
 

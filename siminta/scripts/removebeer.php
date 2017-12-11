@@ -101,7 +101,7 @@
 		}
 		else
 		{
-			$result = "No beer found! empty";
+			$result = "No beer found!";
 			//echo $result;
 		}
 		

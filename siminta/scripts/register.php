@@ -86,7 +86,7 @@ if(isset($_POST['submitRegistration']))
 	{
 		
 		//all of the data needed to complete a user in the USER table is complete
-		$query = $db->prepare("INSERT INTO USER (USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_LOCATION, USER_CELLAR_NAME, USER_PROFILE_PICTURE, USER_CELLAR_VISIBLE) VALUES (?,?,?,?,?,?,?,?,?);");
+		$query = $db->prepare("INSERT INTO user (USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_LOCATION, USER_CELLAR_NAME, USER_PROFILE_PICTURE, USER_CELLAR_VISIBLE) VALUES (?,?,?,?,?,?,?,?,?);");
 		$query->execute([$username, $password, $email, $firstName, $lastName, $location, $cellarName, $username.$filename, $public]);
 		
 		//query the database to get the user ID of the just entered user so we can create a cellar for them
@@ -111,6 +111,7 @@ if(isset($_POST['submitRegistration']))
 		$_SESSION['USER']['lastName'] = $lastName;
 		$_SESSION['USER']['cellarName'] = $cellarName;
 		$_SESSION['USER']['image'] = $username.$filename;
+		$_SESSION['USER']['username'] = $username;
 		
 	}
 	catch(PDOException $exception)

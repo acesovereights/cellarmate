@@ -229,7 +229,7 @@ elseif($_SESSION['USER']['role'] == "admin")
 														$_SESSION['barcode'] = $barcode;
 														echo "<div class='col-lg-4'>";
 														echo "<form action='scripts/beersearch.php' method='post'>";
-														echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required><br>";
+														echo "<input class='form-control' type='text' name='searchBeerName' placeholder='Beer Name' required autofocus><br>";
 														echo "<input class='form-control' type='text' name='searchBreweryName' placeholder='Brewery Name' required><br>";
 														echo "<button class='btn btn-success' type='submit' name='searchUnfoundBeer' value='$barcode'>Search</button>";
 														echo "</form>";

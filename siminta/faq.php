@@ -177,7 +177,7 @@ elseif($_SESSION['USER']['role'] == "user")
 										<div class="col-lg-11 col-sm-11">
 											<ul>
 												<li>
-													<label>What if I dont have a barcode scanner?</label>
+													<label>What if I don't have a barcode scanner?</label>
 													<p>You can simply type the UPC (barcode) number in. Remember to include the numbers on the outer edges of the barcode!</p>
 												</li>
 												<li>

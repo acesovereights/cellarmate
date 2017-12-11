@@ -1,10 +1,11 @@
 <?php
 
 session_start();
+include('brewerydb.php');
 
 function breweryIdAPI($breweryID)
 	{
-
+		$apikey = "59a62c5db7fbcbce7bd278756f886a11";
 
 		//echo $breweryID;
 		$service_url = "https://api.brewerydb.com/v2/brewery/";
@@ -20,7 +21,7 @@ function breweryIdAPI($breweryID)
 		{
 			$info = curl_getinfo($curl);
 			curl_close($curl);
-			die('error occured during curl exec. Aditional info: ' . var_export($info));
+			die('error occurred during curl exec. Additional info: ' . var_export($info));
 		}
 		curl_close($curl);
 		$decodedBrewery = json_decode($curl_response);
@@ -35,12 +36,36 @@ function breweryIdAPI($breweryID)
 
 function breweryNameApi($breweryName)
 	{
+		$url = "search?q=".$breweryName."&type=brewery";
+		$apikey = "59a62c5db7fbcbce7bd278756f886a11";
+		$bdb = new Pintlabs_Service_Brewerydb($apikey);
+		$bdb->setFormat('json'); // if you want to get php back.  'xml' and 'json' are also valid options.
+
+		//Then you can call the API:
+
+		try {
+			// The first argument to request() is the endpoint you want to call
+			// 'brewery/BrvKTz', 'beers', etc.
+			// The third parameter is the HTTP method to use (GET, PUT, POST, or DELETE)
+			$params = array("q"=>$breweryName, "type"=>"brewery");
+			$results = $bdb->request('search', $params, 'GET'); // where $params is a keyed array of parameters to send with the API call.
+			
+			} 
+			catch (Exception $e) 
+			{
+				$results = array('error' => $e->getMessage());
+			}
+		//print_r($results);
 		
+		return $results;
+		
+		
+		/*
 			$service_url = "https://api.brewerydb.com/v2/search?q=";
 			$service_url.=$breweryName;
 			$service_url.= "&type=brewery&key=59a62c5db7fbcbce7bd278756f886a11&format=json";
 
-
+			
 				//echo $service_url;
 			$curl = curl_init($service_url);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -49,7 +74,7 @@ function breweryNameApi($breweryName)
 			{
 				$info = curl_getinfo($curl);
 				curl_close($curl);
-				die('error occured during curl exec. Aditional info: ' . var_export($info));
+				die('error occurred during curl exec. Additional info: ' . var_export($info));
 			}
 			curl_close($curl);
 			$decoded = json_decode($curl_response);
@@ -58,11 +83,13 @@ function breweryNameApi($breweryName)
 				die('error occured: ' . $decoded->response->errormessage);
 
 			}
-			//print_r($decoded);
+			
 			//find the number of results returned for that brewery
 			//echo "Brewery Name API <br>";
-			//print_r($decoded);
-			return $decoded;
+			*/
+		
+		
+			//return $decoded;
 	}
 
 //the post comes from the section where proper brewery is selected from multiple breweries displayed, the post['breweryID'] contains a breweryID
@@ -140,22 +167,31 @@ elseif(isset($_POST['searchUnfoundBeer']))
 	//echo $breweryName."<br>";
 	//print_r($returnedBrewery);
 	
-	$numResults = $returnedBrewery->totalResults;
+	$numResults = $returnedBrewery['totalResults'];
 	
 		if($numResults>1)
 		{
+			
 			//There are more then 1 brewery returned for that name, lets list them to the user and have them choose before proceeding
 			$multiBreweryIDArray = [];
 			$multiBreweryNameArray = [];
 			$multiBreweryDescArray = [];
 
 
-			foreach($returnedBrewery->data as $index=>$brewery)
+			foreach($returnedBrewery['data'] as $index=>$brewery)
 			{
 				
-				$multiBreweryIDArray[] = $brewery->id;
-				$multiBreweryNameArray[] = $brewery->name;
-				$multiBreweryDescArray[] = $brewery->description;
+				$multiBreweryIDArray[] = $brewery['id'];
+				$multiBreweryNameArray[] = $brewery['name'];
+				if(isset($brewery['description']))
+				{
+					$multiBreweryDescArray[] = $brewery['description'];
+				}
+				else
+				{
+					$multiBreweryDescArray[] = "No brewery description available.";
+				}
+				
 			}
 			$_SESSION['Multi']['multiBreweryIdArray'] = $multiBreweryIDArray;
 			$_SESSION['Multi']['multiBreweryNameArray'] = $multiBreweryNameArray;
@@ -171,12 +207,15 @@ elseif(isset($_POST['searchUnfoundBeer']))
 		{
 			//there is only 1 brewery returned for that name
 			//print_r($returnedBrewery);
-			$breweryId = $returnedBrewery->data[0]->id;
+			$breweryId = $returnedBrewery['data'][0]['id'];
 			$singleBrewery = breweryIdAPI($breweryId);
 			//print_r($singleBrewery);
 			//print_r($_POST);
 			$beerName = strtoupper($_POST['searchBeerName']);
 			$beerData = $singleBrewery->data;
+			
+			
+			
 			$nameOptionArray=[];
 			$idOptionArray=[];
 			//print_r($beerData);
@@ -212,6 +251,9 @@ elseif(isset($_POST['searchUnfoundBeer']))
 			header('location: ../addbeer.php?upc='.$barcode);
 
 		}
+	else{
+		//echo "Num results".$numResults;
+	}
 	
 }
 else

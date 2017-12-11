@@ -23,14 +23,14 @@ class Pintlabs_Service_Brewerydb
      *
      * @var string
      */
-    protected $_apiKey = '59a62c5db7fbcbce7bd278756f886a11';
+    protected $_apiKey = '';
     protected $_url = '';
     /**
      * Response format
      *
      * @var string
      */
-    protected $_format = 'php';
+    protected $_format = 'json';
     /**
      * Stores the last parsed response from the server
      *
