@@ -4,7 +4,7 @@ session_start();
 //stuck here, need to find a way to pass the beer id to the drink.php so I can purge the correct one.
 
 
-if((isset($_POST['view']) || isset($_POST['remove'])) && isset($_SESSION['USER']))
+if((isset($_POST['view']) || isset($_POST['remove'])) || isset($_POST['purgeView']) && isset($_SESSION['USER']))
 {
 	if(isset($_SESSION['aboutToRemove']))
 	{
@@ -16,10 +16,15 @@ if((isset($_POST['view']) || isset($_POST['remove'])) && isset($_SESSION['USER']
 		$id = $_POST['view'];
 		$reason = "edit";	//yes, this value and the value for remove, below, seem backwards. It Is. its just a hacky work around right now.
 	}
-	else
+	elseif(isset($_POST['remove']))
 	{
 		$id = $_POST['remove'];
 		$reason = "view";
+	}
+	elseif(isset($_POST['purgeView']))
+	{
+		$id = $_POST['purgeView'];
+		$reason = "purge";
 	}
 	
 	include('connect.php');
@@ -38,7 +43,16 @@ if($result)
 {
 	$_SESSION['aboutToRemove'] = $result;
 	$_SESSION['aboutToRemove']['removalMethod'] = $reason;
-	header('location: ../drink.php');
+	
+	if(isset($_POST['purgeView']))
+	{
+		header('location: ../delete.php');
+	}
+	else
+	{
+		header('location: ../drink.php');
+	}
+	
 }
 else
 {

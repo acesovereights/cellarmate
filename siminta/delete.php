@@ -23,13 +23,12 @@ if(isset($_SESSION['brewery']))
 {
 	unset($_SESSION['brewery']);
 }
-
-if(isset($_SESSION['purged']))
+if(isset($_SESSION['searched']))
 {
 	unset($_SESSION['removal']);
-	unset($_SESSION['purged']);
+	unset($_SESSION['searched']);
+	
 }
-
 if(!isset($_SESSION['USER']))
 {
 	header('location: lognin.php');
@@ -173,7 +172,7 @@ else
 																		}
 																		else
 																		{
-																			echo " Drink a beer";
+																			echo " DELETE a beer";
 																		}
 																		
 																		?>
@@ -196,7 +195,7 @@ else
 											
 											echo "<form action='scripts/removebeer.php' method='post'>
 									   		
-											<input type='text' class='form-control' name='removal' placeholder='Scan barcode or type name' autofocus><br><button type='submit' class='btn btn-info' name='search' value='search'>Search</button><br>
+											<input type='text' class='form-control' name='removal' placeholder='Scan barcode or type name' autofocus><br><button type='submit' class='btn btn-info' name='search' value='purge'>Search</button><br>
 											
 									   		</form>";
 											//print_r($_SESSION);
@@ -228,7 +227,18 @@ else
                                             
                                             
                                                	<?php
-											
+													//print_r($_SESSION);
+													if(isset($_POST['deleteBeer']))
+													{
+														//the user has selected to delete a beer
+
+														echo "<form action='scripts/purge.php' method='post'>";
+														echo "<span id='reason'><input class='form-group' type='text' size='40' placeholder='Reason for deletion' name='deleteReason' required></span>";
+														echo "<br>";
+														echo "<button class='btn btn-danger btn-lg' name='confirmedDelete' type='submit' value='{$_POST['deleteBeer']}'>Confirm DELETE!</button>";
+
+														echo "</form><br>";
+													}
 													if(isset($_SESSION['removal']) && !isset($_SESSION['aboutToRemove']))
 													{
 														$returnedBeers = $_SESSION['removal'];
@@ -240,10 +250,10 @@ else
 															echo "<br><a href='cellar.php' class='btn btn-info'>Back to cellar</a>";
 															
 														}
-														else
+														elseif(!isset($_POST['deleteBeer']))
 														{
 															//bring the table head in only when its a search for a beer to remove
-															include('scripts/tablehead.html');
+															include('scripts/tableheaddelete.html');
 															echo "<tbody>";
 															foreach($returnedBeers as $beer)
 															{
@@ -251,7 +261,12 @@ else
 																echo "<td class='centering'>".$beer['USERS_BEER_NAME']."</td>";
 																echo "<td class='centering'>".$beer['USERS_BREWERY_NAME']."</td>";
 																echo "<td class='centering'>".$beer['USERS_BEER_VINTAGE']."</td>";
-																echo "<td class='centering'><form action='scripts/preremoval.php' method='post'><button class='btn btn-info' type='submit' name='view' value='".$beer['USERS_UNIQUE_BEER_ID']."'>View</button> <button class='btn btn-success' type='submit' name='remove' value='".$beer['USERS_UNIQUE_BEER_ID']."'>Drink</button></td>";
+																echo "<td class='centering'>
+																		<form action='delete.php' method='post'>
+																			<button class='btn btn-info' type='submit' name='purgeView' value='".$beer['USERS_UNIQUE_BEER_ID']."'>View</button> 
+																			<button class='btn btn-danger' type='submit' name='deleteBeer' value='".$beer['USERS_UNIQUE_BEER_ID']."'>DELETE</button>
+																	  </td>";
+		//this is the remove button area
 																echo "</tr>";
 															}
 															
@@ -264,24 +279,23 @@ else
 														//the user seleceted a beer to remove
 														$beerToRemove = $_SESSION['aboutToRemove'];
 														//print_r($_SESSION);
-														if(isset($_POST['drink']) || isset($_POST['purge']))
-														{
-															if(isset($_POST['drink']))
-															{
-																//user wants to drink the beer
+														echo "<br><br>";
+														//print_r($_POST);
+														if(isset($_POST['purgeView']))
+														{															
+																//user wants to delete the beer
 																
 																//probably dont need this, I think i would still have access to the $beerToRemove, but thats OK, this should work and be 'safer'
-																$removalID = $_POST['drink'];
-										//confirm the user wants to drink this beer
-																
-																echo "<td colspan='2'><form action='scripts/drinkbeer.php' method='post'><h3>Are you sure you want to remove this beer from your cellar?</h3><h3>{$_SESSION['removal'][0]['USERS_BEER_NAME']}</h3><br><button class='btn btn-danger btn-lg' name='drinkConfirm' type='submit' value='$removalID'>Click to Drink!</button></form><a class='btn btn-success pull-right' href='cellar.php'>Cancel</a></td>";
-																
-															}
-															elseif(isset($_POST['purge']))
-															{
-																//user wants to remove this beer from the database
-															}
-															
+																$removalID = $_POST['purgeView'];
+
+																echo "<td colspan='2'>
+																		<form action='scripts/drinkbeer.php' method='post'>
+																			<h3>Are you sure you want to remove this beer from your cellar?</h3>
+																			<h3>{$_SESSION['removal'][0]['USERS_BEER_NAME']}</h3><br>
+																			<button class='btn btn-danger btn-lg' name='drinkConfirm' type='submit' value='$removalID'>Click to Drink!</button>
+																		</form>
+																		<a class='btn btn-success pull-right' href='cellar.php'>Cancel</a>
+																	</td>";
 														}
 														if($beerToRemove['removalMethod'] == "view" && !isset($_POST['drink']))
 														{
@@ -306,7 +320,7 @@ else
 															
 															echo "</form>";
 														}
-														elseif($_SESSION['aboutToRemove']['removalMethod'] == "edit")
+														elseif($_SESSION['aboutToRemove']['removalMethod'] == "purge" && !isset($_POST['deleteBeer']))
 														{
 															//this is where we display the beer to edit the details.
 															//all the needed data is in the session['aboutToRemove']
@@ -340,17 +354,17 @@ else
 																unset($_SESSION['updatedBeer']);
 																
 															}
-															echo "<form action='scripts/insertBeer.php' method='post'>";
+															echo "<form action='delete.php' method='post'>";
 															
-															echo "<label>Beer Name</label><input type='text' class='form-control' value='{$result['USERS_BEER_NAME']}' name='beerName'>";
-															echo "<label>Brewery</label><input type='text' class='form-control' value='{$result['USERS_BREWERY_NAME']}' name='breweryName'>";
-															echo "<label>Container Size</label><input type='text' class='form-control' name='containerSize' value='{$result['USERS_BEER_CONTAINER_SIZE']}'>";
-															echo "<label>IBU</label><input type='text' class='form-control' value='{$result['USERS_BEER_IBU']}' name='ibu'>";
-															echo "<label>ABV</label><input type='text' class='form-control' value='{$result['USERS_BEER_ABV']}' name='abv'>";
-															echo "<label>Beer Style</label><input type='text' class='form-control' value='{$result['USERS_BEER_STYLE']}' name='style'>";
+															echo "<label>Beer Name</label><input type='text' class='form-control' value='{$result['USERS_BEER_NAME']}' name='beerName' disabled>";
+															echo "<label>Brewery</label><input type='text' class='form-control' value='{$result['USERS_BREWERY_NAME']}' name='breweryName' disabled>";
+															echo "<label>Container Size</label><input type='text' class='form-control' name='containerSize' value='{$result['USERS_BEER_CONTAINER_SIZE']}' disabled>";
+															echo "<label>IBU</label><input type='text' class='form-control' value='{$result['USERS_BEER_IBU']}' name='ibu' disabled>";
+															echo "<label>ABV</label><input type='text' class='form-control' value='{$result['USERS_BEER_ABV']}' name='abv' disabled>";
+															echo "<label>Beer Style</label><input type='text' class='form-control' value='{$result['USERS_BEER_STYLE']}' name='style' disabled>";
 															if($result['USERS_BEER_IMAGE'] != NULL)
 															{
-																echo "<img src='{$result['USERS_BEER_IMAGE']}' alt='No Image Available' name='image' value='{$result['USERS_BEER_IMAGE']}'>";
+																echo "<img src='{$result['USERS_BEER_IMAGE']}' alt='No Image Available' name='image' value='{$result['USERS_BEER_IMAGE']}' disabled>";
 															}
 															else
 															{
@@ -362,19 +376,50 @@ else
 																	<div class='col-lg-5'>";
 
 
-															echo "<label>Vintage</label><input type='text' class='form-control' value='{$result['USERS_BEER_VINTAGE']}' name='beerVintage'>";
-															echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace' value ='{$result['USERS_PURCHASE_PLACE']}'>";
-															echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice' value='{$result['USERS_PURCHASE_PRICE']}'>";
+															echo "<label>Vintage</label><input type='text' class='form-control' value='{$result['USERS_BEER_VINTAGE']}' name='beerVintage' disabled>";
+															echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace' value ='{$result['USERS_PURCHASE_PLACE']}' disabled>";
+															echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice' value='{$result['USERS_PURCHASE_PRICE']}' disabled>";
 							//if I get time maybe add a date picker calendar....
-															echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate' value='{$result['USERS_PURCHASE_DATE']}'>";
+															echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate' value='{$result['USERS_PURCHASE_DATE']}' disabled>";
 																								
-															echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>{$result['USERS_BEER_DESCRIPTION']}</textarea>";
-															echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'>{$result['USERS_BEER_NOTES']}</textarea>";
-															echo "<br><a href='cellar.php' class='btn btn-info pull-left'>Back to Cellar</a><button class='btn btn-success pull-right' name='updateBeer' value='$uniqueBeerId'>Update Details</button>
+															echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description' disabled>{$result['USERS_BEER_DESCRIPTION']}</textarea>";
+															echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes' disabled>{$result['USERS_BEER_NOTES']}</textarea>";
+															echo "<br>
+																	<a href='cellar.php' class='btn btn-info pull-left'>Back to Cellar</a>
+																	<button class='btn btn-danger pull-right' name='deleteBeer' value='$uniqueBeerId'>PERMANENTLY DELETE</button>
 																</div></form>";																	
-																}
+														}
+														elseif(isset($_POST['deleteBeer']))
+														{
+															//the user has selected to delete a beer
+															
+															echo "<form action='scripts/purge.php' method='post'>";
+															echo "<span id='reason'><input class='form-group' type='text' size='40' placeholder='Reason for deletion' name='deleteReason' required></span>";
+															echo "<br>";
+															echo "<button class='btn btn-danger btn-lg' name='confirmedDelete' type='submit' value='{$_POST['deleteBeer']}'>Confirm DELETE!</button>";
 
+															echo "</form><br>";
+														}
+														elseif(isset($_POST['confirmedDelete']))
+														{
+															//lets 'delete' the beer from the datebase
+															/*
+															try
+															{
+																$query = $db->prepare("UPDATE users_beer SET USERS_BEER_REMOVAL_REASON = ? WHERE USERS_UNIQUE_BEER_ID = ?;");
+																$query->execute(array($_POST['deleteReason'], $_POST['confirmedDelete']));
+																echo "DELETED!!!";
 															}
+															catch(PDOException $e)
+															{
+																echo $e->getMessage();
+															}
+															*/
+															echo "<br><br>should be deleted";
+															
+														}
+
+													}
 												?>
                                                
                                             </tbody>
@@ -415,7 +460,7 @@ else
     <script src="assets/plugins/morris/morris.js"></script>
     <script src="assets/scripts/dashboard-demo.js"></script>
     <script>
-		$("#drink").addClass("selected");
+		$("#delete").addClass("selected");
 	</script>
 
 </body>

@@ -85,6 +85,24 @@
 			}
 			
 		}
+		elseif(isset($_POST['deleteBeer']))
+		{
+			$userID = $_SESSION['USER']['id'];
+			$searchValue = $_POST['deleteBeer'];
+			//the user clicked on the remove button from their cellar view
+			$query = $db->prepare("SELECT USERS_UNIQUE_BEER_ID, USERS_BEER_NAME, USERS_BREWERY_NAME, USERS_BEER_VINTAGE FROM users_beer WHERE USERS_BEER_USER_ID = ? AND USERS_CHECK_OUT_DATE IS NULL AND USERS_BEER_NAME = ?;");
+				
+			$query->execute(array($userID, $searchValue));
+			$query->setFetchMode(PDO::FETCH_ASSOC);
+
+			$result = $query->fetch();
+			if(!$result)
+			{
+				//still no result, nothing found in the cellar by that search criteria
+				$result = "No beers found!";
+			}
+			
+		}
 		
 		
 		if(is_array($result))
@@ -106,10 +124,24 @@
 		}
 		
 		$_SESSION['removal'] = $result;
+		
+		
 		//$_SESSION['removal']['triedOnce'] = true;
 		
+		if($_POST['search'] == "purge" || isset($_POST['deleteBeer']))
+		{
+			$_SESSION['purged'] = true;
+			//this page was referenced by delete.php, so lets go back there
+			header('location: ../delete.php');
+			
+		}
+		elseif($_POST['search'] == "search")
+		{
+			$_SESSION['searched'] = true;
+			//this page was referenced by drink.php, so lets go back there
+			header('location: ../drink.php');
+		}
 		
-		header('location: ../drink.php');
 		
 		
 	}

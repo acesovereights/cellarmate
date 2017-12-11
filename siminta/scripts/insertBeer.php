@@ -132,11 +132,12 @@ session_start();
 	{
 //left off here, fix the place the variables get their data from.
 		include('connect.php');
+		//print_r($_POST);
 		$userID = $_SESSION['ID'];
-		$uniqueBeerId = $_POST['editBeer'];
+		$uniqueBeerId = $_POST['updateBeer'];
 		$beerName = $_POST['beerName'];
 		$breweryName = $_POST['breweryName'];
-		$barcode = $_POST['barcode'];
+		//$barcode = $_POST['barcode'];
 		if(isset($_POST['ibu']))
 		{
 			$ibu = $_POST['ibu'];
@@ -153,7 +154,7 @@ session_start();
 		
 		
 		
-		$isCommercial = $_SESSION['commercial'];
+		//$isCommercial = $_SESSION['commercial'];
 		//$quantity = $_POST['beerQuantity'];
 		$purDate = NULL; //$_POST['purchaseDate']; set to null now until I make all the entered dates fit date time format
 		$purPlace = $_POST['purchasePlace'];
@@ -169,7 +170,7 @@ session_start();
 			$query->execute(array($beerName, $breweryName, $ibu, $abv, $description, $style, $purPlace, $purPrice, $vintage, $notes, $container, $uniqueBeerId));
 			
 			$_SESSION['updatedBeer'] = "success";
-			//header('location: ../drink.php');
+			header('location: ../drink.php');
 		}
 		catch(PDOException $error)
 		{
