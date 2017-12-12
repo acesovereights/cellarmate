@@ -32,7 +32,7 @@ if(isset($_SESSION['purged']))
 
 if(!isset($_SESSION['USER']))
 {
-	header('location: lognin.php');
+	header('location: login.php');
 }
 elseif($_SESSION['USER']['role'] == "admin")
 {
@@ -370,8 +370,8 @@ else
 																								
 															echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>{$result['USERS_BEER_DESCRIPTION']}</textarea>";
 															echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'>{$result['USERS_BEER_NOTES']}</textarea>";
-															echo "<br><a href='cellar.php' class='btn btn-info pull-left'>Back to Cellar</a><button class='btn btn-success pull-right' name='updateBeer' value='$uniqueBeerId'>Update Details</button>
-																</div></form>";																	
+															echo "<br><a href='cellar.php' class='btn btn-info pull-left'>Back to Cellar</a><button class='btn btn-success pull-right' name='updateBeer' value='$uniqueBeerId'>Update Details</button><br><br><br>
+																</form><form action='scripts/preremoval.php' method='post'><button class='btn btn-success pull-right' name='remove' value='$uniqueBeerId'>Drink!</button></form></div>";																	
 																}
 
 															}

@@ -18,7 +18,7 @@ try
 {
 	$query = $db->prepare("UPDATE users_beer SET USERS_CHECK_OUT_DATE = CURRENT_TIMESTAMP, USERS_BEER_REMOVAL_REASON = ? WHERE USERS_UNIQUE_BEER_ID = ?;");
 	$query->execute(array($reason, $id));
-	echo "DELETED!!!";
+	header('location: ../cellar.php');
 }
 catch(PDOException $e)
 {

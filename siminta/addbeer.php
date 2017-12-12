@@ -31,7 +31,7 @@ if(!isset($_GET['upc']))
 
 if(!isset($_SESSION['USER']))
 {
-	header('location: lognin.php');
+	header('location: login.php');
 }
 elseif($_SESSION['USER']['role'] == "admin")
 {
@@ -234,10 +234,10 @@ elseif($_SESSION['USER']['role'] == "admin")
 												if (count($names) > 0)
 												{
 													//let the user get teh beer details if there are results
-													echo "<button class='btn btn-success' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button>";
+													echo "<button class='btn btn-success pull-left' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button>";
 												}
 												
-												echo "&nbsp;<a href='newbeer.php?upc=".$_GET['upc']."' name='beerChoice' value='manual' class='btn btn-info'>Not Listed</a><br>";
+												echo "<a href='newbeer.php?upc=".$_GET['upc']."' name='beerChoice' value='manual' class='btn btn-info pull-right'>Not Listed</a><br>";
 												echo "</form>";
 												
 											}
@@ -305,8 +305,11 @@ elseif($_SESSION['USER']['role'] == "admin")
 												
 												if( ($foundResults >2 && $numResults == 1) || isset($_SESSION['apiBeer']['fromSearch']))
 												{
-													if(!isset($_SESSION['apiBeer']['fromSearch']))	//from successful barcode retrieval
+													if(!isset($_SESSION['apiBeer']['fromSearch']))	
 													{
+														//single result returned
+														//from successful barcode retrieval
+														
 														//put double quotes around the beername so that apostrophes dont break in the input
 														$displayBeerName = '"'.$results->data[0]->name.'"';
 														$beerName = $results->data[0]->name;
@@ -357,6 +360,7 @@ elseif($_SESSION['USER']['role'] == "admin")
 														//put double quotes around the beername so that apostrophes dont break in the input
 														
 														//print_r($_SESSION);
+														//print_r($results);
 														$displayBeerName = '"'.$results->data->name.'"';
 														$beerName = $results->data->name;
 														if(isset($results->data->ibu))
@@ -454,8 +458,8 @@ elseif($_SESSION['USER']['role'] == "admin")
 													echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace'>";
 													echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice'>";
 					//if I get time maybe add a date picker calendar....
-													echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
-													echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
+													//echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
+													echo "<label>Quantity</label><input type='text' class='form-control' id='quantity' value='1' name='beerQuantity' onfocusout='checkQty()'><span id='badQty' class='red'></span><br>";									
 													echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>$description</textarea>";
 													echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
 													echo "<br><button class='btn btn-success pull-right' name='submitBeer' value='submit'>Add to Cellar</button>
@@ -475,34 +479,73 @@ elseif($_SESSION['USER']['role'] == "admin")
 												{
 													$multipleBeers=[];
 													//the api returned more than 1 beer
+								//change this to a foreach?
+													//print_r($results);
+													
+													/*$breweryName = $_SESSION['brewery']->data[0]->name;
+													foreach($_SESSION as $sess)
+													{
+														print_r($sess);
+														echo "<br><br>";
+													}
+													echo "<br><br><br>";
+													*/
+													echo "<h3>Multiple beers returned</h3><h4>Please select the proper beer</h4>
+														<div class='col-lg-8'>
+															<form action='scripts/apiBeer.php' method='post'>";
 													for($i=0; $i<$numResults; $i++)
 													{
-														$beerName = $results->data[$i]->name;
-														$beerID = $results->data[$i]->id;
 														
+														$beerName = $results->data[$i]->nameDisplay;
+														$beerID = $results->data[$i]->id;
+														if($i ==0 )
+														{
+															//lets get the brewery name one time
+															$_SESSION['id'] = $beerID;
+															include('scripts/apiBrewery.php');
+															$breweryName = $_SESSION['brewery']->data[0]->name;
+															unset ($_SESSION['brewery']);
+															unset ($_SESSION['id']);
+															
+														}
+														
+														//echo "<br>Beer Name ".$beerName." Beer ID ".$beerID."<br>";
+														echo "<input type='radio'  name='beerChoice' value='$beerID' required> <span class='h5'>$beerName by $breweryName</span><br>";
+														//echo "<label class='radio-inline'><input type='radio' name='beerChoice' required>$beerName by $breweryName</label>";
 														unset($_POST['barcode']);
 
 														//set the session to trigger the API
 														$_SESSION['id']=$beerID;
 
 														include('scripts/apiBrewery.php');
-														$breweryName = $_SESSION['brewery']->data[0]->name;
+														
 														
 														//set the individual beer data in the array
 														$beerArray[] = $beerName;
 														$beerArray[] = $beerID;
 														$beerArray[] = $breweryName;
 														
-														$multipleBeers[$i] = $beerArray;
+														$multipleBeers[] = $beerArray;
 														
 														
 													}
-													echo "<h3>Multiple beers returned</h3><h4>Please select the proper beer</h4><div class='col-lg-5'>";
-													foreach($multipleBeers as $beer)
+													echo "<br>";
+													if (count($numResults) > 0)
+													{
+														//let the user get the beer details if there are results
+														echo "<button class='btn btn-success pull-left' type='submit' name='searchSubmit' value='".$_GET['upc']."'>Get Beer Data</button>";
+													}
+
+													echo "<a href='newbeer.php?upc=".$_GET['upc']."' name='beerChoice' value='manual' class='btn btn-info pull-right'>Not Listed</a><br>
+															</form>";
+													
+													/*
+													foreach($multipleBeers as $i=>$beer)
 													{
 														echo "<input type='radio' class='radio-inline' name='beerChoice' value='$beer[1]'><h4>$beer[0] by $beer[2]</h4>";
 									//left off here. This SHOULD work to display all of the returned beers, need to find a beer that has multiple entried to try.
 													}
+													*/
 													echo "</div>";
 												}
 												elseif(!isset($_SESSION['Multi']) && !isset($_SESSION['MultiBeerNames']) && isset($_SESSION['apiBeer']['results']))
@@ -585,8 +628,8 @@ elseif($_SESSION['USER']['role'] == "admin")
 														echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace'>";
 														echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice'>";
 						//if I get time maybe add a date picker calendar....
-														echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
-														echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
+														//echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
+														echo "<label>Quantity</label><input type='text' class='form-control' value='1' id='quantity' name='beerQuantity' onfocusout='checkQty()'><span id='badQty' class='red'></span><br>";										
 														echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'>$description</textarea>";
 														echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";
 														echo "<br><button class='btn btn-success' name='submitBeer' value='submit'>Add to Cellar</button>
@@ -661,6 +704,19 @@ elseif($_SESSION['USER']['role'] == "admin")
     <script src="assets/scripts/dashboard-demo.js"></script>
     <script>
 		$("#add").addClass("selected");
+		function checkQty()
+		{
+			var qty = $('#quantity').val();	
+			if(qty < 1)
+			{
+				$('#badQty').html("Please enter a valid quantity");
+				$('#quantity').val("");
+			}
+			else
+			{
+				$('#badQty').html("");
+			}
+		}
 	</script>
 
 </body>

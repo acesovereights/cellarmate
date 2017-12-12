@@ -161,8 +161,11 @@ if(!isset($_SESSION['USER']))
                             <div class="pull-right">
                                 <div class="btn-group actionMove">
                                     <?php
+										if($_SESSION['USER']['role'] != "admin")
+										{
+											include('scripts/actionbutton.html');
+										}
 										
-										include('scripts/actionbutton.html');
 									
 									?>
                                 </div>
@@ -211,7 +214,6 @@ if(!isset($_SESSION['USER']))
 										<form action="scripts/updateuser.php" method="post" enctype="multipart/form-data">
 											<label class="form-inline">First Name </label><input class="form-control" id="firstName" type="text" name="firstName" value="<?php echo $user['USER_FIRST_NAME']; ?>" required> 
 											<label class="form-inline">Last Name </label><input class="form-control" id="lastName" type="text" name="lastName" value="<?php echo $user['USER_LAST_NAME']; ?>" required>
-<!--			left off here, finidsh adding the query results to the inputs-->
 											<label class="form-inline">Email </label><input class="form-control" id="email" type="text" name="email" value="<?php echo $user['USER_EMAIL']; ?>" required> 
 											<label class="form-inline">Verify Email </label><input class="form-control" id="emailVer" type="text" name="emailVer" placeholder="Retype Email Address" onfocusout="checkEmail()" required>
 											<div class="red" id="noEMatch"></div>
@@ -268,7 +270,18 @@ if(!isset($_SESSION['USER']))
                
                     <?php
 						$id = $_SESSION['USER']['id'];
-						include('scripts/usercellarcount.php');
+						if($_SESSION['USER']['role'] == "admin")
+						{
+							echo "<div class='col-lg-4'>";
+							include('scripts/allcellarcount.php');
+							echo "</div>";
+						}
+						else
+						{
+							include('scripts/usercellarcount.php');
+						}
+						
+						
 					?>
 
                 

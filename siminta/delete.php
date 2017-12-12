@@ -31,7 +31,7 @@ if(isset($_SESSION['searched']))
 }
 if(!isset($_SESSION['USER']))
 {
-	header('location: lognin.php');
+	header('location: login.php');
 }
 elseif($_SESSION['USER']['role'] == "admin")
 {

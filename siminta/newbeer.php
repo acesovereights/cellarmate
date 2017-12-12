@@ -23,7 +23,7 @@ unset($_SESSION['aboutToRemove']);
 unset($_SESSION['removal']);
 if(!isset($_SESSION['USER']))
 {
-	header('location: lognin.php');
+	header('location: login.php');
 }
 elseif($_SESSION['USER']['role'] == "admin")
 {
@@ -168,7 +168,7 @@ elseif($_SESSION['USER']['role'] == "admin")
 													{
 														echo "<div class='col-lg-4'>";
 														echo "<form action='newbeer.php' method='post'>";
-														echo "<button class='btn btn-info' name='choice' value='search' type='submit'>Search by name</button>";
+														echo "<button class='btn btn-info pull-left' name='choice' value='search' type='submit'>Search by name</button>";
 														echo "<button class='btn btn-info pull-right' name='choice' value='manual' type='submit'>Enter a new beer</button>";
 														echo "</form></div>";
 														

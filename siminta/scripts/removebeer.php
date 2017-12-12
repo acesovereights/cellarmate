@@ -69,6 +69,7 @@
 		}
 		elseif(isset($_POST['directRemoval']))
 		{
+			//echo "in direct removal";
 			$userID = $_SESSION['USER']['id'];
 			$searchValue = $_POST['directRemoval'];
 			//the user clicked on the remove button from their cellar view
@@ -116,6 +117,7 @@
 			}
 			$result = $beerArray;
 			//print_r($result);
+			//echo "<br>in here too";
 		}
 		else
 		{
@@ -127,18 +129,24 @@
 		
 		
 		//$_SESSION['removal']['triedOnce'] = true;
-		
-		if($_POST['search'] == "purge" || isset($_POST['deleteBeer']))
+		if(isset($_POST['search']))
 		{
-			$_SESSION['purged'] = true;
-			//this page was referenced by delete.php, so lets go back there
-			header('location: ../delete.php');
-			
+			if($_POST['search'] == "purge" || isset($_POST['deleteBeer']))
+			{
+				$_SESSION['purged'] = true;
+				//this page was referenced by delete.php, so lets go back there
+				header('location: ../delete.php');
+
+			}
+			elseif($_POST['search'] == "search")
+			{
+				$_SESSION['searched'] = true;
+				//this page was referenced by drink.php, so lets go back there
+				header('location: ../drink.php');
+			}
 		}
-		elseif($_POST['search'] == "search")
+		if(isset($_POST['directRemoval']))
 		{
-			$_SESSION['searched'] = true;
-			//this page was referenced by drink.php, so lets go back there
 			header('location: ../drink.php');
 		}
 		

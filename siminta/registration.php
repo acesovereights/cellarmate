@@ -216,6 +216,10 @@ include('scripts/connect.php');
 				$('#passwordVer').val("");
 				$('#noPWMatch').html("Passwords do not match!");
 			}
+			else
+			{
+				$('#noPWMatch').html("");
+			}
 		}
 		
 		function checkEmail()
@@ -228,6 +232,10 @@ include('scripts/connect.php');
 				//emails do not match
 				$('#emailVer').val("");
 				$('#noEMatch').html("Emails do not match!");
+			}
+			else
+			{
+				$('#noEMatch').html("");
 			}
 		}
 	</script>

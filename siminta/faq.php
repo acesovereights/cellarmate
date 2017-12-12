@@ -135,7 +135,7 @@ elseif($_SESSION['USER']['role'] == "user")
                     <div class="alert alert-info">
                         <i class="fa fa-folder-open"></i><b>&nbsp;Hello! </b><?php if(isset($_SESSION['USER']))
 																				{
-																					echo "Welcome Back <b>$fullname</b>";
+																					echo "<b>$fullname</b>";
 																				}
 																				else
 																				{

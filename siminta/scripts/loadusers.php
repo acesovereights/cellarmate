@@ -19,6 +19,7 @@
 					<th>User ID</th>
 					<th>First Name</th>
 					<th>Last Name</th>
+					<th>Username</th>
 					<th>Email</th>
 					<th>Location</th>
 					<th>Cellar Name</th>
@@ -37,6 +38,7 @@
 						echo "<td class='center h4'><b>".$result['USER_ID']."</b></td>";
 						echo "<td class='center'>".$result['USER_FIRST_NAME']."</td>";
 						echo "<td class='center'>".$result['USER_LAST_NAME']."</td>";
+						echo "<td class='center'>".$result['USER_USERNAME']."</td>";
 						echo "<td>".$result['USER_EMAIL']."</td>";
 						echo "<td>".$result['USER_LOCATION']."</td>";
 						echo "<td class='center'>".$result['USER_CELLAR_NAME']."</td>";
