@@ -232,7 +232,7 @@ else
 													if(isset($_SESSION['removal']) && !isset($_SESSION['aboutToRemove']))
 													{
 														$returnedBeers = $_SESSION['removal'];
-														
+														$_SESSION['viewed'] = true;
 														if(!is_array($returnedBeers))
 														{
 															//No beers found

@@ -29,6 +29,11 @@ if(isset($_SESSION['searched']))
 	unset($_SESSION['searched']);
 	
 }
+if(isset($_SESSION['viewed']))
+{
+	unset($_SESSION['removal']);
+	unset($_SESSION['viewed']);
+}
 if(!isset($_SESSION['USER']))
 {
 	header('location: login.php');
