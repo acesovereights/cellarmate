@@ -237,7 +237,7 @@ else
 														$num_of_pages = ceil($totalRecd/$limit);
 
 
-//THis needs to be refined. It does not find all the proper results. I think a LIKE is needed in the query
+
 														foreach($beerResult as $beer)
 														{
 															$beerName = $beer['USERS_BEER_NAME'];
@@ -420,9 +420,9 @@ else
 																$vintage = $beer['USERS_BEER_VINTAGE'];
 																$beerID = $beer['USERS_UNIQUE_BEER_ID'];
 																echo "<tr>
-																		<td>$beerName</td>
-																		<td>$breweryName</td>";
-																echo "<td>$vintage</td><td class='centering'><form action='scripts/removebeer.php' method='post'><button type='submit' class='btn btn-sm btn-warning' value='$beerID' name='searchRemoval'>Remove</button></form></td></tr>";
+																		<td class='centering'>$beerName</td>
+																		<td class='centering'>$breweryName</td>";
+																echo "<td class='centering'>$vintage</td><td class='centering'><form action='scripts/removebeer.php' method='post'><button type='submit' class='btn btn-sm btn-success' value='$beerID' name='searchRemoval'>View</button></form></td></tr>";
 															}	
 														}
 													}

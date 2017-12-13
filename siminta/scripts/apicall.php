@@ -16,8 +16,6 @@ if(isset($_POST['barcode']))
 	$service_url.=$upc;
 	$service_url.= "&key=59a62c5db7fbcbce7bd278756f886a11&format=json";
 		
-
-		//echo $service_url;
 	$curl = curl_init($service_url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	$curl_response = curl_exec($curl);
@@ -37,7 +35,6 @@ if(isset($_POST['barcode']))
 	$_SESSION['apiBeer']['results'] = $decoded;
 	$_SESSION['apiBeer']['barcode'] = $upc;
 		
-	//print_r($decoded);
 	header('location: ../addbeer.php?upc='.$upc);
 			
 	

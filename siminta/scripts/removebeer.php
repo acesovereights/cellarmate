@@ -149,6 +149,10 @@
 		{
 			header('location: ../drink.php');
 		}
+		if(isset($_POST['searchRemoval']))
+		{
+			header('location: ../drink.php');
+		}
 		
 		
 		

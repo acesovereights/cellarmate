@@ -36,7 +36,8 @@ function breweryIdAPI($breweryID)
 
 function breweryNameApi($breweryName)
 	{
-		$url = "search?q=".$breweryName."&type=brewery";
+		//This code from brewerydb.com Service Library
+		//https://github.com/PintLabs/PHP-Brewerydb
 		$apikey = "59a62c5db7fbcbce7bd278756f886a11";
 		$bdb = new Pintlabs_Service_Brewerydb($apikey);
 		$bdb->setFormat('json'); // if you want to get php back.  'xml' and 'json' are also valid options.
@@ -55,7 +56,6 @@ function breweryNameApi($breweryName)
 			{
 				$results = array('error' => $e->getMessage());
 			}
-		//print_r($results);
 		
 		return $results;
 		
