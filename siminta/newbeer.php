@@ -218,7 +218,7 @@ elseif($_SESSION['USER']['role'] == "admin")
 														echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace'>";
 														echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice'>";
 						//if I get time maybe add a date picker calendar....
-														echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
+														//echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate'>";
 														echo "<label>Quantity</label><input type='text' class='form-control' value='1' name='beerQuantity'>";										
 														echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description'></textarea>";
 														echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes'></textarea>";

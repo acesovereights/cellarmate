@@ -387,7 +387,7 @@ else
 															echo "<label>Purchase Place</label><input type='text' class='form-control'  name='purchasePlace' value ='{$result['USERS_PURCHASE_PLACE']}' disabled>";
 															echo "<label>Purchase Price</label><input type='text' class='form-control' name='purchasePrice' value='{$result['USERS_PURCHASE_PRICE']}' disabled>";
 							//if I get time maybe add a date picker calendar....
-															echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate' value='{$result['USERS_PURCHASE_DATE']}' disabled>";
+															//echo "<label>Purchase Date</label><input type='text' class='form-control' name='purchaseDate' value='{$result['USERS_PURCHASE_DATE']}' disabled>";
 																								
 															echo "<label>Description</label><textarea rows='5' cols='50' class='form-control' name='description' disabled>{$result['USERS_BEER_DESCRIPTION']}</textarea>";
 															echo "<label>Notes</label><textarea rows='3' cols='50' class='form-control' name='notes' disabled>{$result['USERS_BEER_NOTES']}</textarea>";

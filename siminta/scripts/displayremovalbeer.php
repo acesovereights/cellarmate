@@ -34,10 +34,12 @@
 	<td style="vertical-align: middle;">Purchase Price</td>
 	<td style="vertical-align: middle;"><?php echo $beerToRemove['USERS_PURCHASE_PRICE'];?></td>
 </tr>
+<!--
 <tr>
 	<td style="vertical-align: middle;">Purchase Date</td>
 	<td style="vertical-align: middle;"><?php echo $beerToRemove['USERS_PURCHASE_DATE'];?></td>
 </tr>
+-->
 <tr>
 	<td style="vertical-align: middle;">Description</td>
 	<td style="vertical-align: middle;"><?php echo $beerToRemove['USERS_BEER_DESCRIPTION'];?></td>
