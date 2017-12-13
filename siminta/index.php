@@ -24,6 +24,8 @@ if($_SESSION['USER']['role'] == "admin")
     <link href="assets/css/main-style.css" rel="stylesheet" />
     <!-- Page-Level CSS -->
     <link href="assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <style>
 		.actionMove{
 			margin-top: -120%;
