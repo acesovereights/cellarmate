@@ -1,8 +1,10 @@
+==============================================
+cellarmate
+Beer cellar inventory management
+
+Luke Smith
+
+See siminta directory for site files
 
 
-========================================================
- This pattern is downloaded from www.subtlepatterns.com 
- If you need more, that's where to get'em.
- ========================================================
- 
- 
+==============================================
