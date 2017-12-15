@@ -84,10 +84,18 @@ if(isset($_POST['submitRegistration']))
 	
 	try
 	{
-		
+		print_r($temp);
+		if(!isset($temp[0]))
+		{
+			$imageInsert = $username.$filename;
+		}
+		else
+		{
+			$imageInsert = NULL;	
+		}
 		//all of the data needed to complete a user in the USER table is complete
 		$query = $db->prepare("INSERT INTO user (USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_LOCATION, USER_CELLAR_NAME, USER_PROFILE_PICTURE, USER_CELLAR_VISIBLE) VALUES (?,?,?,?,?,?,?,?,?);");
-		$query->execute([$username, $password, $email, $firstName, $lastName, $location, $cellarName, $username.$filename, $public]);
+		$query->execute([$username, $password, $email, $firstName, $lastName, $location, $cellarName, $imageInsert, $public]);
 		
 		//query the database to get the user ID of the just entered user so we can create a cellar for them
 		$userId = $db->lastInsertId();

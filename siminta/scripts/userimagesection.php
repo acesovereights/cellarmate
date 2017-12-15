@@ -4,8 +4,9 @@
 	  <?php 
 		if(isset($_SESSION['USER']))
 		{
-			if(isset($_SESSION['USER']['image']){
-			echo "<img src='userImages/".$_SESSION['USER']['image']."' alt='User Profile Image'>";
+			if(is_null($_SESSION['USER']['image'])){
+				echo $_SESSION['USER']['image'];
+			//echo "<img src='userImages/".$_SESSION['USER']['image']."' alt='User Profile Image'>";
 			}
 
 		}
