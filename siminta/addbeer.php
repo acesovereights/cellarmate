@@ -28,6 +28,9 @@ if(!isset($_GET['upc']))
 	unset($_SESSION['commercial']);
 	unset($_SESSION['image']);
 }
+else{
+	$_SESSION['barcode'] = $_GET['upc'];
+}
 
 if(!isset($_SESSION['USER']))
 {

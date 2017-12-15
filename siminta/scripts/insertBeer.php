@@ -43,6 +43,7 @@ session_start();
 		else
 		{
 			$barcode = $_SESSION['barcode'];
+			//print_r($_SESSION);
 		}
 		
 		$isCommercial = $_SESSION['commercial'];

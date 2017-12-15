@@ -88,7 +88,7 @@ elseif($_SESSION['USER']['role'] == "user")
 						?>
                         <!--end user image section-->
                     </li>
-                   	<li class="sidebar-search"></li>
+                   	
                     <?php
 							if(isset($_SESSION['USER']))
 						{
